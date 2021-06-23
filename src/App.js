@@ -1,25 +1,32 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
+import React from 'react';
+// import { useSelector, useDispatch } from 'react-redux';
+// import { loginUserViaAPI } from './actions/auth';
+
 import './App.css';
+import '@fontsource/roboto';
+
+import NavBar from './components/Navigation/NavBar';
+import Routes from './Routes';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	// const dispatch = useDispatch();
+	// const { user } = useSelector(store => store);
+	// const access_token = localStorage.getItem('access_token') || null;
+
+	// if (!user) {
+	// 	console.log('NO USER')
+	// 	if (access_token) {
+	// 		dispatch(loginUserViaAPI());
+	// 	}
+	// }
+
+	return (
+		<div className="App">
+			<NavBar />
+			<Routes />
+		</div>
+	);
 }
 
 export default App;

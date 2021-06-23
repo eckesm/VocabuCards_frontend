@@ -1,0 +1,84 @@
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
+
+import { loginUserViaAPI } from '../actions/auth';
+import { getUserLanguageWordsViaAPI, getAllLanguageOptionsViaAPI, getUserLastLanguageViaAPI } from '../actions/vocab';
+import { TextField, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+	root : {
+		'& > *' : {
+			margin  : theme.spacing(1),
+			width   : '300px',
+			display : 'flex',
+			margin  : '0 auto',
+			// 'margin-bottom':'10px'
+		}
+	}
+}));
+
+export default function LoginForm() {
+	const user = useSelector(store => store.user);
+	const dispatch = useDispatch();
+	const history = useHistory();
+
+	const [ formData, setFormData ] = useState({
+		emailAddress : '',
+		password     : ''
+	});
+
+	useEffect(
+		() => {
+			if (user) {
+				dispatch(getAllLanguageOptionsViaAPI());
+				dispatch(getUserLanguageWordsViaAPI());
+				dispatch(getUserLastLanguageViaAPI());
+				history.push('/read');
+			}
+		},
+		[ user, history, dispatch ]
+	);
+
+	function handleChange(evt) {
+		const { name, value } = evt.target;
+		setFormData(data => ({
+			...data,
+			[name] : value
+		}));
+	}
+
+	function handleSubmit(evt) {
+		evt.preventDefault();
+		dispatch(loginUserViaAPI(formData.emailAddress, formData.password));
+	}
+
+	const classes = useStyles();
+
+	return (
+		<div>
+			<h1>Login Screen</h1>
+			<form onSubmit={handleSubmit} className={classes.root}>
+				<TextField
+					id="emailAddress"
+					name="emailAddress"
+					label="Email Address"
+					onChange={handleChange}
+					value={formData.emailAddress}
+				/>
+				<TextField
+					id="password"
+					name="password"
+					label="Password"
+					type="password"
+					onChange={handleChange}
+					value={formData.password}
+				/>
+				<Button variant="outlined" type="submit" color="primary" className={classes.root}>
+					Submit
+				</Button>
+			</form>
+		</div>
+	);
+}
