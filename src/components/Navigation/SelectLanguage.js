@@ -7,7 +7,6 @@ import { updateUserLastLanguageViaAPI, getUserLanguageWordsViaAPI, setUserLangua
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-// import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
@@ -29,14 +28,13 @@ export default function SelectLanguage() {
 	const dispatch = useDispatch();
 	const history = useHistory();
 
-
 	const handleChange = event => {
 		const newLanguage = event.target.value;
 		setLanguage(newLanguage);
 		dispatch(setUserLanguage(newLanguage));
 		dispatch(updateUserLastLanguageViaAPI(newLanguage));
 		dispatch(getUserLanguageWordsViaAPI(newLanguage));
-		history.push(`/words/languages/${newLanguage}`);
+		history.push(`/words`);
 	};
 
 	return (
@@ -57,7 +55,6 @@ export default function SelectLanguage() {
 							</MenuItem>
 						);
 					})}
-
 				</Select>
 			</FormControl>
 		</div>

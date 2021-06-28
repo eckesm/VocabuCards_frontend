@@ -1,25 +1,23 @@
-// import logo from './logo.svg';
 import React from 'react';
-// import { useSelector, useDispatch } from 'react-redux';
-// import { loginUserViaAPI } from './actions/auth';
+import { useSelector, useDispatch } from 'react-redux';
+import { getUserInfo } from './actions/vocab';
 
 import './App.css';
 import '@fontsource/roboto';
 
 import NavBar from './components/Navigation/NavBar';
-import Routes from './Routes';
+import Routes from './components/Routes/Routes';
 
 function App() {
-	// const dispatch = useDispatch();
-	// const { user } = useSelector(store => store);
-	// const access_token = localStorage.getItem('access_token') || null;
+	const dispatch = useDispatch();
 
-	// if (!user) {
-	// 	console.log('NO USER')
-	// 	if (access_token) {
-	// 		dispatch(loginUserViaAPI());
-	// 	}
-	// }
+	const access_token = localStorage.getItem('access_token') || null;
+	const { user } = useSelector(store => store);
+
+	if (access_token && !user) {
+		dispatch(getUserInfo());
+	}
+
 
 	return (
 		<div className="App">

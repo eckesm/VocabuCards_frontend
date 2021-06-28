@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+// import { useSelector } from 'react-redux';
 // import { useHistory } from 'react-router';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { translateWordViaAPI, dictionaryWordViaAPI } from '../../actions/vocab';
+// import { translateWordViaAPI, dictionaryWordViaAPI } from '../../actions/vocab';
 import SelectDictionary from './SelectDictionary';
 import SelectWord from './SelectWord';
+
+import { getDictionaryWordViaAPI, getTranslateWordViaAPI, createNewVariation, createNewWord } from '../../helpers/API';
+import { addWordToState, addComponentToState } from '../../actions/vocab';
 
 const useStyles = makeStyles(theme => ({
 	root : {
@@ -17,17 +21,17 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function VocabComponentForm({ wordText }) {
+export default function VocabComponentForm({ wordText, onClose }) {
 	const dispatch = useDispatch();
-	// const history = useHistory();
-
-	const { translations, dictionary, language } = useSelector(store => store);
-
-	const languageWords = useSelector(store => store.words_array[language]);
-
+	const { language, words_array } = useSelector(store => store);
 	const [ dictionaryChoices, setDictionaryChoices ] = useState([]);
-	// const [ wordChoices, setWordChoices ] = useState([ { id: 'NEW', root: 'Add new word' }, ...languageWords ]);
-	const wordChoices = [ { id: 'NEW', root: 'Add new word' }, ...languageWords ];
+	const wordChoices = [];
+	wordChoices.push({ value: 'NEW', name: 'Add new word' });
+	words_array.forEach(choice => {
+		wordChoices.push({ value: choice.id, name: choice.root });
+	});
+
+	console.log(wordChoices);
 
 	const [ formData, setFormData ] = useState({
 		partOfSpeech : '',
@@ -37,7 +41,7 @@ export default function VocabComponentForm({ wordText }) {
 		synonyms     : '',
 		examples     : '',
 		notes        : '',
-		existingWord : ''
+		existingWord : 'NEW'
 	});
 
 	function handleChange(evt) {
@@ -49,52 +53,74 @@ export default function VocabComponentForm({ wordText }) {
 	}
 
 	useEffect(() => {
-		try {
-			if (wordText) {
-				dispatch(translateWordViaAPI(formData.variation));
+		if (wordText) {;
+			try {
+				translateAPI();
+			} catch (e) {
+				console.log(e);
 			}
-		} catch (e) {
-			console.log(e);
 		}
 	}, []);
 
-	useEffect(
-		() => {
-			try {
-				setFormData({
-					...formData,
-					translation : translations[`sv_en_${formData.variation}`]['translatedWord']
-				});
-			} catch (e) {
-				console.log(e);
-			}
-		},
-		[ translations ]
-	);
-
-	useEffect(
-		() => {
-			try {
-				setDictionaryChoices(dictionary[`en_${formData.translation}`]['dictionaryResults']);
-			} catch (e) {
-				console.log(e);
-			}
-		},
-		[ dictionary ]
-	);
-
-	function handleSubmit(evt) {
+	async function handleSubmit(evt) {
 		evt.preventDefault();
+		console.log('EXISTING WORD:', formData.existingWord);
+		if (formData.existingWord === 'NEW') {
+			console.log('New word');
+
+			const wordRes = await createNewWord(
+				language,
+				formData.variation,
+				formData.translation,
+				formData.dictionary.definition,
+				formData.synonyms,
+				formData.examples
+			);
+			console.log(wordRes.word.id);
+
+			dispatch(addWordToState(wordRes.word));
+
+			const componentRes = await createNewVariation(
+				wordRes.word.id,
+				language,
+				formData.partOfSpeech,
+				formData.variation,
+				formData.translation,
+				formData.examples
+			);
+			dispatch(addComponentToState(componentRes.component));
+		}
+		else {
+			console.log('New variation');
+			const componentRes = await createNewVariation(
+				formData.existingWord,
+				language,
+				formData.partOfSpeech,
+				formData.variation,
+				formData.translation,
+				formData.examples
+			);
+			console.log(componentRes);
+		}
+		onClose();
 	}
 
 	function handleTranslate(evt) {
 		evt.preventDefault();
-		dispatch(translateWordViaAPI(formData.variation));
+		translateAPI();
+	}
+	async function translateAPI() {
+		const results = await getTranslateWordViaAPI(formData.variation);
+		setFormData({ ...formData, translation: results });
 	}
 
 	function handleDictionary(evt) {
 		evt.preventDefault();
-		dispatch(dictionaryWordViaAPI(formData.translation));
+		dictionaryAPI();
+	}
+	async function dictionaryAPI() {
+		const results = await getDictionaryWordViaAPI(formData.translation);
+		setDictionaryChoices(results.results);
 	}
 
 	function updateDictionary(dictionaryChoice) {
@@ -152,28 +178,33 @@ export default function VocabComponentForm({ wordText }) {
 		<div>
 			<h1>Vocabulary Component Form</h1>
 			<form onSubmit={handleSubmit} className={classes.root}>
-				<TextField
-					id="variation"
-					label="Variation"
-					onChange={handleChange}
-					value={formData.variation}
-					variant="outlined"
-				/>
-				<Button variant="outlined" color="primary" onClick={handleTranslate}>
-					Translate
-				</Button>
+				<div>
+					<TextField
+						id="variation"
+						name="variation"
+						label="Variation"
+						onChange={handleChange}
+						value={formData.variation}
+						variant="outlined"
+					/>
+					<Button variant="outlined" color="primary" onClick={handleTranslate}>
+						Translate
+					</Button>
+				</div>
 
-				<TextField
-					id="translation"
-					name="translation"
-					label="Translation"
-					onChange={handleChange}
-					value={formData.translation}
-					variant="outlined"
-				/>
-				<Button variant="outlined" color="primary" onClick={handleDictionary}>
-					Search Dictionary
-				</Button>
+				<div>
+					<TextField
+						id="translation"
+						name="translation"
+						label="Translation"
+						onChange={handleChange}
+						value={formData.translation}
+						variant="outlined"
+					/>
+					<Button variant="outlined" color="primary" onClick={handleDictionary}>
+						Search Dictionary
+					</Button>
+				</div>
 
 				<SelectDictionary
 					id="dictionary"

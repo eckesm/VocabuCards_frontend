@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-// import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
@@ -18,7 +17,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function SelectDictionary({ id, label, updateDictionary, value, dictionaryChoices = [] }) {
 	const classes = useStyles();
-	const [ data, setData ] = useState(value);
+	const [ data, setData ] = useState('');
+
+	// console.log('dictionaryChoices',dictionaryChoices)
 
 	useEffect(
 		() => {
@@ -26,6 +27,8 @@ export default function SelectDictionary({ id, label, updateDictionary, value, d
 				if (dictionaryChoices.length > 0) {
 					setData(dictionaryChoices[0]);
 					updateDictionary(dictionaryChoices[0]);
+					console.log('dictionaryChoices',dictionaryChoices)
+
 				}
 			} catch (e) {
 				console.log(e);

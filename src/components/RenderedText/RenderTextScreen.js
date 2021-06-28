@@ -1,28 +1,28 @@
 import React, { useState } from 'react';
-import { renderHtml } from '../../helpers';
+import { renderHtml } from '../../helpers/helpers';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-
 import { v4 as uuid } from 'uuid';
 import Paragraph from './Paragraph';
-import VocabComponentFormModal from './VocabComponentFormModal';
+import VocabComponentFormModal from '../VocabForms/VocabComponentFormModal';
+import TestModal from '../VocabForms/TestModal';
 
-const useStyles = makeStyles((theme) => ({
-	root: {
-	  '& > *': {
-		margin: theme.spacing(1),
-		// width: '25ch',
-		width: '90%',
-	  },
-	},
-  }));
+const useStyles = makeStyles(theme => ({
+	root : {
+		'& > *' : {
+			margin : theme.spacing(1),
+			// width: '25ch',
+			width  : '90%'
+		}
+	}
+}));
 
 export default function RenderTextScreen() {
 	const [ formData, setFormData ] = useState({
 		foreignText : ''
 	});
 	let [ renderedText, setRenderedText ] = useState([ [] ]);
-	const [ modals, setModals ] = useState([]);
+	const [ modalText, setModalText ] = useState(null);
 
 	function handleChange(evt) {
 		const { name, value } = evt.target;
@@ -40,10 +40,19 @@ export default function RenderTextScreen() {
 	}
 
 	function updateModalText(wordObject) {
-		setModals([ wordObject ]);
+		setModalText(wordObject.text);
+		setOpen(true);
 	}
 
 	const classes = useStyles();
+
+	const [ open, setOpen ] = React.useState(false);
+	const handleOpen = () => {
+		setOpen(true);
+	};
+	const handleClose = () => {
+		setOpen(false);
+	};
 
 	return (
 		<div>
@@ -70,9 +79,11 @@ export default function RenderTextScreen() {
 				})}
 			</div>
 
-			{modals.map(modal => {
+			{/* {modals.map(modal => {
 				return <VocabComponentFormModal key={uuid()} wordText={modal.text} />;
-			})}
+			})} */}
+
+			<TestModal open={open} handleOpen={handleOpen} handleClose={handleClose} wordText={modalText} />
 		</div>
 	);
 }

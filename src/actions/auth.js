@@ -12,24 +12,27 @@ export function loginUserViaAPI(email, password) {
 			if (res.data.status === 'success') {
 				const access_token = res.data.access_token;
 				localStorage.setItem('access_token', access_token);
-				return dispatch(loggedInUser(email, access_token));
+				return dispatch(loggedInUser(email));
 			}
 		} catch (e) {
 			console.log(e);
 		}
 	};
 }
-function loggedInUser(email, access_token) {
+function loggedInUser(email) {
 	return {
-		type         : LOGIN_USER,
-		user         : email,
-		access_token
+		type : LOGIN_USER,
+		user : email
+		// access_token
 	};
 }
 
 // LOGOUT_USER
 export function logoutUser() {
 	localStorage.removeItem('access_token');
+	// localStorage.removeItem('last_language');
+	// localStorage.removeItem('languages');
+	// localStorage.removeItem('language_object');
 	return {
 		type : LOGOUT_USER
 	};

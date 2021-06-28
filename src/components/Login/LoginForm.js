@@ -2,18 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import { loginUserViaAPI } from '../actions/auth';
-import { getUserLanguageWordsViaAPI, getAllLanguageOptionsViaAPI, getUserLastLanguageViaAPI } from '../actions/vocab';
+import { loginUserViaAPI } from '../../actions/auth';
+// import { getUserLanguageWordsViaAPI, getAllLanguageOptionsViaAPI, getUserLastLanguageViaAPI } from '../actions/vocab';
+import { getUserInfo } from '../../actions/vocab';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
 	root : {
 		'& > *' : {
-			margin  : theme.spacing(1),
-			width   : '300px',
-			display : 'flex',
+			// margin  : theme.spacing(1),
 			margin  : '0 auto',
+			width   : '300px',
+			display : 'flex'
 			// 'margin-bottom':'10px'
 		}
 	}
@@ -32,9 +33,7 @@ export default function LoginForm() {
 	useEffect(
 		() => {
 			if (user) {
-				dispatch(getAllLanguageOptionsViaAPI());
-				dispatch(getUserLanguageWordsViaAPI());
-				dispatch(getUserLastLanguageViaAPI());
+				dispatch(getUserInfo());
 				history.push('/read');
 			}
 		},

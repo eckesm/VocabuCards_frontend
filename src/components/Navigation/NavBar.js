@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 import { logoutUser } from '../../actions/auth';
@@ -20,6 +20,9 @@ import Button from '@material-ui/core/Button';
 
 // import SelectLanguage from './SelectLanguage';
 import NavDrawer from './NavDrawer';
+import VocabWordFormModal from '../VocabForms/VocabWordFormModal';
+import VocabComponentFormModalButton from '../VocabForms/VocabComponentFormModalButton';
+import TestModal from '../VocabForms/TestModal';
 
 const useStyles = makeStyles(theme => ({
 	root       : {
@@ -45,8 +48,8 @@ export default function NavBar() {
 	const languageName = language_object[language];
 
 	const classes = useStyles();
-	const [ auth, setAuth ] = React.useState(false);
-	const [ anchorEl, setAnchorEl ] = React.useState(null);
+	const [ auth, setAuth ] = useState(false);
+	const [ anchorEl, setAnchorEl ] = useState(null);
 	const open = Boolean(anchorEl);
 
 	useEffect(
@@ -75,24 +78,20 @@ export default function NavBar() {
 
 	const goToLogout = () => {
 		dispatch(logoutUser());
-		history.push('/login');
+		history.push('/logout');
 	};
 
-	const goToRead = event => {
-		event.preventDefault();
-		history.push('/read');
+	const [ modalOpen, setModalOpen ] = React.useState(false);
+	const handleModalOpen = () => {
+		setModalOpen(true);
 	};
-
-	const goToLanguageWords = event => {
-		event.preventDefault();
-		history.push(`/words/languages/${language}`);
+	const handleModalClose = () => {
+		setModalOpen(false);
 	};
-
-	// const preventDefault = event => event.preventDefault();
 
 	return (
 		<div className={classes.root}>
-			<AppBar position="sticky">
+			<AppBar position="fixed">
 				<Toolbar>
 					{auth && <NavDrawer />}
 
@@ -105,10 +104,10 @@ export default function NavBar() {
 
 					{auth && (
 						<Typography className={classes.links}>
-							<Link href="#" color="inherit" onClick={goToRead}>
+							<Link href="#/read" color="inherit">
 								Render & Study Foreign Text
 							</Link>
-							<Link href="#" color="inherit" onClick={goToLanguageWords}>
+							<Link href={'#/words'} color="inherit">
 								{languageName}
 							</Link>
 						</Typography>
@@ -146,8 +145,38 @@ export default function NavBar() {
 							<Button color="inherit" onClick={goToLogout}>
 								Logout
 							</Button>
+							{/* <Button color="inherit">
+								<VocabComponentFormModalButton />
+							</Button> */}
+							<Button color="inherit" onClick={handleModalOpen}>
+								Add Word
+							</Button>
+							{modalOpen && (
+								<TestModal
+									open={modalOpen}
+									handleOpen={handleModalOpen}
+									handleClose={handleModalClose}
+								/>
+							)}
+
+							{/* <div>
+								<Typography className={classes.links}>
+									<Link href="#/logout" color="inherit">
+										Logout
+									</Link>
+								</Typography>
+							</div> */}
 						</div>
 					)}
+					{/* {auth && (
+						<div>
+							<Typography className={classes.links}>
+								<Link href="#/logout" color="inherit" onClick={logout}>
+									Logout
+								</Link>
+							</Typography>
+						</div>
+					)} */}
 					{!auth && (
 						<div>
 							<Button color="inherit" onClick={goToLogin}>

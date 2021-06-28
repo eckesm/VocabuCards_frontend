@@ -1,5 +1,5 @@
 import React from 'react';
-import './VocabWordCard.css';
+import './VocabWords.css';
 
 export default function VocabWordCard({ word }) {
 	return (
