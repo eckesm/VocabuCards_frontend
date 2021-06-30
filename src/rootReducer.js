@@ -7,6 +7,7 @@ import {
 	SET_USER_LANGUAGE,
 	ADD_WORD,
 	ADD_COMPONENT,
+	EDIT_COMPONENT,
 	SET_TEXT_INPUT
 } from './actions/types';
 
@@ -37,6 +38,12 @@ function sortByVariation(components_array) {
 }
 
 export default function rootReducer(state = INITIAL_STATE, action) {
+	let root_id = null;
+	let word = null;
+	let adjustedWordsArray = [];
+	let adjustedComponentsArray = [];
+	let updatedWord = {};
+
 	switch (action.type) {
 		case LOGIN_USER:
 			return {
@@ -80,11 +87,24 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 			};
 
 		case ADD_COMPONENT:
-			const root_id = action.component.root_id;
-			const word = state.words_array.filter(w => w.id === root_id)[0];
-			const adjustedWordsArray = state.words_array.filter(w => w.id !== root_id);
-			const updatedWord = { ...word, components: sortByVariation([ ...word.components, action.component ]) };
-			console.log(updatedWord)
+			root_id = action.component.root_id;
+			word = state.words_array.filter(w => w.id === root_id)[0];
+			adjustedWordsArray = state.words_array.filter(w => w.id !== root_id);
+			updatedWord = { ...word, components: sortByVariation([ ...word.components, action.component ]) };
+			return {
+				...state,
+				words_array : sortByRoot([ ...adjustedWordsArray, updatedWord ])
+			};
+
+		case EDIT_COMPONENT:
+			root_id = action.component.root_id;
+			word = state.words_array.filter(w => w.id === root_id)[0];
+			adjustedWordsArray = state.words_array.filter(w => w.id !== root_id);
+			adjustedComponentsArray = word.components.filter(c => c.id !== action.component.id);
+			updatedWord = {
+				...word,
+				components : sortByVariation([ ...adjustedComponentsArray, action.component ])
+			};
 			return {
 				...state,
 				words_array : sortByRoot([ ...adjustedWordsArray, updatedWord ])

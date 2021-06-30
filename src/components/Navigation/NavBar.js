@@ -74,7 +74,7 @@ export default function NavBar() {
 		history.push('/logout');
 	};
 
-	const [ modalOpen, setModalOpen ] = React.useState(false);
+	const [ modalOpen, setModalOpen ] = useState(false);
 	const handleModalOpen = () => {
 		setModalOpen(true);
 	};
@@ -140,7 +140,6 @@ export default function NavBar() {
 							{modalOpen && (
 								<VocabForm
 									open={modalOpen}
-									handleOpen={handleModalOpen}
 									handleClose={handleModalClose}
 								/>
 							)}

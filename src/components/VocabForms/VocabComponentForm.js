@@ -4,8 +4,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { getDictionaryWordViaAPI, getTranslateWordViaAPI, createNewVariation, createNewWord } from '../../helpers/API';
-import { addWordToState, addComponentToState } from '../../actions/vocab';
+import {
+	getDictionaryWordViaAPI,
+	getTranslateWordViaAPI,
+	createNewVariation,
+	createNewWord,
+	editVariation
+} from '../../helpers/API';
+import { addWordToState, addComponentToState, editComponentInState } from '../../actions/vocab';
 
 import SelectDictionary from './SelectDictionary';
 import SelectWord from './SelectWord';
@@ -19,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function VocabComponentForm({ wordText, onClose }) {
+export default function VocabComponentForm({ onClose, wordText = null, variation = null }) {
 	const dispatch = useDispatch();
 	const { language, words_array } = useSelector(store => store);
 	const [ dictionaryChoices, setDictionaryChoices ] = useState([]);
@@ -28,17 +34,43 @@ export default function VocabComponentForm({ wordText, onClose }) {
 	words_array.forEach(choice => {
 		wordChoices.push({ value: choice.id, name: choice.root });
 	});
+	const [ showWordNotes, setShowWordNotes ] = useState(true);
 
-	const [ formData, setFormData ] = useState({
-		partOfSpeech : '',
-		variation    : wordText || '',
-		translation  : '',
-		dictionary   : '',
-		synonyms     : '',
-		examples     : '',
-		notes        : '',
-		existingWord : 'NEW'
-	});
+	let INITIAL_STATE = {
+		partOfSpeech   : '',
+		variation      : '',
+		translation    : '',
+		description    : '',
+		dictionary     : '',
+		definition     : '',
+		synonyms       : '',
+		examples       : '',
+		variationNotes : '',
+		existingWord   : 'NEW',
+		wordNotes      : ''
+	};
+
+	if (wordText) {
+		INITIAL_STATE.variation = wordText;
+	}
+
+	if (variation) {
+		INITIAL_STATE = {
+			partOfSpeech   : variation.part_of_speech,
+			variation      : variation.variation,
+			translation    : variation.translation,
+			description    : variation.description,
+			dictionary     : '',
+			definition     : variation.definition,
+			synonyms       : variation.synonyms,
+			examples       : variation.examples,
+			variationNotes : variation.notes,
+			existingWord   : variation.root_id,
+			wordNotes      : ''
+		};
+	}
+
+	const [ formData, setFormData ] = useState(INITIAL_STATE);
 
 	function handleChange(evt) {
 		const { name, value } = evt.target;
@@ -60,38 +92,62 @@ export default function VocabComponentForm({ wordText, onClose }) {
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
-		if (formData.existingWord === 'NEW') {
-			const wordRes = await createNewWord(
-				language,
-				formData.variation,
-				formData.translation,
-				formData.dictionary.definition || '',
-				formData.synonyms,
-				formData.examples
-			);
-			dispatch(addWordToState(wordRes.word));
 
-			const componentRes = await createNewVariation(
-				wordRes.word.id,
-				language,
+		if (variation) {
+			const componentRes = await editVariation(
+				variation.id,
 				formData.partOfSpeech,
 				formData.variation,
 				formData.translation,
-				formData.examples
+				formData.description,
+				formData.definition,
+				formData.synonyms,
+				formData.examples,
+				formData.variationNotes
 			);
-			dispatch(addComponentToState(componentRes.component));
+			dispatch(editComponentInState(componentRes.component));
 		}
 		else {
-			const componentRes = await createNewVariation(
-				formData.existingWord,
-				language,
-				formData.partOfSpeech,
-				formData.variation,
-				formData.translation,
-				formData.examples
-			);
-			dispatch(addComponentToState(componentRes.component));
+			if (formData.existingWord === 'NEW') {
+				const wordRes = await createNewWord(
+					language,
+					formData.variation,
+					formData.translation,
+					formData.wordNotes
+				);
+				dispatch(addWordToState(wordRes.word));
+
+				const componentRes = await createNewVariation(
+					wordRes.word.id,
+					language,
+					formData.partOfSpeech,
+					formData.variation,
+					formData.translation,
+					formData.description,
+					formData.definition,
+					formData.synonyms,
+					formData.examples,
+					formData.variationNotes
+				);
+				dispatch(addComponentToState(componentRes.component));
+			}
+			else {
+				const componentRes = await createNewVariation(
+					formData.existingWord,
+					language,
+					formData.partOfSpeech,
+					formData.variation,
+					formData.translation,
+					formData.description,
+					formData.definition,
+					formData.synonyms,
+					formData.examples,
+					formData.variationNotes
+				);
+				dispatch(addComponentToState(componentRes.component));
+			}
 		}
+
 		onClose();
 	}
 
@@ -100,7 +156,7 @@ export default function VocabComponentForm({ wordText, onClose }) {
 		translateAPI();
 	}
 	async function translateAPI() {
-		const results = await getTranslateWordViaAPI(formData.variation);
+		const results = await getTranslateWordViaAPI(formData.variation, language);
 		setFormData({ ...formData, translation: results });
 	}
 
@@ -117,6 +173,7 @@ export default function VocabComponentForm({ wordText, onClose }) {
 		setFormData({
 			...formData,
 			dictionary   : dictionaryChoice,
+			definition   : dictionaryChoice['definition'],
 			partOfSpeech : dictionaryChoice['partOfSpeech'],
 			examples     : constructExamplesDisplay(dictionaryChoice['examples']),
 			synonyms     : constructSynonymsDisplay(dictionaryChoice['synonyms'])
@@ -196,6 +253,15 @@ export default function VocabComponentForm({ wordText, onClose }) {
 					</Button>
 				</div>
 
+				<TextField
+					id="description"
+					name="description"
+					label="Description"
+					onChange={handleChange}
+					value={formData.description}
+					variant="outlined"
+				/>
+
 				<SelectDictionary
 					id="dictionary"
 					name="dictionary"
@@ -233,25 +299,40 @@ export default function VocabComponentForm({ wordText, onClose }) {
 				/>
 
 				<TextField
-					id="notes"
-					name="notes"
-					label="Notes"
+					id="variationNotes"
+					name="variationNotes"
+					label="Variation Notes"
 					onChange={handleChange}
-					value={formData.notes}
+					value={formData.variationNotes}
 					variant="outlined"
 				/>
 
-				<SelectWord
-					id="existingWord"
-					name="existingWord"
-					label="Add to Existing Word"
-					updateExistingWord={updateExistingWord}
-					wordChoices={wordChoices}
-					value={formData.existingWord}
-				/>
+				{variation === null && (
+					<SelectWord
+						id="existingWord"
+						name="existingWord"
+						label="Add to Existing Word"
+						updateExistingWord={updateExistingWord}
+						wordChoices={wordChoices}
+						value={formData.existingWord}
+						setShowWordNotes={setShowWordNotes}
+					/>
+				)}
+
+				{showWordNotes &&
+				variation === null && (
+					<TextField
+						id="wordNotes"
+						name="wordNotes"
+						label="Word Notes"
+						onChange={handleChange}
+						value={formData.wordNotes}
+						variant="outlined"
+					/>
+				)}
 
 				<Button variant="outlined" type="submit" color="primary">
-					Add
+					{variation ? 'Save' : 'Add'}
 				</Button>
 			</form>
 		</div>

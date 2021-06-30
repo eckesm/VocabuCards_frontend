@@ -6,7 +6,7 @@ function getAccessToken() {
 	return localStorage.getItem('access_token') || null;
 }
 
-export async function getTranslateWordViaAPI(word, source_code = 'sv', translate_code = 'en') {
+export async function getTranslateWordViaAPI(word, source_code, translate_code = 'en') {
 	try {
 		const headers = {
 			Authorization : 'Bearer ' + getAccessToken()
@@ -20,7 +20,7 @@ export async function getTranslateWordViaAPI(word, source_code = 'sv', translate
 	}
 }
 
-export async function getDictionaryWordViaAPI(word, translate_code = 'en') {
+export async function getDictionaryWordViaAPI(word) {
 	try {
 		const headers = {
 			Authorization : 'Bearer ' + getAccessToken()
@@ -32,7 +32,7 @@ export async function getDictionaryWordViaAPI(word, translate_code = 'en') {
 	}
 }
 
-export async function createNewWord(source_code, word, translation, definition, synonyms, examples) {
+export async function createNewWord(source_code, word, translation, notes) {
 	const headers = {
 		Authorization : 'Bearer ' + getAccessToken()
 	};
@@ -41,37 +41,29 @@ export async function createNewWord(source_code, word, translation, definition, 
 		part_of_speech : 'other',
 		word           : word,
 		translation    : translation,
-		definition     : definition,
-		synonyms       : synonyms,
-		examples       : examples
+		notes          : notes
 	};
-
-	// console.log(data);
 
 	try {
 		const res = await axios.post(`${API_URL}/vocab/words/new`, data, { headers: headers });
-		// console.log(res.data);
 		return res.data;
 	} catch (e) {
 		console.log(e);
 	}
-
-	// if (response.data['status'] == 'errors') {
-	// 	errors = response.data['errors'];
-	// 	for (let error in errors) {
-	// 		for (let err of errors[error]) {
-	// 			console.log(err);
-	// 			$('#errors_ul').append(`<li>${err}</li>`);
-	// 		}
-	// 	}
-	// }
-	// else {
-	// 	window.open(`/words/${response.data['word']['id']}`, '_blank');
-	// 	$('#studyMaterialModel').modal('hide');
-	// }
 }
 
-export async function createNewVariation(root_id, source_code, part_of_speech, word, translation, examples) {
+export async function createNewVariation(
+	root_id,
+	source_code,
+	part_of_speech,
+	word,
+	translation,
+	description,
+	definition,
+	synonyms,
+	examples,
+	notes
+) {
 	const headers = {
 		Authorization : 'Bearer ' + getAccessToken()
 	};
@@ -81,7 +73,11 @@ export async function createNewVariation(root_id, source_code, part_of_speech, w
 		part_of_speech : part_of_speech,
 		word           : word,
 		translation    : translation,
-		examples       : examples
+		description    : description,
+		definition     : definition,
+		synonyms       : synonyms,
+		examples       : examples,
+		notes          : notes
 	};
 
 	try {
@@ -92,18 +88,40 @@ export async function createNewVariation(root_id, source_code, part_of_speech, w
 	} catch (e) {
 		console.log(e);
 	}
+}
 
-	// if (response.data['status'] == 'errors') {
-	// 	errors = response.data['errors'];
-	// 	for (let error in errors) {
-	// 		for (let err of errors[error]) {
-	// 			console.log(err);
-	// 			$('#errors_ul').append(`<li>${err}</li>`);
-	// 		}
-	// 	}
-	// }
-	// else {
-	// 	window.open(`/words/${response.data['component']['root_id']}`, '_blank');
-	// 	$('#studyMaterialModel').modal('hide');
-	// }
+export async function editVariation(
+	id,
+	part_of_speech,
+	word,
+	translation,
+	description,
+	definition,
+	synonyms,
+	examples,
+	notes
+) {
+	const headers = {
+		Authorization : 'Bearer ' + getAccessToken()
+	};
+	const data = {
+		id             : id,
+		part_of_speech : part_of_speech,
+		word           : word,
+		translation    : translation,
+		description    : description,
+		definition     : definition,
+		synonyms       : synonyms,
+		examples       : examples,
+		notes          : notes
+	};
+
+	try {
+		const res = await axios.post(`${API_URL}/vocab/variations/${id}`, data, { headers: headers });
+
+		console.log(res.data);
+		return res.data;
+	} catch (e) {
+		console.log(e);
+	}
 }

@@ -25,18 +25,18 @@ const useStyles = makeStyles(theme => ({
 		boxShadow       : theme.shadows[5],
 		padding         : theme.spacing(2, 4, 3),
 		overflow        : 'auto',
-		maxHeight: '90%'
+		maxHeight       : '90%'
 	}
 }));
 
-export default function VocabForm({ open, handleOpen, handleClose, wordText }) {
+export default function VocabForm({ open, handleClose, wordText = null, variation = null }) {
 	const classes = useStyles();
 	// getModalStyle is not a pure function, we roll the style only on the first render
 	const [ modalStyle ] = React.useState(getModalStyle);
 
 	const body = (
 		<div style={modalStyle} className={classes.paper}>
-			<VocabComponentForm wordText={wordText} onClose={handleClose} />
+			<VocabComponentForm onClose={handleClose} wordText={wordText} variation={variation} />
 		</div>
 	);
 

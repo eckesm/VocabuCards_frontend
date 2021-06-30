@@ -16,13 +16,19 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function SelectWord({ id, label, value, updateExistingWord, wordChoices = [] }) {
+export default function SelectWord({ id, label, value, updateExistingWord, wordChoices = [], setShowWordNotes }) {
 	const classes = useStyles();
 	const [ data, setData ] = useState('NEW');
 
 	const handleChange = event => {
 		setData(event.target.value);
 		updateExistingWord(event.target.value);
+		if (event.target.value === 'NEW') {
+			setShowWordNotes(true);
+		}
+		else {
+			setShowWordNotes(false);
+		}
 	};
 
 	return (

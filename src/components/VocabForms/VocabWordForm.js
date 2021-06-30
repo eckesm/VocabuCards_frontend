@@ -55,7 +55,7 @@ export default function VocabWordForm() {
 		translateAPI();
 	}
 	async function translateAPI() {
-		const results = await getTranslateWordViaAPI(formData.root);
+		const results = await getTranslateWordViaAPI(formData.root, language);
 		setFormData({ ...formData, translation: results });
 	}
 

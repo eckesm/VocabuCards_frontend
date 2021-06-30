@@ -4,9 +4,9 @@ import { useParams } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
+// import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
+// import Button from '@material-ui/core/Button';
 
 import WordDetailAccordian from './WordDetailAccordian';
 import './WordDetail.css';
@@ -56,9 +56,7 @@ export default function WordDetail() {
 	}
 
 	if (wordLoaded) {
-		const definition = word.definition === '' ? null : word.definition;
-		const synonyms = word.synonyms === '' ? null : word.synonyms;
-		const examples = word.examples === '' ? null : word.examples;
+		const notes = word.notes === '' ? null : word.notes;
 
 		return (
 			<Card className={classes.root}>
@@ -68,21 +66,11 @@ export default function WordDetail() {
 							<b>{word.root.toLowerCase()}</b> - {word.translation.toLowerCase()}
 						</p>
 
-						{(definition || synonyms || examples) && (
+						{notes && (
 							<div className="VocabCardDetail-wordInfoContainer">
-								{definition && (
+								{notes && (
 									<p className="VocabCardDetail-wordInfo">
-										<b>Definition:</b> {definition}
-									</p>
-								)}
-								{synonyms && (
-									<p className="VocabCardDetail-wordInfo">
-										<b>Synonyms:</b> {synonyms}
-									</p>
-								)}
-								{examples && (
-									<p className="VocabCardDetail-wordInfo">
-										<b>Examples:</b> {examples}
+										<b>Notes:</b> {notes}
 									</p>
 								)}
 							</div>

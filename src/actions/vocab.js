@@ -6,6 +6,7 @@ import {
 	GET_ALL_LANGUAGE_OPTIONS,
 	ADD_WORD,
 	ADD_COMPONENT,
+	EDIT_COMPONENT,
 	SET_TEXT_INPUT
 } from './types';
 
@@ -41,7 +42,7 @@ export function getUserInfo() {
 			}
 		}
 		// else {
-			// console.log('No access token present');
+		// console.log('No access token present');
 		// }
 	};
 }
@@ -52,55 +53,6 @@ function loggedInUserInfo(email) {
 		user : email
 	};
 }
-
-// TRANSLATE_WORD
-// export function translateWordViaAPI(word, source_code = 'sv', translate_code = 'en') {
-// 	return async function(dispatch) {
-// 		try {
-// 			const headers = {
-// 				Authorization : 'Bearer ' + getAccessToken()
-// 			};
-// 			// console.log(headers)
-// 			const res = await axios.get(`${API_URL}/translate/${word}/${source_code}/${translate_code}`, {
-// 				headers : headers
-// 			});
-// 			const translatedWord = res.data;
-
-// 			return dispatch(storeTranslatedWord(word, translatedWord, source_code, translate_code));
-// 		} catch (e) {
-// 			console.log(e);
-// 		}
-// 	};
-// }
-// function storeTranslatedWord(word, translatedWord, source_code, translate_code) {
-// 	return {
-// 		type        : TRANSLATE_WORD,
-// 		translation : { word, translatedWord, source_code, translate_code }
-// 	};
-// }
-
-// DICTIONARY_WORD
-// export function dictionaryWordViaAPI(word, translate_code = 'en') {
-// 	return async function(dispatch) {
-// 		try {
-// 			const headers = {
-// 				Authorization : 'Bearer ' + getAccessToken()
-// 			};
-// 			const res = await axios.get(`${API_URL}/dictionary/${word}`, { headers: headers });
-// 			const results = res.data['results'];
-
-// 			return dispatch(storeDictionaryWord(word, results, translate_code));
-// 		} catch (e) {
-// 			console.log(e);
-// 		}
-// 	};
-// }
-// function storeDictionaryWord(word, dictionaryResults, translate_code) {
-// 	return {
-// 		type       : DICTIONARY_WORD,
-// 		dictionary : { word, dictionaryResults, translate_code }
-// 	};
-// }
 
 // GET_USER_LANGUAGE_WORDS
 export function getUserLanguageWordsViaAPI(source_code = 'sv') {
@@ -187,8 +139,6 @@ function setLanguageOptions(languages) {
 	languages.forEach(option => {
 		languageObject[option[0]] = option[1];
 	});
-	// localStorage.setItem('languages', languages)
-	// localStorage.setItem('language_object', languageObject)
 
 	return {
 		type            : GET_ALL_LANGUAGE_OPTIONS,
@@ -212,6 +162,16 @@ export function addComponentToState(componentObject) {
 	return function(dispatch) {
 		dispatch({
 			type      : ADD_COMPONENT,
+			component : componentObject
+		});
+	};
+}
+
+// ADD_COMPONENT
+export function editComponentInState(componentObject) {
+	return function(dispatch) {
+		dispatch({
+			type      : EDIT_COMPONENT,
 			component : componentObject
 		});
 	};
