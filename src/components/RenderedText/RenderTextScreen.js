@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
 import { renderHtml } from '../../helpers/helpers';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import { v4 as uuid } from 'uuid';
+// import { v4 as uuid } from 'uuid';
 import Paragraph from './Paragraph';
-import VocabComponentFormModal from '../VocabForms/VocabComponentFormModal';
-import TestModal from '../VocabForms/TestModal';
+import VocabForm from '../VocabForms/VocabForm';
+import { setTextInput } from '../../actions/vocab';
 
 const useStyles = makeStyles(theme => ({
 	root : {
@@ -18,8 +20,11 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function RenderTextScreen() {
+	const dispatch = useDispatch();
+	const { text_input } = useSelector(store => store);
+
 	const [ formData, setFormData ] = useState({
-		foreignText : ''
+		foreignText : text_input
 	});
 	let [ renderedText, setRenderedText ] = useState([ [] ]);
 	const [ modalText, setModalText ] = useState(null);
@@ -33,13 +38,16 @@ export default function RenderTextScreen() {
 	}
 	const source_code = 'sv';
 	const translate_code = 'en';
+
 	function handleSubmit(evt) {
 		evt.preventDefault();
+		dispatch(setTextInput(formData.foreignText));
 		let prepareRenderedText = renderHtml(formData.foreignText, source_code, translate_code);
 		setRenderedText(prepareRenderedText);
 	}
 
 	function updateModalText(wordObject) {
+		// console.log(wordObject)
 		setModalText(wordObject.text);
 		setOpen(true);
 	}
@@ -79,11 +87,7 @@ export default function RenderTextScreen() {
 				})}
 			</div>
 
-			{/* {modals.map(modal => {
-				return <VocabComponentFormModal key={uuid()} wordText={modal.text} />;
-			})} */}
-
-			<TestModal open={open} handleOpen={handleOpen} handleClose={handleClose} wordText={modalText} />
+			<VocabForm open={open} handleOpen={handleOpen} handleClose={handleClose} wordText={modalText} />
 		</div>
 	);
 }

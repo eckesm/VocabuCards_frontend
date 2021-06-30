@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { useSelector } from 'react-redux';
-// import { useHistory } from 'react-router';
+
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-// import { translateWordViaAPI, dictionaryWordViaAPI } from '../../actions/vocab';
-import SelectDictionary from './SelectDictionary';
-import SelectWord from './SelectWord';
-
 import { getDictionaryWordViaAPI, getTranslateWordViaAPI, createNewVariation, createNewWord } from '../../helpers/API';
 import { addWordToState, addComponentToState } from '../../actions/vocab';
+
+import SelectDictionary from './SelectDictionary';
+import SelectWord from './SelectWord';
 
 const useStyles = makeStyles(theme => ({
 	root : {
@@ -30,8 +28,6 @@ export default function VocabComponentForm({ wordText, onClose }) {
 	words_array.forEach(choice => {
 		wordChoices.push({ value: choice.id, name: choice.root });
 	});
-
-	console.log(wordChoices);
 
 	const [ formData, setFormData ] = useState({
 		partOfSpeech : '',
@@ -53,7 +49,7 @@ export default function VocabComponentForm({ wordText, onClose }) {
 	}
 
 	useEffect(() => {
-		if (wordText) {;
+		if (wordText) {
 			try {
 				translateAPI();
 			} catch (e) {
@@ -64,20 +60,15 @@ export default function VocabComponentForm({ wordText, onClose }) {
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
-		console.log('EXISTING WORD:', formData.existingWord);
 		if (formData.existingWord === 'NEW') {
-			console.log('New word');
-
 			const wordRes = await createNewWord(
 				language,
 				formData.variation,
 				formData.translation,
-				formData.dictionary.definition,
+				formData.dictionary.definition || '',
 				formData.synonyms,
 				formData.examples
 			);
-			console.log(wordRes.word.id);
-
 			dispatch(addWordToState(wordRes.word));
 
 			const componentRes = await createNewVariation(
@@ -91,7 +82,6 @@ export default function VocabComponentForm({ wordText, onClose }) {
 			dispatch(addComponentToState(componentRes.component));
 		}
 		else {
-			console.log('New variation');
 			const componentRes = await createNewVariation(
 				formData.existingWord,
 				language,
@@ -100,7 +90,7 @@ export default function VocabComponentForm({ wordText, onClose }) {
 				formData.translation,
 				formData.examples
 			);
-			console.log(componentRes);
+			dispatch(addComponentToState(componentRes.component));
 		}
 		onClose();
 	}

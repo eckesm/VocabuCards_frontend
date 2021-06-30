@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import SelectDictionary from './SelectDictionary';
-
 import { getDictionaryWordViaAPI, getTranslateWordViaAPI, createNewWord } from '../../helpers/API';
+
+import SelectDictionary from './SelectDictionary';
 
 const useStyles = makeStyles(theme => ({
 	root : {
@@ -17,11 +18,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function VocabWordForm() {
-	// const { language, words_array } = useSelector(store => store);
 	const { language } = useSelector(store => store);
-	// const languageWords = words_array[language];
 	const [ dictionaryChoices, setDictionaryChoices ] = useState([]);
-	// const wordChoices = [ { id: 'NEW', root: 'Add new word' }, ...languageWords ];
 
 	const [ formData, setFormData ] = useState({
 		root        : '',
@@ -39,16 +37,6 @@ export default function VocabWordForm() {
 			[name] : value
 		}));
 	}
-
-	// useEffect(() => {
-	// 	if (wordText) {
-	// 		try {
-	// 			translateAPI();
-	// 		} catch (e) {
-	// 			console.log(e);
-	// 		}
-	// 	}
-	// }, []);
 
 	function handleSubmit(evt) {
 		evt.preventDefault();
@@ -84,18 +72,10 @@ export default function VocabWordForm() {
 		setFormData({
 			...formData,
 			dictionary : dictionaryChoice,
-			// partOfSpeech : dictionaryChoice['partOfSpeech'],
 			examples   : constructExamplesDisplay(dictionaryChoice['examples']),
 			synonyms   : constructSynonymsDisplay(dictionaryChoice['synonyms'])
 		});
 	}
-
-	// function updateExistingWord(wordChoice) {
-	// 	setFormData({
-	// 		...formData,
-	// 		existingWord : wordChoice
-	// 	});
-	// }
 
 	function constructExamplesDisplay(array) {
 		let display = '';

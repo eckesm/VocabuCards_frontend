@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -19,23 +20,9 @@ export default function SelectWord({ id, label, value, updateExistingWord, wordC
 	const classes = useStyles();
 	const [ data, setData ] = useState('NEW');
 
-	// useEffect(
-	// 	() => {
-	// 		try {
-	// 			if (wordChoices.length > 0) {
-	// 				setData(wordChoices[0]);
-	// 			}
-	// 		} catch (e) {
-	// 			console.log(e);
-	// 		}
-	// 	},
-	// 	[ wordChoices ]
-	// );
-
 	const handleChange = event => {
 		setData(event.target.value);
 		updateExistingWord(event.target.value);
-		// console.log(event.target.value)
 	};
 
 	return (

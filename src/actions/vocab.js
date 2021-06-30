@@ -5,10 +5,15 @@ import {
 	SET_USER_LANGUAGE,
 	GET_ALL_LANGUAGE_OPTIONS,
 	ADD_WORD,
-	ADD_COMPONENT
+	ADD_COMPONENT,
+	SET_TEXT_INPUT
 } from './types';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/vocab';
+
+function getTextInput() {
+	return localStorage.getItem('text_input') || null;
+}
 
 function getAccessToken() {
 	return localStorage.getItem('access_token') || null;
@@ -16,7 +21,7 @@ function getAccessToken() {
 
 // GET_USER_INFO
 export function getUserInfo() {
-	console.log('getUserInfo() ran!');
+	// console.log('getUserInfo() ran!');
 	return async function(dispatch) {
 		const access_token = getAccessToken();
 		if (access_token) {
@@ -29,14 +34,15 @@ export function getUserInfo() {
 				dispatch(setLanguageOptions(data.languages));
 				dispatch(setUserLanguage(data.last_source_code));
 				dispatch(storeUserLanguageWords(data.words_array, data.last_source_code));
-				return dispatch(loggedInUserInfo(data.user));
+				dispatch(loggedInUserInfo(data.user));
+				dispatch(setTextInputInState(getTextInput()));
 			} catch (e) {
 				console.log(e);
 			}
 		}
-		else {
-			console.log('No access token present');
-		}
+		// else {
+			// console.log('No access token present');
+		// }
 	};
 }
 
@@ -205,8 +211,23 @@ export function addWordToState(wordObject) {
 export function addComponentToState(componentObject) {
 	return function(dispatch) {
 		dispatch({
-			type : ADD_COMPONENT,
+			type      : ADD_COMPONENT,
 			component : componentObject
 		});
+	};
+}
+
+// SET_TEXT_INPUT
+export function setTextInput(textInput) {
+	localStorage.setItem('text_input', textInput);
+	return function(dispatch) {
+		dispatch(setTextInputInState(textInput));
+	};
+}
+
+function setTextInputInState(textInput) {
+	return {
+		type      : SET_TEXT_INPUT,
+		textInput
 	};
 }

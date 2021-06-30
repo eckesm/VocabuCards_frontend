@@ -6,7 +6,8 @@ import {
 	GET_ALL_LANGUAGE_OPTIONS,
 	SET_USER_LANGUAGE,
 	ADD_WORD,
-	ADD_COMPONENT
+	ADD_COMPONENT,
+	SET_TEXT_INPUT
 } from './actions/types';
 
 const INITIAL_STATE = {
@@ -14,7 +15,8 @@ const INITIAL_STATE = {
 	words_array     : [],
 	language        : null,
 	languages       : [],
-	language_object : {}
+	language_object : {},
+	text_input      : ''
 };
 
 function sortByRoot(words_array) {
@@ -82,10 +84,16 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 			const word = state.words_array.filter(w => w.id === root_id)[0];
 			const adjustedWordsArray = state.words_array.filter(w => w.id !== root_id);
 			const updatedWord = { ...word, components: sortByVariation([ ...word.components, action.component ]) };
-
+			console.log(updatedWord)
 			return {
 				...state,
 				words_array : sortByRoot([ ...adjustedWordsArray, updatedWord ])
+			};
+
+		case SET_TEXT_INPUT:
+			return {
+				...state,
+				text_input : action.textInput
 			};
 
 		default:

@@ -30,9 +30,7 @@ function loggedInUser(email) {
 // LOGOUT_USER
 export function logoutUser() {
 	localStorage.removeItem('access_token');
-	// localStorage.removeItem('last_language');
-	// localStorage.removeItem('languages');
-	// localStorage.removeItem('language_object');
+	localStorage.removeItem('text_input');
 	return {
 		type : LOGOUT_USER
 	};

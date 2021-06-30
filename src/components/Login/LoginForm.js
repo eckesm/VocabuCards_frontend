@@ -34,7 +34,7 @@ export default function LoginForm() {
 		() => {
 			if (user) {
 				dispatch(getUserInfo());
-				history.push('/read');
+				history.push('/words');
 			}
 		},
 		[ user, history, dispatch ]

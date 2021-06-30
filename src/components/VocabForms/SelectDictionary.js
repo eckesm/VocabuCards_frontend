@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -19,16 +20,12 @@ export default function SelectDictionary({ id, label, updateDictionary, value, d
 	const classes = useStyles();
 	const [ data, setData ] = useState('');
 
-	// console.log('dictionaryChoices',dictionaryChoices)
-
 	useEffect(
 		() => {
 			try {
 				if (dictionaryChoices.length > 0) {
 					setData(dictionaryChoices[0]);
 					updateDictionary(dictionaryChoices[0]);
-					console.log('dictionaryChoices',dictionaryChoices)
-
 				}
 			} catch (e) {
 				console.log(e);

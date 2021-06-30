@@ -2,12 +2,9 @@
 
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-// import { isLogin } from '../utils';
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
 	const access_token = localStorage.getItem('access_token') || null;
-	// const { user } = useSelector(store => store);
 
 	return (
 		<Route
