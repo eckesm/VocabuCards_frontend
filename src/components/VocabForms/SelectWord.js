@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function SelectWord({ id, label, value, updateExistingWord, wordChoices = [], setShowWordNotes }) {
+export default function SelectWord({ id, label, updateExistingWord, wordChoices = [], setShowWordNotes }) {
 	const classes = useStyles();
 	const [ data, setData ] = useState('NEW');
 

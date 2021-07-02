@@ -17,6 +17,12 @@ const useStyles = makeStyles(theme => ({
 			display : 'flex'
 			// 'margin-bottom':'10px'
 		}
+	},
+	container:{
+		marginTop:'150px'
+	},
+	button:{
+		marginTop:'15px'
 	}
 }));
 
@@ -56,7 +62,7 @@ export default function LoginForm() {
 	const classes = useStyles();
 
 	return (
-		<div>
+		<div className={classes.container}>
 			<h1>Login Screen</h1>
 			<form onSubmit={handleSubmit} className={classes.root}>
 				<TextField
@@ -74,7 +80,7 @@ export default function LoginForm() {
 					onChange={handleChange}
 					value={formData.password}
 				/>
-				<Button variant="outlined" type="submit" color="primary" className={classes.root}>
+				<Button variant="outlined" type="submit" color="primary" className={classes.button}>
 					Submit
 				</Button>
 			</form>

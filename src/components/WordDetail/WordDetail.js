@@ -1,88 +1,104 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { useHistory } from 'react-router';
 
-import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-// import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-// import Button from '@material-ui/core/Button';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 import WordDetailAccordian from './WordDetailAccordian';
-import './WordDetail.css';
+import VocabForm from '../VocabForms/VocabForm';
 
-const useStyles = makeStyles({
-	root : {
-		minWidth   : 275,
-		marginTop  : '100px',
-		fontFamily : 'roboto, sans-serif'
-	}
-	// bullet : {
-	// 	display   : 'inline-block',
-	// 	margin    : '0 2px',
-	// 	transform : 'scale(0.8)'
-	// },
-	// title : {
-	// 	fontSize  : '2rem',
-	// 	textAlign : 'left'
-	// },
-	// pos   : {
-	// 	marginBottom : 12
-	// }
-});
+import { deleteWord } from '../../helpers/API';
+import { deleteWordInState } from '../../actions/vocab';
+
+import './WordDetail.css';
 
 export default function WordDetail() {
 	const { rootId } = useParams();
-	const [ wordLoaded, setWordLoaded ] = useState(false);
-	const word = useSelector(st => st.words_array.filter(w => w.id === rootId)[0]);
+	const dispatch = useDispatch();
+	const history = useHistory();
+
+	const { words_array } = useSelector(st => st);
+	const [ word, setWord ] = useState(null);
 
 	useEffect(
 		() => {
-			if (word) {
-				setWordLoaded(true);
-			}
-			else {
-				setWordLoaded(false);
-			}
+			const thisWord = words_array.filter(w => w.id === rootId)[0];
+			setWord(thisWord);
 		},
-		[ word ]
+		[ words_array ]
 	);
 
-	const classes = useStyles();
-	// const bull = <span className={classes.bullet}>•</span>;
+	const [ modalOpen, setModalOpen ] = useState(false);
+	const handleModalOpen = () => {
+		setModalOpen(true);
+	};
+	const handleModalClose = () => {
+		setModalOpen(false);
+	};
 
-	if (!wordLoaded) {
-		return <h1>Loading...</h1>;
-	}
+	const handleDelete = () => {
+		history.push('/words');
+		deleteWord(rootId);
+		dispatch(deleteWordInState(rootId));
+	};
 
-	if (wordLoaded) {
-		const notes = word.notes === '' ? null : word.notes;
+	const notes = word ? word.notes : null;
 
-		return (
-			<Card className={classes.root}>
-				<CardContent>
-					<div className="VocabCardDetail-heading">
-						<p className="VocabCardDetail-title">
-							<b>{word.root.toLowerCase()}</b> - {word.translation.toLowerCase()}
-						</p>
+	return (
+		<div>
+			{word && (
+				<Card className='WordDetail'>
+					<CardContent>
+						<div className="WordDetail-heading">
+							<div className="WordDetail-topHeading">
+								<p className="WordDetail-title">
+									<b>{word.root.toLowerCase()}</b> - {word.translation.toLowerCase()}
+								</p>
 
-						{notes && (
-							<div className="VocabCardDetail-wordInfoContainer">
-								{notes && (
-									<p className="VocabCardDetail-wordInfo">
-										<b>Notes:</b> {notes}
-									</p>
-								)}
+								<div className="WordDetail-buttonGroup">
+									<ButtonGroup
+										variant="text"
+										size="large"
+										aria-label="large text primary button group"
+									>
+										<Button color="primary" onClick={handleModalOpen}>
+											<i className="fad fa-pencil" />
+										</Button>
+										<Button color="secondary" onClick={handleDelete}>
+											<i className="fad fa-trash-alt" />
+										</Button>
+									</ButtonGroup>
+									{modalOpen && (
+										<VocabForm
+											open={modalOpen}
+											handleClose={handleModalClose}
+											word={word}
+											setWord={setWord}
+											setting="root"
+										/>
+									)}
+								</div>
 							</div>
-						)}
-					</div>
+							{notes &&
+							notes !== '' && (
+								<div className="WordDetail-wordInfoContainer">
+									{notes && (
+										<p className="WordDetail-wordInfo">
+											<b>Notes:</b> {notes}
+										</p>
+									)}
+								</div>
+							)}
+						</div>
 
-					<WordDetailAccordian word={word} />
-				</CardContent>
-				{/* <CardActions>
-					<Button size="small">Learn More</Button>
-				</CardActions> */}
-			</Card>
-		);
-	}
+						<WordDetailAccordian wordId={word.id} />
+					</CardContent>
+				</Card>
+			)}
+		</div>
+	);
 }

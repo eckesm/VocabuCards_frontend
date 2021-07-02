@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -9,45 +9,41 @@ import Select from '@material-ui/core/Select';
 const useStyles = makeStyles(theme => ({
 	formControl : {
 		margin   : theme.spacing(1),
-		minWidth : 120
+		minWidth : 200
 	},
 	selectEmpty : {
 		marginTop : theme.spacing(2)
 	}
 }));
 
-export default function SelectDictionary({ id, label, updateDictionary, dictionaryChoices = [] }) {
+export default function SelectPOS({ id, label, updatePOS, value }) {
 	const classes = useStyles();
-	const [ data, setData ] = useState('');
-
-	useEffect(
-		() => {
-			try {
-				if (dictionaryChoices.length > 0) {
-					setData(dictionaryChoices[0]);
-					updateDictionary(dictionaryChoices[0]);
-				}
-			} catch (e) {
-				console.log(e);
-			}
-		},
-		[ dictionaryChoices ]
-	);
+	const [ data, setData ] = useState(value);
+	const POSChoices = [
+		[ 'Adjective', 'adjective' ],
+		[ 'Adverb', 'adverb' ],
+		[ 'Article', 'article' ],
+		[ 'Conjunction', 'conjunction' ],
+		[ 'Noun', 'noun' ],
+		[ 'Preposition', 'preposition' ],
+		[ 'Verb', 'verb' ],
+		[ 'Other', 'other' ]
+	];
 
 	const handleChange = event => {
 		setData(event.target.value);
-		updateDictionary(event.target.value);
+		updatePOS(event.target.value);
 	};
 
 	return (
 		<div>
-			<FormControl variant="outlined" className={classes.formControl}>
+			<FormControl required variant="outlined" className={classes.formControl}>
 				<InputLabel id={id}>{label}</InputLabel>
 				<Select labelId={id} id={id} value={data} onChange={handleChange} label={label}>
-					{dictionaryChoices.map((choice, i) => {
+					{POSChoices.map(choice => {
 						return (
-							<MenuItem key={i} value={choice}>
-								{choice.definition}
+							<MenuItem key={choice[1]} value={choice[1]}>
+								{choice[0]}
 							</MenuItem>
 						);
 					})}

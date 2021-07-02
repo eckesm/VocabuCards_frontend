@@ -52,6 +52,42 @@ export async function createNewWord(source_code, word, translation, notes) {
 	}
 }
 
+export async function editWord(id, source_code, word, translation, notes) {
+	const headers = {
+		Authorization : 'Bearer ' + getAccessToken()
+	};
+	const data = {
+		word        : word,
+		source_code : source_code,
+		translation : translation,
+		notes       : notes || ''
+	};
+
+	try {
+		const res = await axios.put(`${API_URL}/vocab/words/${id}`, data, { headers: headers });
+
+		console.log(res.data);
+		return res.data;
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+export async function deleteWord(id) {
+	const headers = {
+		Authorization : 'Bearer ' + getAccessToken()
+	};
+
+	try {
+		const res = await axios.delete(`${API_URL}/vocab/words/${id}`, { headers: headers });
+
+		console.log(res.data);
+		return res.data;
+	} catch (e) {
+		console.log(e);
+	}
+}
+
 export async function createNewVariation(
 	root_id,
 	source_code,
@@ -82,8 +118,7 @@ export async function createNewVariation(
 
 	try {
 		const res = await axios.post(`${API_URL}/vocab/variations/new`, data, { headers: headers });
-
-		console.log(res.data);
+		
 		return res.data;
 	} catch (e) {
 		console.log(e);
@@ -105,7 +140,7 @@ export async function editVariation(
 		Authorization : 'Bearer ' + getAccessToken()
 	};
 	const data = {
-		id             : id,
+		// id             : id,
 		part_of_speech : part_of_speech,
 		word           : word,
 		translation    : translation,
@@ -117,7 +152,22 @@ export async function editVariation(
 	};
 
 	try {
-		const res = await axios.post(`${API_URL}/vocab/variations/${id}`, data, { headers: headers });
+		const res = await axios.put(`${API_URL}/vocab/variations/${id}`, data, { headers: headers });
+
+		console.log(res.data);
+		return res.data;
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+export async function deleteVariation(id) {
+	const headers = {
+		Authorization : 'Bearer ' + getAccessToken()
+	};
+
+	try {
+		const res = await axios.delete(`${API_URL}/vocab/variations/${id}`, { headers: headers });
 
 		console.log(res.data);
 		return res.data;

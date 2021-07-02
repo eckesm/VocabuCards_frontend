@@ -46,10 +46,10 @@ const IGNORED = [
 function splitString(unsplitString) {
 	const splitList = [];
 	let startPosition = 0;
-	let endPosition = 0;
+	// let endPosition = 0;
 	for (let charPosition = 0; charPosition < unsplitString.length; charPosition++) {
 		if (IGNORED.indexOf(unsplitString[charPosition]) === -1) {
-			endPosition++;
+			// endPosition++
 		}
 		else {
 			let word = unsplitString.slice(startPosition, charPosition);
@@ -84,47 +84,54 @@ function refineSplitString(wordList) {
 	return wordList;
 }
 
-export function renderHtml(pastedText,source_code,translate_code) {
+export function renderHtml(pastedText, source_code, translate_code) {
 	const unrefinedList = splitString(pastedText);
 	const refinedList = refineSplitString(unrefinedList);
-	const paragraphsArray=[]
-	let paragraph=[]
+	const paragraphsArray = [];
 
+	let paragraph = [];
+	let sentence = [];
 	for (let word of refinedList) {
 		if (word === '\n') {
-			paragraphsArray.push(paragraph)
-			paragraph=[]
-
+			paragraph.push(sentence);
+			paragraphsArray.push(paragraph);
+			sentence = [];
+			paragraph = [];
+		}
+		else if (word === '.') {
+			sentence.push({
+				text : '.',
+				type : 'period'
+			});
+			paragraph.push(sentence);
+			sentence = [];
 		}
 		else if (word === ' ') {
-			paragraph.push(
-				{
-							text : ' ',
-							type : 'space'
-						}
-			)
+			// paragraph.push({
+			sentence.push({
+				text : ' ',
+				type : 'space'
+			});
 		}
 		else if (IGNORED.indexOf(word) === -1) {
-			paragraph.push(
-				{
-							text : word,
-							type : 'clickable',
-							source_code,
-							translate_code
-						}
-			)
+			// paragraph.push({
+			sentence.push({
+				text           : word,
+				type           : 'clickable',
+				source_code,
+				translate_code
+			});
 		}
 		else {
-			paragraph.push(
-				{
-							text : word,
-							type : 'ignore'
-						}
-			)
+			// paragraph.push({
+			sentence.push({
+				text : word,
+				type : 'ignore'
+			});
 		}
 	}
 
-	return paragraphsArray
+	return paragraphsArray;
 
 	// updateClickableClickEvent();
 	// updateClickableModals();

@@ -1,34 +1,60 @@
-.VocabCardDetail-heading {
-	border-top-left-radius: 8px;
-	border-top-right-radius: 8px;
-	border: 1px solid rgb(200, 200, 200);
-	margin-bottom: 15px;
+.WordDetail {
+	margin-top: 100px;
+	min-width: 275;
+	margin-top: '100px';
+	font-family: 'roboto, sans-serif';
 }
 
-.VocabCardDetail-title {
-	border-top-left-radius: 8px;
-	border-top-right-radius: 8px;
-	padding: 15px;
-	border-bottom: 1px solid rgb(200, 200, 200);
-	background-color: rgb(218, 237, 255);
+.WordDetail-heading {
+	border-radius: 3px;
+	border: 1px solid rgb(215, 215, 215);
+	box-shadow: 5px 5px 8px grey;
+	margin-bottom: 10px;
+}
 
+.WordDetail-topHeading {
+	padding: 15px;
+	border-bottom: 1px solid rgb(215, 215, 215);
+	background-color: rgb(218, 237, 255);
 	font-family: 'Roboto', sans-serif;
 	font-size: 2rem;
 	text-align: left;
 	color: blue;
-	margin: 0px;
+	display: flex;
+	justify-content: space-between;
 }
 
-.VocabCardDetail-wordInfoContainer {
+.WordDetail-title {
+	margin: 10px;
+}
+
+.WordDetail-buttonGroup {
+	position: relative;
+	top: 5px;
+}
+
+.WordDetail-wordInfoContainer {
 	padding-top: 15px;
 	padding-right: 15px;
 	padding-left: 15px;
 	padding-bottom: 10px;
 }
 
-.VocabCardDetail-wordInfo {
+.WordDetail-wordInfo {
 	font-family: 'Roboto', sans-serif;
 	text-align: left;
 	margin: 0px;
 	margin-bottom: 5px;
 }
+
+.WordDetail-accordian {
+	width: '100%';
+	border-radius: 3px;
+	border: 1px solid rgb(215, 215, 215);
+	box-shadow: 5px 5px 8px grey;
+}
+
+/* .WordDetail-accordianPanel {
+	border: 1px solid rgb(215, 215, 215);
+	box-shadow: 5px 5px 8px grey;
+} */

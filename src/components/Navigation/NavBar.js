@@ -141,6 +141,7 @@ export default function NavBar() {
 								<VocabForm
 									open={modalOpen}
 									handleClose={handleModalClose}
+									setting='variation'
 								/>
 							)}
 						</div>

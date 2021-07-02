@@ -5,8 +5,11 @@ import {
 	SET_USER_LANGUAGE,
 	GET_ALL_LANGUAGE_OPTIONS,
 	ADD_WORD,
+	EDIT_WORD,
+	DELETE_WORD,
 	ADD_COMPONENT,
 	EDIT_COMPONENT,
+	DELETE_COMPONENT,
 	SET_TEXT_INPUT
 } from './types';
 
@@ -157,6 +160,26 @@ export function addWordToState(wordObject) {
 	};
 }
 
+// EDIT_WORD
+export function editWordInState(wordObject) {
+	return function(dispatch) {
+		dispatch({
+			type : EDIT_WORD,
+			word : wordObject
+		});
+	};
+}
+
+// DELETE_WORD
+export function deleteWordInState(root_id) {
+	return function(dispatch) {
+		dispatch({
+			type    : DELETE_WORD,
+			root_id
+		});
+	};
+}
+
 // ADD_COMPONENT
 export function addComponentToState(componentObject) {
 	return function(dispatch) {
@@ -167,12 +190,23 @@ export function addComponentToState(componentObject) {
 	};
 }
 
-// ADD_COMPONENT
+// EDIT_COMPONENT
 export function editComponentInState(componentObject) {
 	return function(dispatch) {
 		dispatch({
 			type      : EDIT_COMPONENT,
 			component : componentObject
+		});
+	};
+}
+
+// DELETE_COMPONENT
+export function deleteComponentInState(componentId, root_id) {
+	return function(dispatch) {
+		dispatch({
+			type        : DELETE_COMPONENT,
+			componentId,
+			root_id
 		});
 	};
 }

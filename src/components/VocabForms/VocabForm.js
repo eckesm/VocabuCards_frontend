@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 
 import VocabComponentForm from './VocabComponentForm';
+import VocabWordForm from './VocabWordForm';
 
 function getModalStyle() {
 	const top = 50;
@@ -29,14 +30,31 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function VocabForm({ open, handleClose, wordText = null, variation = null }) {
+export default function VocabForm({
+	open,
+	handleClose,
+	wordText = null,
+	variation = null,
+	setVariation,
+	word = null,
+	setWord,
+	setting
+}) {
 	const classes = useStyles();
 	// getModalStyle is not a pure function, we roll the style only on the first render
 	const [ modalStyle ] = React.useState(getModalStyle);
 
 	const body = (
 		<div style={modalStyle} className={classes.paper}>
-			<VocabComponentForm onClose={handleClose} wordText={wordText} variation={variation} />
+			{setting === 'variation' && (
+				<VocabComponentForm
+					onClose={handleClose}
+					wordText={wordText}
+					variation={variation}
+					setVariation={setVariation}
+				/>
+			)}
+			{setting === 'root' && <VocabWordForm onClose={handleClose} word={word} setWord={setWord} />}
 		</div>
 	);
 

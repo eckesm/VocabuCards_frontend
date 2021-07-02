@@ -1,34 +1,52 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { getDictionaryWordViaAPI, getTranslateWordViaAPI, createNewWord } from '../../helpers/API';
-
-import SelectDictionary from './SelectDictionary';
+import { getTranslateWordViaAPI, createNewWord, editWord } from '../../helpers/API';
+import { addWordToState, editWordInState } from '../../actions/vocab';
 
 const useStyles = makeStyles(theme => ({
-	root : {
+	root         : {
 		'& .MuiTextField-root' : {
 			margin : theme.spacing(1),
-			width  : '25ch'
+			width  : '90%'
 		}
+	},
+	container    : {
+		fontFamily : 'roboto, sans-serif'
+	},
+	button       : {
+		marginBottom : '15px',
+		marginLeft   : '9px'
+	},
+	submitButton : {
+		marginTop    : '15px',
+		marginBottom : '15px',
+		marginLeft   : '9px'
 	}
 }));
 
-export default function VocabWordForm() {
+export default function VocabWordForm({ onClose, word = null, setWord }) {
+	const dispatch = useDispatch();
 	const { language } = useSelector(store => store);
-	const [ dictionaryChoices, setDictionaryChoices ] = useState([]);
 
-	const [ formData, setFormData ] = useState({
-		root        : '',
+	let INITIAL_STATE = {
+		word        : '',
 		translation : '',
-		dictionary  : '',
-		synonyms    : '',
-		examples    : '',
 		notes       : ''
-	});
+	};
+
+	if (word) {
+		INITIAL_STATE = {
+			word        : word.root,
+			translation : word.translation,
+			notes       : word.notes
+		};
+	}
+
+	const [ formData, setFormData ] = useState(INITIAL_STATE);
 
 	function handleChange(evt) {
 		const { name, value } = evt.target;
@@ -38,16 +56,36 @@ export default function VocabWordForm() {
 		}));
 	}
 
-	function handleSubmit(evt) {
+	useEffect(() => {
+		if (formData.word) {
+			try {
+				translateAPI();
+			} catch (e) {
+				console.log(e);
+			}
+		}
+	}, []);
+
+	async function handleSubmit(evt) {
 		evt.preventDefault();
-		createNewWord(
-			language,
-			formData.root,
-			formData.translation,
-			formData.dictionary.definition,
-			formData.synonyms,
-			formData.examples
-		);
+
+		if (word) {
+			const wordRes = await editWord(
+				word.id,
+				word.source_code,
+				formData.word,
+				formData.translation,
+				formData.notes
+			);
+			dispatch(editWordInState(wordRes.word));
+			setWord(wordRes.word);
+		}
+		else {
+			const wordRes = await createNewWord(language, formData.word, formData.translation, formData.notes);
+			dispatch(addWordToState(wordRes.word));
+		}
+
+		onClose();
 	}
 
 	function handleTranslate(evt) {
@@ -55,117 +93,41 @@ export default function VocabWordForm() {
 		translateAPI();
 	}
 	async function translateAPI() {
-		const results = await getTranslateWordViaAPI(formData.root, language);
+		const results = await getTranslateWordViaAPI(formData.word, language);
 		setFormData({ ...formData, translation: results });
-	}
-
-	function handleDictionary(evt) {
-		evt.preventDefault();
-		dictionaryAPI();
-	}
-	async function dictionaryAPI() {
-		const results = await getDictionaryWordViaAPI(formData.translation);
-		setDictionaryChoices(results.results);
-	}
-
-	function updateDictionary(dictionaryChoice) {
-		setFormData({
-			...formData,
-			dictionary : dictionaryChoice,
-			examples   : constructExamplesDisplay(dictionaryChoice['examples']),
-			synonyms   : constructSynonymsDisplay(dictionaryChoice['synonyms'])
-		});
-	}
-
-	function constructExamplesDisplay(array) {
-		let display = '';
-		if (array) {
-			for (let index = 0; index < array.length; index++) {
-				if (index > 0) {
-					display += '; ';
-				}
-				display += array[index];
-			}
-		}
-		else {
-			display = '';
-		}
-		return display;
-	}
-
-	function constructSynonymsDisplay(array) {
-		let display = '';
-		if (array) {
-			for (let index = 0; index < array.length; index++) {
-				if (index > 0) {
-					display += ', ';
-				}
-				display += array[index];
-			}
-		}
-		else {
-			display = '';
-		}
-		return display;
 	}
 
 	const classes = useStyles();
 
 	return (
-		<div>
-			<h1>Vocabulary Word Form</h1>
+		<div className={classes.container}>
+			{word && <h1>Edit Word</h1>}
+			{!word && <h1>Add Word</h1>}
 			<form onSubmit={handleSubmit} className={classes.root}>
-				<TextField
-					id="root"
-					name="root"
-					label="Root"
-					onChange={handleChange}
-					value={formData.root}
-					variant="outlined"
-				/>
+				<div>
+					<TextField
+						id="word"
+						name="word"
+						label="Root Word"
+						onChange={handleChange}
+						value={formData.word}
+						variant="outlined"
+					/>
+					<Button className={classes.button} variant="outlined" color="primary" onClick={handleTranslate}>
+						Translate
+					</Button>
+				</div>
 
-				<Button variant="outlined" color="primary" onClick={handleTranslate}>
-					Translate
-				</Button>
-
-				<TextField
-					id="translation"
-					name="translation"
-					label="Translation"
-					onChange={handleChange}
-					value={formData.translation}
-					variant="outlined"
-				/>
-				<Button variant="outlined" color="primary" onClick={handleDictionary}>
-					Search Dictionary
-				</Button>
-
-				<SelectDictionary
-					id="dictionary"
-					name="dictionary"
-					label="Dictionary"
-					updateDictionary={updateDictionary}
-					dictionaryChoices={dictionaryChoices}
-					value={formData.dictionary}
-				/>
-
-				<TextField
-					id="synonyms"
-					name="synonyms"
-					label="Synonyms"
-					onChange={handleChange}
-					value={formData.synonyms}
-					variant="outlined"
-				/>
-
-				<TextField
-					id="examples"
-					name="examples"
-					label="Examples"
-					onChange={handleChange}
-					value={formData.examples}
-					variant="outlined"
-				/>
+				<div>
+					<TextField
+						id="translation"
+						name="translation"
+						label="Translation"
+						onChange={handleChange}
+						value={formData.translation}
+						variant="outlined"
+					/>
+				</div>
 
 				<TextField
 					id="notes"
@@ -176,8 +138,8 @@ export default function VocabWordForm() {
 					variant="outlined"
 				/>
 
-				<Button variant="outlined" type="submit" color="primary">
-					Add Word
+				<Button className={classes.submitButton} variant="contained" type="submit" color="primary" size="large">
+					{word ? 'Save Word' : 'Add Word'}
 				</Button>
 			</form>
 		</div>

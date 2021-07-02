@@ -2,7 +2,7 @@ import React from 'react';
 
 import './RenderedText.css';
 
-export default function Word({ wordObject, updateModalText }) {
+export default function Word({ wordObject, updateModalText, sentenceText }) {
 	const wordClassName = `RenderedText-Word-${wordObject.type}`;
 
 	if (wordObject.type === 'space') {
@@ -14,7 +14,10 @@ export default function Word({ wordObject, updateModalText }) {
 	}
 
 	return (
-		<span onClick={() => updateModalText({ text: wordObject.text })} className={wordClassName}>
+		<span
+			onClick={() => updateModalText({ text: wordObject.text, sentence: sentenceText })}
+			className={wordClassName}
+		>
 			{wordObject.text}
 		</span>
 	);

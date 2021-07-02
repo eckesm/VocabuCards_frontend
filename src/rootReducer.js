@@ -6,8 +6,11 @@ import {
 	GET_ALL_LANGUAGE_OPTIONS,
 	SET_USER_LANGUAGE,
 	ADD_WORD,
+	EDIT_WORD,
+	DELETE_WORD,
 	ADD_COMPONENT,
 	EDIT_COMPONENT,
+	DELETE_COMPONENT,
 	SET_TEXT_INPUT
 } from './actions/types';
 
@@ -86,6 +89,21 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 				words_array : sortByRoot([ ...state.words_array, action.word ])
 			};
 
+		case EDIT_WORD:
+			adjustedWordsArray = state.words_array.filter(w => w.id !== action.word.id);
+
+			return {
+				...state,
+				words_array : sortByRoot([ ...adjustedWordsArray, action.word ])
+			};
+
+		case DELETE_WORD:
+			adjustedWordsArray = state.words_array.filter(w => w.id !== action.root_id);
+			return {
+				...state,
+				words_array : adjustedWordsArray
+			};
+
 		case ADD_COMPONENT:
 			root_id = action.component.root_id;
 			word = state.words_array.filter(w => w.id === root_id)[0];
@@ -104,6 +122,19 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 			updatedWord = {
 				...word,
 				components : sortByVariation([ ...adjustedComponentsArray, action.component ])
+			};
+			return {
+				...state,
+				words_array : sortByRoot([ ...adjustedWordsArray, updatedWord ])
+			};
+
+		case DELETE_COMPONENT:
+			word = state.words_array.filter(w => w.id === action.root_id)[0];
+			adjustedWordsArray = state.words_array.filter(w => w.id !== action.root_id);
+			adjustedComponentsArray = word.components.filter(c => c.id !== action.componentId);
+			updatedWord = {
+				...word,
+				components : sortByVariation(adjustedComponentsArray)
 			};
 			return {
 				...state,

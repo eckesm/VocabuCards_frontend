@@ -10,12 +10,21 @@ import VocabForm from '../VocabForms/VocabForm';
 import { setTextInput } from '../../actions/vocab';
 
 const useStyles = makeStyles(theme => ({
-	root : {
+	root             : {
 		'& > *' : {
 			margin : theme.spacing(1),
 			// width: '25ch',
 			width  : '90%'
 		}
+	},
+	renderTextScreen : {
+		border          : '1px solid rgb(200, 200, 200)',
+		borderRadius    : '3px',
+		margin          : '20px',
+		marginTop       : '100px',
+		fontFamily      : 'roboto, sans-serif',
+		backgroundColor : 'snow',
+		boxShadow       : '5px 5px 8px grey'
 	}
 }));
 
@@ -47,9 +56,10 @@ export default function RenderTextScreen() {
 	}
 
 	function updateModalText(wordObject) {
-		// console.log(wordObject)
-		setModalText(wordObject.text);
+		// setModalText(wordObject.text);
+		setModalText(wordObject);
 		setOpen(true);
+		// console.log(wordObject.sentence);
 	}
 
 	const classes = useStyles();
@@ -63,7 +73,7 @@ export default function RenderTextScreen() {
 	};
 
 	return (
-		<div>
+		<div className={classes.renderTextScreen}>
 			<h1>RENDER TEXT SCREEN</h1>
 			<form onSubmit={handleSubmit} className={classes.root}>
 				<TextField
@@ -76,7 +86,7 @@ export default function RenderTextScreen() {
 					variant="outlined"
 					onChange={handleChange}
 				/>
-				<Button variant="outlined" type="submit" color="primary">
+				<Button variant="contained" type="submit" color="primary">
 					Render
 				</Button>
 			</form>
@@ -87,7 +97,13 @@ export default function RenderTextScreen() {
 				})}
 			</div>
 
-			<VocabForm open={open} handleOpen={handleOpen} handleClose={handleClose} wordText={modalText} />
+			<VocabForm
+				open={open}
+				handleOpen={handleOpen}
+				handleClose={handleClose}
+				wordText={modalText}
+				setting="variation"
+			/>
 		</div>
 	);
 }

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Accordion from '@material-ui/core/Accordion';
@@ -9,51 +10,60 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import AllVariationCards from '../VariationCard/AllVariationCards';
 
+import './WordDetail.css';
+
 const useStyles = makeStyles(theme => ({
-	// root             : {
-	// 	width : '100%'
-	// },
 	heading          : {
 		fontSize   : theme.typography.pxToRem(15),
 		flexBasis  : '33.33%',
-		flexShrink : 0
+		flexShrink : 0,
+		fontWeight : 'bold'
 	},
 	secondaryHeading : {
 		fontSize : theme.typography.pxToRem(15),
 		color    : theme.palette.text.secondary
+	},
+	summary:{
+		borderBottom:'1px solid lightgrey'
 	}
 }));
 
-export default function WordDetailAccordianPanel({ panel, expanded, onChange, pos, components }) {
+export default function WordDetailAccordianPanel({ panel, expanded, onChange, pos, wordId }) {
 	const classes = useStyles();
+	const { words_array } = useSelector(store => store);
 
-	console.log(components)
+	const [ variationHeading, setVariationHeading ] = useState('');
 
-	let variationHeading = '';
-	for (let i = 0; i < components.length; i++) {
-		if (i > 0 && i < components.length) {
-			variationHeading = variationHeading + ' | ';
-		}
-		variationHeading = variationHeading + components[i].variation;
-	}
+	useEffect(
+		() => {
+			const word = words_array.filter(w => w.id === wordId)[0];
+			const variations = word.components.filter(c => c.part_of_speech === pos);
+
+			let varHeading = '';
+			for (let i = 0; i < variations.length; i++) {
+				if (i > 0 && i < variations.length) {
+					varHeading = varHeading + ' | ';
+				}
+				varHeading = varHeading + variations[i].variation;
+			}
+			setVariationHeading(varHeading);
+		},
+		[ words_array ]
+	);
 
 	return (
-		<Accordion expanded={expanded} onChange={onChange}>
-			<AccordionSummary
+		<Accordion className="WordDetail-accordianPanel" expanded={expanded} onChange={onChange}>
+			<AccordionSummary className={classes.summary}
 				expandIcon={<ExpandMoreIcon />}
 				aria-controls={`panel${panel}bh-content`}
 				id={`panel${panel}bh-header`}
 			>
-				<Typography className={classes.heading}>{pos}</Typography>
+				<Typography className={classes.heading}>{pos}s</Typography>
 				<Typography className={classes.secondaryHeading}>{variationHeading}</Typography>
 			</AccordionSummary>
 
 			<AccordionDetails>
-				{/* <Typography>
-					Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget maximus est, id
-					dignissim quam.
-				</Typography> */}
-				<AllVariationCards variations={components} />
+				<AllVariationCards pos={pos} wordId={wordId} />
 			</AccordionDetails>
 		</Accordion>
 	);
