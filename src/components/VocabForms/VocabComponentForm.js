@@ -193,6 +193,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 	}
 
 	function updateDictionary(dictionaryChoice) {
+		console.log(dictionaryChoice.partOfSpeech);
 		setFormData({
 			...formData,
 			dictionary   : dictionaryChoice,
@@ -215,7 +216,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 			...formData,
 			partOfSpeech : pos
 		});
-		console.log(formData);
+		// console.log(formData);
 	}
 
 	function constructExamplesDisplay(array) {

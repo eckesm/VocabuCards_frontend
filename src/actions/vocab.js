@@ -10,14 +10,15 @@ import {
 	ADD_COMPONENT,
 	EDIT_COMPONENT,
 	DELETE_COMPONENT,
-	SET_TEXT_INPUT
+	SET_TEXT_INPUT,
+	SET_LAST_LOGIN
 } from './types';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/vocab';
 
-function getTextInput() {
-	return localStorage.getItem('text_input') || null;
-}
+// function getTextInput() {
+// 	return localStorage.getItem('text_input') || null;
+// }
 
 function getAccessToken() {
 	return localStorage.getItem('access_token') || null;
@@ -39,14 +40,12 @@ export function getUserInfo() {
 				dispatch(setUserLanguage(data.last_source_code));
 				dispatch(storeUserLanguageWords(data.words_array, data.last_source_code));
 				dispatch(loggedInUserInfo(data.user));
-				dispatch(setTextInputInState(getTextInput()));
+				dispatch(setTextInputInState(data.current_text));
+				dispatch(storeLastLogininState(data.last_login));
 			} catch (e) {
 				console.log(e);
 			}
 		}
-		// else {
-		// console.log('No access token present');
-		// }
 	};
 }
 
@@ -54,6 +53,13 @@ function loggedInUserInfo(email) {
 	return {
 		type : LOGGED_IN_USER,
 		user : email
+	};
+}
+
+function storeLastLogininState(last_login) {
+	return {
+		type       : SET_LAST_LOGIN,
+		last_login
 	};
 }
 
@@ -90,6 +96,7 @@ export function updateUserLastLanguageViaAPI(source_code) {
 			const res = await axios.get(`${API_URL}/last/${source_code}`, { headers: headers });
 			let last_source_code = res.data;
 
+			dispatch(setTextInputInState(null));
 			return dispatch(setUserLanguage(last_source_code));
 		} catch (e) {
 			console.log(e);
@@ -213,7 +220,6 @@ export function deleteComponentInState(componentId, root_id) {
 
 // SET_TEXT_INPUT
 export function setTextInput(textInput) {
-	localStorage.setItem('text_input', textInput);
 	return function(dispatch) {
 		dispatch(setTextInputInState(textInput));
 	};

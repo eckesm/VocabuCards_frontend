@@ -1,23 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 
-import './RenderedText.css';
+const useStyles = makeStyles(theme => ({
+	span      : {
+		height  : 'fit-content',
+		display : 'inline-block'
+	},
+	space     : {
+		height     : 'fit-content',
+		display    : 'inline-block',
+		marginLeft : '5px'
+	},
+	clickable : {
+		height    : 'fit-content',
+		display   : 'inline-block',
+		margin    : '0px',
+		'&:hover' : {
+			backgroundColor : 'aqua'
+		}
+	},
+	clicked   : {
+		height          : 'fit-content',
+		display         : 'inline-block',
+		margin          : '0px',
+		backgroundColor : 'yellow'
+	}
+}));
 
 export default function Word({ wordObject, updateModalText, sentenceText }) {
-	const wordClassName = `RenderedText-Word-${wordObject.type}`;
+	const classes = useStyles();
+	const [ wordClassName, setWordClassName ] = useState(wordObject.type);
+
+	function handleClick() {
+		updateModalText({ text: wordObject.text, sentence: sentenceText });
+		setWordClassName('clicked');
+	}
 
 	if (wordObject.type === 'space') {
-		return <span className={wordClassName} />;
+		return <span className={classes.space} />;
 	}
 
 	if (wordObject.type === 'ignore') {
-		return <span className={wordClassName}>{wordObject.text}</span>;
+		return <span className={classes.span}>{wordObject.text}</span>;
 	}
 
 	return (
-		<span
-			onClick={() => updateModalText({ text: wordObject.text, sentence: sentenceText })}
-			className={wordClassName}
-		>
+		<span onClick={handleClick} className={classes[wordClassName]}>
 			{wordObject.text}
 		</span>
 	);

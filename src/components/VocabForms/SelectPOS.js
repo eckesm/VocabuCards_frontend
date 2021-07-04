@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+
+import { partsOfSpeechSelectMenuItems } from '../../helpers/partsOfSpeech';
 
 const useStyles = makeStyles(theme => ({
 	formControl : {
@@ -19,16 +21,23 @@ const useStyles = makeStyles(theme => ({
 export default function SelectPOS({ id, label, updatePOS, value }) {
 	const classes = useStyles();
 	const [ data, setData ] = useState(value);
-	const POSChoices = [
-		[ 'Adjective', 'adjective' ],
-		[ 'Adverb', 'adverb' ],
-		[ 'Article', 'article' ],
-		[ 'Conjunction', 'conjunction' ],
-		[ 'Noun', 'noun' ],
-		[ 'Preposition', 'preposition' ],
-		[ 'Verb', 'verb' ],
-		[ 'Other', 'other' ]
-	];
+	// const POSChoices = [
+	// 	[ 'Adjective', 'adjective' ],
+	// 	[ 'Adverb', 'adverb' ],
+	// 	[ 'Article', 'article' ],
+	// 	[ 'Conjunction', 'conjunction' ],
+	// 	[ 'Noun', 'noun' ],
+	// 	[ 'Preposition', 'preposition' ],
+	// 	[ 'Verb', 'verb' ],
+	// 	[ 'Other', 'other' ]
+	// ];
+
+	useEffect(
+		() => {
+			setData(value);
+		},
+		[ value ]
+	);
 
 	const handleChange = event => {
 		setData(event.target.value);
@@ -40,7 +49,7 @@ export default function SelectPOS({ id, label, updatePOS, value }) {
 			<FormControl required variant="outlined" className={classes.formControl}>
 				<InputLabel id={id}>{label}</InputLabel>
 				<Select labelId={id} id={id} value={data} onChange={handleChange} label={label}>
-					{POSChoices.map(choice => {
+					{partsOfSpeechSelectMenuItems.map(choice => {
 						return (
 							<MenuItem key={choice[1]} value={choice[1]}>
 								{choice[0]}

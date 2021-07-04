@@ -98,23 +98,21 @@ export function renderHtml(pastedText, source_code, translate_code) {
 			sentence = [];
 			paragraph = [];
 		}
-		else if (word === '.') {
+		else if (word === '.' || word === '!' || word === '?') {
 			sentence.push({
-				text : '.',
+				text : word,
 				type : 'period'
 			});
 			paragraph.push(sentence);
 			sentence = [];
 		}
 		else if (word === ' ') {
-			// paragraph.push({
 			sentence.push({
 				text : ' ',
 				type : 'space'
 			});
 		}
 		else if (IGNORED.indexOf(word) === -1) {
-			// paragraph.push({
 			sentence.push({
 				text           : word,
 				type           : 'clickable',
@@ -130,6 +128,8 @@ export function renderHtml(pastedText, source_code, translate_code) {
 			});
 		}
 	}
+	paragraph.push(sentence);
+	paragraphsArray.push(paragraph);
 
 	return paragraphsArray;
 

@@ -65,6 +65,10 @@ export default function NavBar() {
 		setAnchorEl(null);
 	};
 
+	const goToNewUser = () => {
+		history.push('/signup');
+	};
+
 	const goToLogin = () => {
 		history.push('/login');
 	};
@@ -138,16 +142,15 @@ export default function NavBar() {
 								Add Word
 							</Button>
 							{modalOpen && (
-								<VocabForm
-									open={modalOpen}
-									handleClose={handleModalClose}
-									setting='variation'
-								/>
+								<VocabForm open={modalOpen} handleClose={handleModalClose} setting="variation" />
 							)}
 						</div>
 					)}
 					{!auth && (
 						<div>
+							<Button color="inherit" onClick={goToNewUser}>
+								New User
+							</Button>
 							<Button color="inherit" onClick={goToLogin}>
 								Login
 							</Button>

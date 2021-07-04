@@ -23,21 +23,27 @@ const useStyles = makeStyles(theme => ({
 		fontSize : theme.typography.pxToRem(15),
 		color    : theme.palette.text.secondary
 	},
-	summary:{
-		borderBottom:'1px solid lightgrey'
+	summary          : {
+		borderBottom : '1px solid lightgrey'
 	}
 }));
 
 export default function WordDetailAccordianPanel({ panel, expanded, onChange, pos, wordId }) {
 	const classes = useStyles();
 	const { words_array } = useSelector(store => store);
-
 	const [ variationHeading, setVariationHeading ] = useState('');
+	const [ hidePanel, setHidePanel ] = useState(true);
 
 	useEffect(
 		() => {
 			const word = words_array.filter(w => w.id === wordId)[0];
 			const variations = word.components.filter(c => c.part_of_speech === pos);
+			if (variations.length > 0) {
+				setHidePanel(false);
+			}
+			else {
+				setHidePanel(true);
+			}
 
 			let varHeading = '';
 			for (let i = 0; i < variations.length; i++) {
@@ -52,8 +58,9 @@ export default function WordDetailAccordianPanel({ panel, expanded, onChange, po
 	);
 
 	return (
-		<Accordion className="WordDetail-accordianPanel" expanded={expanded} onChange={onChange}>
-			<AccordionSummary className={classes.summary}
+		<Accordion className="WordDetail-accordianPanel" expanded={expanded} onChange={onChange} hidden={hidePanel}>
+			<AccordionSummary
+				className={classes.summary}
 				expandIcon={<ExpandMoreIcon />}
 				aria-controls={`panel${panel}bh-content`}
 				id={`panel${panel}bh-header`}

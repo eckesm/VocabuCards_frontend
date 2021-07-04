@@ -1,31 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
+import { emptyPartsOfSpeechObject } from '../../helpers/partsOfSpeech';
+
 import WordDetailAccordianPanel from './WordDetailAccordianPanel';
 
-import './WordDetail.css'
-
+import './WordDetail.css';
 
 export default function WordDetailAccordian({ wordId }) {
-	// const classes = useStyles();
 	const [ expanded, setExpanded ] = useState(false);
 	const [ partsOfSpeechArray, setPartsOfSpeechArray ] = useState(null);
-	const [ partsOfSpeechObj, setPartsOfSpeechObj ] = useState(null);
+	const [ partsOfSpeechObj, setPartsOfSpeechObj ] = useState(emptyPartsOfSpeechObject);
 	const { words_array } = useSelector(store => store);
 
 	useEffect(
 		() => {
 			const word = words_array.filter(w => w.id === wordId)[0];
-			const posObj = {};
+			const posObj = partsOfSpeechObj;
 			function preparePosGroups() {
 				word.components.forEach(component => {
 					let pos = component.part_of_speech;
-					if (posObj.hasOwnProperty(pos)) {
-						posObj[pos].push(component);
-					}
-					else {
-						posObj[pos] = [ component ];
-					}
+					posObj[pos].push(component);
 				});
 				return posObj;
 			}
@@ -42,8 +37,7 @@ export default function WordDetailAccordian({ wordId }) {
 
 	if (partsOfSpeechArray && partsOfSpeechObj) {
 		return (
-			<div className='WordDetail-accordian'>
-				{/* <h1>Parts of Speech</h1> */}
+			<div className="WordDetail-accordian">
 				{partsOfSpeechArray.map((pos, index) => {
 					return (
 						<WordDetailAccordianPanel

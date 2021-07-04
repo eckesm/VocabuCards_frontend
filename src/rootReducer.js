@@ -11,16 +11,21 @@ import {
 	ADD_COMPONENT,
 	EDIT_COMPONENT,
 	DELETE_COMPONENT,
-	SET_TEXT_INPUT
+	SET_TEXT_INPUT,
+	ADD_ALERT,
+	CLEAR_ALERTS,
+	SET_LAST_LOGIN,
 } from './actions/types';
 
 const INITIAL_STATE = {
-	user            : null,
-	words_array     : [],
+	alerts          : [],
 	language        : null,
-	languages       : [],
 	language_object : {},
-	text_input      : ''
+	languages       : [],
+	last_login      : null,
+	text_input      : '',
+	user            : null,
+	words_array     : []
 };
 
 function sortByRoot(words_array) {
@@ -59,6 +64,24 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 			return {
 				...state,
 				user : action.user
+			};
+
+		case SET_LAST_LOGIN:
+			return {
+				...state,
+				last_login : action.last_login
+			};
+
+		case ADD_ALERT:
+			return {
+				...state,
+				alerts : [ ...state.alerts, action.alert ]
+			};
+
+		case CLEAR_ALERTS:
+			return {
+				...state,
+				alerts : []
 			};
 
 		case LOGOUT_USER:

@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { renderHtml } from '../../helpers/helpers';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-// import { v4 as uuid } from 'uuid';
+
 import Paragraph from './Paragraph';
 import VocabForm from '../VocabForms/VocabForm';
 import { setTextInput } from '../../actions/vocab';
+import { updateSavedRenderedText } from '../../helpers/API';
 
 const useStyles = makeStyles(theme => ({
 	root             : {
@@ -25,17 +26,30 @@ const useStyles = makeStyles(theme => ({
 		fontFamily      : 'roboto, sans-serif',
 		backgroundColor : 'snow',
 		boxShadow       : '5px 5px 8px grey'
+	},
+	renderTextOutput : {
+		border          : '1px solid rgb(200, 200, 200)',
+		borderRadius    : '3px',
+		margin          : '53px',
+		marginTop       : '25px',
+		fontFamily      : 'roboto, sans-serif',
+		backgroundColor : 'snow',
+		// boxShadow       : '5px 5px 8px grey'
+		padding         : '15px',
+		textAlign       : 'left',
+		fontSize        : '1.5rem'
 	}
 }));
 
 export default function RenderTextScreen() {
+	const classes = useStyles();
 	const dispatch = useDispatch();
-	const { text_input } = useSelector(store => store);
+	const { text_input, language, language_object } = useSelector(store => store);
 
 	const [ formData, setFormData ] = useState({
 		foreignText : text_input
 	});
-	let [ renderedText, setRenderedText ] = useState([ [] ]);
+	let [ renderedText, setRenderedText ] = useState([]);
 	const [ modalText, setModalText ] = useState(null);
 
 	function handleChange(evt) {
@@ -50,19 +64,17 @@ export default function RenderTextScreen() {
 
 	function handleSubmit(evt) {
 		evt.preventDefault();
+		updateSavedRenderedText(formData.foreignText);
 		dispatch(setTextInput(formData.foreignText));
+
 		let prepareRenderedText = renderHtml(formData.foreignText, source_code, translate_code);
 		setRenderedText(prepareRenderedText);
 	}
 
 	function updateModalText(wordObject) {
-		// setModalText(wordObject.text);
 		setModalText(wordObject);
 		setOpen(true);
-		// console.log(wordObject.sentence);
 	}
-
-	const classes = useStyles();
 
 	const [ open, setOpen ] = React.useState(false);
 	const handleOpen = () => {
@@ -72,14 +84,25 @@ export default function RenderTextScreen() {
 		setOpen(false);
 	};
 
+	useEffect(
+		() => {
+			if (text_input !== '' && text_input !== null) {
+				setFormData({ ...formData, foreignText: text_input });
+				let prepareRenderedText = renderHtml(text_input, source_code, translate_code);
+				setRenderedText(prepareRenderedText);
+			}
+		},
+		[ text_input ]
+	);
+
 	return (
 		<div className={classes.renderTextScreen}>
-			<h1>RENDER TEXT SCREEN</h1>
+			<h1>Study {language_object[language]} Text</h1>
 			<form onSubmit={handleSubmit} className={classes.root}>
 				<TextField
 					id="foreignText"
 					name="foreignText"
-					label="Paste foreign language text"
+					label="Type or paste foreign language text"
 					multiline
 					rows={10}
 					value={formData.foreignText}
@@ -91,10 +114,20 @@ export default function RenderTextScreen() {
 				</Button>
 			</form>
 
-			<div>
-				{renderedText.map((paragraphArray, i) => {
-					return <Paragraph key={i} paragraphArray={paragraphArray} updateModalText={updateModalText} />;
-				})}
+			<div className={classes.renderTextOutput}>
+				{renderedText.length === 0 && (
+					<h4>
+						<i>
+							...type or paste {language_object[language]} into the input box then click RENDER to
+							process...
+						</i>
+					</h4>
+				)}
+
+				{renderedText.length > 0 &&
+					renderedText.map((paragraphArray, i) => {
+						return <Paragraph key={i} paragraphArray={paragraphArray} updateModalText={updateModalText} />;
+					})}
 			</div>
 
 			<VocabForm

@@ -2,16 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import { loginUserViaAPI } from '../../actions/auth';
-
-import { TextField, Button, Link } from '@material-ui/core';
-
+import { registerUserViaAPI } from '../../actions/auth';
+import { getUserInfo } from '../../actions/vocab';
+import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
 	container : {
 		margin          : '0 auto',
-		marginTop       : '100px',
+		// marginTop       : '150px',
 		width           : '300px',
 		fontFamily      : 'roboto, sans-serif',
 		border          : '1px solid rgb(200, 200, 200)',
@@ -26,18 +25,16 @@ const useStyles = makeStyles(theme => ({
 	},
 	button    : {
 		marginTop : '15px'
-	},
-	link      : {
-		marginTop : '25px'
 	}
 }));
 
-export default function LoginForm({ addAlert }) {
-	const { user } = useSelector(store => store);
+export default function SignUpForm({ addAlert }) {
+	const user = useSelector(store => store.user);
 	const dispatch = useDispatch();
 	const history = useHistory();
 
 	const [ formData, setFormData ] = useState({
+		userName     : '',
 		emailAddress : '',
 		password     : ''
 	});
@@ -45,10 +42,11 @@ export default function LoginForm({ addAlert }) {
 	useEffect(
 		() => {
 			if (user) {
-				history.push('/words');
+				dispatch(getUserInfo());
+				history.push('/read');
 			}
 		},
-		[ user, history ]
+		[ user, history, dispatch ]
 	);
 
 	function handleChange(evt) {
@@ -61,7 +59,7 @@ export default function LoginForm({ addAlert }) {
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
-		const res = await dispatch(loginUserViaAPI(formData.emailAddress, formData.password));
+		const res = await dispatch(registerUserViaAPI(formData.userName, formData.emailAddress, formData.password));
 		if (res.status === 'fail') {
 			addAlert({
 				type  : 'warning',
@@ -82,8 +80,16 @@ export default function LoginForm({ addAlert }) {
 
 	return (
 		<div className={classes.container}>
-			<h1>Login</h1>
+			<h1>New User</h1>
 			<form onSubmit={handleSubmit}>
+				<TextField
+					id="userName"
+					name="userName"
+					label="What name should we call you?"
+					className={classes.textInput}
+					onChange={handleChange}
+					value={formData.userName}
+				/>
 				<TextField
 					id="emailAddress"
 					name="emailAddress"
@@ -105,11 +111,6 @@ export default function LoginForm({ addAlert }) {
 					Submit
 				</Button>
 			</form>
-			<div className={classes.link}>
-				<Link href="/#/reset-password">
-					<i>I need to reset my password?</i>
-				</Link>
-			</div>
 		</div>
 	);
 }

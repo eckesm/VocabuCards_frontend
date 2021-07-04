@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
+import React, { useState } from 'react';
+import { resetPasswordViaAPI } from '../../helpers/API';
 
-import { loginUserViaAPI } from '../../actions/auth';
-
-import { TextField, Button, Link } from '@material-ui/core';
-
+import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -25,31 +21,16 @@ const useStyles = makeStyles(theme => ({
 		width        : '250px'
 	},
 	button    : {
-		marginTop : '15px'
-	},
-	link      : {
-		marginTop : '25px'
+        marginTop : '15px'
 	}
 }));
 
-export default function LoginForm({ addAlert }) {
-	const { user } = useSelector(store => store);
-	const dispatch = useDispatch();
-	const history = useHistory();
-
+export default function NewPasswordForm({ token, addAlert }) {
+    const classes = useStyles();
 	const [ formData, setFormData ] = useState({
-		emailAddress : '',
-		password     : ''
+		password      : '',
+		passwordCheck : ''
 	});
-
-	useEffect(
-		() => {
-			if (user) {
-				history.push('/words');
-			}
-		},
-		[ user, history ]
-	);
 
 	function handleChange(evt) {
 		const { name, value } = evt.target;
@@ -61,11 +42,18 @@ export default function LoginForm({ addAlert }) {
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
-		const res = await dispatch(loginUserViaAPI(formData.emailAddress, formData.password));
+		const res = await resetPasswordViaAPI(token, formData.password, formData.passwordCheck);
+		if (res.status === 'success') {
+			addAlert({
+				type  : 'success',
+				title : 'Success!',
+				text  : res.message
+			});
+		}
 		if (res.status === 'fail') {
 			addAlert({
 				type  : 'warning',
-				title : 'Incorrect!',
+				title : 'Password Mismatch!',
 				text  : res.message
 			});
 		}
@@ -78,38 +66,33 @@ export default function LoginForm({ addAlert }) {
 		}
 	}
 
-	const classes = useStyles();
 
 	return (
 		<div className={classes.container}>
-			<h1>Login</h1>
+			<h1>Change Password</h1>
 			<form onSubmit={handleSubmit}>
-				<TextField
-					id="emailAddress"
-					name="emailAddress"
-					label="Email Address"
-					className={classes.textInput}
-					onChange={handleChange}
-					value={formData.emailAddress}
-				/>
 				<TextField
 					id="password"
 					name="password"
-					label="Password"
+					label="New Password"
 					className={classes.textInput}
-					type="password"
 					onChange={handleChange}
 					value={formData.password}
+					type="password"
+				/>
+				<TextField
+					id="passwordCheck"
+					name="passwordCheck"
+					label="Re-enter New Password"
+					className={classes.textInput}
+					onChange={handleChange}
+					value={formData.passwordCheck}
+					type="password"
 				/>
 				<Button variant="contained" type="submit" color="primary" className={classes.button}>
-					Submit
+					Change Password
 				</Button>
 			</form>
-			<div className={classes.link}>
-				<Link href="/#/reset-password">
-					<i>I need to reset my password?</i>
-				</Link>
-			</div>
 		</div>
 	);
 }

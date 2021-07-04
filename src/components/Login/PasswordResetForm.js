@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
+import React, { useState } from 'react';
+import { sendPasswordResetViaAPI } from '../../helpers/API';
 
-import { loginUserViaAPI } from '../../actions/auth';
-
-import { TextField, Button, Link } from '@material-ui/core';
-
+import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -26,30 +22,13 @@ const useStyles = makeStyles(theme => ({
 	},
 	button    : {
 		marginTop : '15px'
-	},
-	link      : {
-		marginTop : '25px'
 	}
 }));
 
-export default function LoginForm({ addAlert }) {
-	const { user } = useSelector(store => store);
-	const dispatch = useDispatch();
-	const history = useHistory();
-
+export default function PasswordResetForm({ addAlert }) {
 	const [ formData, setFormData ] = useState({
-		emailAddress : '',
-		password     : ''
+		emailAddress : ''
 	});
-
-	useEffect(
-		() => {
-			if (user) {
-				history.push('/words');
-			}
-		},
-		[ user, history ]
-	);
 
 	function handleChange(evt) {
 		const { name, value } = evt.target;
@@ -61,15 +40,15 @@ export default function LoginForm({ addAlert }) {
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
-		const res = await dispatch(loginUserViaAPI(formData.emailAddress, formData.password));
-		if (res.status === 'fail') {
+		const res = await sendPasswordResetViaAPI(formData.emailAddress);
+		if (res.status === 'success') {
 			addAlert({
-				type  : 'warning',
-				title : 'Incorrect!',
+				type  : 'success',
+				title : 'Success!',
 				text  : res.message
 			});
 		}
-		if (res.status === 'error') {
+		if (res.status === 'fail') {
 			addAlert({
 				type  : 'error',
 				title : 'Error!',
@@ -82,7 +61,7 @@ export default function LoginForm({ addAlert }) {
 
 	return (
 		<div className={classes.container}>
-			<h1>Login</h1>
+			<h1>Reset Password</h1>
 			<form onSubmit={handleSubmit}>
 				<TextField
 					id="emailAddress"
@@ -92,24 +71,10 @@ export default function LoginForm({ addAlert }) {
 					onChange={handleChange}
 					value={formData.emailAddress}
 				/>
-				<TextField
-					id="password"
-					name="password"
-					label="Password"
-					className={classes.textInput}
-					type="password"
-					onChange={handleChange}
-					value={formData.password}
-				/>
 				<Button variant="contained" type="submit" color="primary" className={classes.button}>
-					Submit
+					Send Password Reset Link
 				</Button>
 			</form>
-			<div className={classes.link}>
-				<Link href="/#/reset-password">
-					<i>I need to reset my password?</i>
-				</Link>
-			</div>
 		</div>
 	);
 }
