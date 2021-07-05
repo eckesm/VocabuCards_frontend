@@ -1,8 +1,14 @@
+// import React, { useState, useEffect } from 'react';
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import { updateUserLastLanguageViaAPI, getUserLanguageWordsViaAPI, setUserLanguage } from '../../actions/vocab';
+import {
+	updateUserLastLanguageViaAPI,
+	getUserLanguageWordsViaAPI,
+	setUserLanguage
+	// getAllLanguageOptionsViaAPI
+} from '../../actions/vocab';
 
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -17,6 +23,10 @@ const useStyles = makeStyles(theme => ({
 	},
 	selectEmpty : {
 		marginTop : theme.spacing(2)
+	},
+	select      : {
+		width : '200px'
+		// width : '100%'
 	}
 }));
 
@@ -37,11 +47,18 @@ export default function SelectLanguage() {
 		history.push(`/words`);
 	};
 
+	// useEffect(() => {
+	// 	if (languages.length === 0) {
+	// 		dispatch(getAllLanguageOptionsViaAPI());
+	// 	}
+	// }, []);
+
 	return (
 		<div>
 			<FormControl variant="outlined" className={classes.formControl}>
 				<InputLabel id="language-label">Change Language</InputLabel>
 				<Select
+					className={classes.select}
 					labelId="language-label"
 					id="language"
 					value={language}

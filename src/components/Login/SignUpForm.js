@@ -7,10 +7,13 @@ import { getUserInfo } from '../../actions/vocab';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+import SelectStartLanguage from './SelectStartLanguage';
+
+// import { setUserLanguage } from '../../actions/vocab';
+
 const useStyles = makeStyles(theme => ({
 	container : {
 		margin          : '0 auto',
-		// marginTop       : '150px',
 		width           : '300px',
 		fontFamily      : 'roboto, sans-serif',
 		border          : '1px solid rgb(200, 200, 200)',
@@ -34,10 +37,20 @@ export default function SignUpForm({ addAlert }) {
 	const history = useHistory();
 
 	const [ formData, setFormData ] = useState({
-		userName     : '',
-		emailAddress : '',
-		password     : ''
+		userName      : '',
+		emailAddress  : '',
+		password      : '',
+		passwordCheck : '',
+		startLanguage : ''
 	});
+
+	function updateStartLanguage(source_code) {
+		// dispatch(setUserLanguage(source_code));
+		setFormData({
+			...formData,
+			startLanguage : source_code
+		});
+	}
 
 	useEffect(
 		() => {
@@ -59,7 +72,15 @@ export default function SignUpForm({ addAlert }) {
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
-		const res = await dispatch(registerUserViaAPI(formData.userName, formData.emailAddress, formData.password));
+		const res = await dispatch(
+			registerUserViaAPI(
+				formData.userName,
+				formData.emailAddress,
+				formData.password,
+				formData.passwordCheck,
+				formData.startLanguage
+			)
+		);
 		if (res.status === 'fail') {
 			addAlert({
 				type  : 'warning',
@@ -106,6 +127,20 @@ export default function SignUpForm({ addAlert }) {
 					type="password"
 					onChange={handleChange}
 					value={formData.password}
+				/>
+				<TextField
+					id="passwordCheck"
+					name="passwordCheck"
+					label="Re-enter Password"
+					className={classes.textInput}
+					type="password"
+					onChange={handleChange}
+					value={formData.passwordCheck}
+				/>
+				<SelectStartLanguage
+					// id="startLanguage"
+					// name="startLanguage"
+					updateStartLanguage={updateStartLanguage}
 				/>
 				<Button variant="contained" type="submit" color="primary" className={classes.button}>
 					Submit

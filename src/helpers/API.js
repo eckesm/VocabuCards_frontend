@@ -6,6 +6,19 @@ function getAccessToken() {
 	return localStorage.getItem('access_token') || null;
 }
 
+export async function createStarterWordsViaAPI() {
+	try {
+		const headers = {
+			Authorization : 'Bearer ' + getAccessToken()
+		};
+		const res = await axios.get(`${API_URL}/auth/starters`, {
+			headers : headers
+		});
+		return res.data;
+	} catch (e) {
+		console.log(e);
+	}
+}
 export async function getTranslateWordViaAPI(word, source_code, translate_code = 'en') {
 	try {
 		const headers = {

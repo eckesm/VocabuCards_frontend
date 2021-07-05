@@ -22,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 		border          : '1px solid rgb(200, 200, 200)',
 		borderRadius    : '3px',
 		margin          : '20px',
-		marginTop       : '100px',
+		marginTop       : '40px',
 		fontFamily      : 'roboto, sans-serif',
 		backgroundColor : 'snow',
 		boxShadow       : '5px 5px 8px grey'
@@ -34,7 +34,6 @@ const useStyles = makeStyles(theme => ({
 		marginTop       : '25px',
 		fontFamily      : 'roboto, sans-serif',
 		backgroundColor : 'snow',
-		// boxShadow       : '5px 5px 8px grey'
 		padding         : '15px',
 		textAlign       : 'left',
 		fontSize        : '1.5rem'
@@ -50,7 +49,7 @@ export default function RenderTextScreen() {
 		foreignText : text_input
 	});
 	let [ renderedText, setRenderedText ] = useState([]);
-	const [ modalText, setModalText ] = useState(null);
+	const [ modalText, setModalText ] = useState('');
 
 	function handleChange(evt) {
 		const { name, value } = evt.target;
@@ -76,7 +75,7 @@ export default function RenderTextScreen() {
 		setOpen(true);
 	}
 
-	const [ open, setOpen ] = React.useState(false);
+	const [ open, setOpen ] = useState(false);
 	const handleOpen = () => {
 		setOpen(true);
 	};

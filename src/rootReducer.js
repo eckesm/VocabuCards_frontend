@@ -14,18 +14,23 @@ import {
 	SET_TEXT_INPUT,
 	ADD_ALERT,
 	CLEAR_ALERTS,
+	SET_ALERTS,
 	SET_LAST_LOGIN,
+	GET_USER_INFO
 } from './actions/types';
 
 const INITIAL_STATE = {
-	alerts          : [],
-	language        : null,
-	language_object : {},
-	languages       : [],
-	last_login      : null,
-	text_input      : '',
-	user            : null,
-	words_array     : []
+	alerts             : [],
+	first_login        : true,
+	is_email_confirmed : false,
+	language           : null,
+	languages          : [],
+	language_object    : {},
+	last_login         : null,
+	name               : '',
+	text_input         : '',
+	user               : null,
+	words_array        : []
 };
 
 function sortByRoot(words_array) {
@@ -53,29 +58,47 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 	let updatedWord = {};
 
 	switch (action.type) {
-		case LOGIN_USER:
+		case GET_USER_INFO:
 			return {
 				...state,
-				user : action.user
-				// access_token : action.access_token
+				is_email_confirmed : action.is_email_confirmed,
+				language           : action.language,
+				languages          : action.languages,
+				language_object    : action.language_object,
+				last_login         : action.last_login,
+				text_input         : action.text_input,
+				user               : action.user,
+				words_array        : action.words_array
 			};
 
-		case LOGGED_IN_USER:
-			return {
-				...state,
-				user : action.user
-			};
+		// case LOGIN_USER:
+		// 	return {
+		// 		...state,
+		// 		user : action.user
+		// 	};
 
-		case SET_LAST_LOGIN:
-			return {
-				...state,
-				last_login : action.last_login
-			};
+		// case LOGGED_IN_USER:
+		// 	return {
+		// 		...state,
+		// 		user : action.user
+		// 	};
+
+		// case SET_LAST_LOGIN:
+		// 	return {
+		// 		...state,
+		// 		last_login : action.last_login
+		// 	};
 
 		case ADD_ALERT:
 			return {
 				...state,
 				alerts : [ ...state.alerts, action.alert ]
+			};
+
+		case SET_ALERTS:
+			return {
+				...state,
+				alerts : action.alerts
 			};
 
 		case CLEAR_ALERTS:
@@ -90,7 +113,8 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 		case GET_USER_LANGUAGE_WORDS:
 			return {
 				...state,
-				words_array : action.words.words_array
+				// words_array : action.words.words_array
+				words_array : action.words_array
 			};
 
 		case SET_USER_LANGUAGE:

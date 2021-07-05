@@ -1,6 +1,9 @@
 // auth
 export const LOGIN_USER = 'LOGIN_USER';
 export const LOGOUT_USER = 'LOGOUT_USER';
+export const ADD_ALERT = 'ADD_ALERT';
+export const SET_ALERTS = 'SET_ALERTS';
+export const CLEAR_ALERTS = 'CLEAR_ALERTS';
 
 // vocabulary
 export const LOGGED_IN_USER = 'LOGGED_IN_USER';
@@ -19,6 +22,3 @@ export const EDIT_COMPONENT = 'EDIT_COMPONENT';
 export const DELETE_COMPONENT = 'DELETE_COMPONENT';
 
 export const SET_TEXT_INPUT = 'SET_TEXT_INPUT';
-
-export const ADD_ALERT = 'ADD_ALERT';
-export const CLEAR_ALERTS = 'CLEAR_ALERTS';

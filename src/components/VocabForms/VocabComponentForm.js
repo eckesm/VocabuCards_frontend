@@ -170,19 +170,14 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 		onClose();
 	}
 
-	// function handleTranslate(evt) {
-	// 	evt.preventDefault();
-	// 	translateAPI();
-	// }
 	async function translateAPI() {
 		const results = await getTranslateWordViaAPI(formData.variation, language);
 		setFormData({ ...formData, translation: results });
 	}
-	async function translateExampleAPI() {
-		const results = await getTranslateWordViaAPI(formData.examples, language);
-		// setFormData({ ...formData, translation: results });
-		console.log(results);
-	}
+	// async function translateExampleAPI() {
+	// 	const results = await getTranslateWordViaAPI(formData.examples, language);
+	// 	console.log(results);
+	// }
 	function handleDictionary(evt) {
 		evt.preventDefault();
 		dictionaryAPI();
@@ -216,24 +211,23 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 			...formData,
 			partOfSpeech : pos
 		});
-		// console.log(formData);
 	}
 
-	function constructExamplesDisplay(array) {
-		let display = '';
-		if (array) {
-			for (let index = 0; index < array.length; index++) {
-				if (index > 0) {
-					display += '; ';
-				}
-				display += array[index];
-			}
-		}
-		else {
-			display = '';
-		}
-		return display;
-	}
+	// function constructExamplesDisplay(array) {
+	// 	let display = '';
+	// 	if (array) {
+	// 		for (let index = 0; index < array.length; index++) {
+	// 			if (index > 0) {
+	// 				display += '; ';
+	// 			}
+	// 			display += array[index];
+	// 		}
+	// 	}
+	// 	else {
+	// 		display = '';
+	// 	}
+	// 	return display;
+	// }
 
 	function constructSynonymsDisplay(array) {
 		let display = '';
@@ -272,7 +266,6 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 					</Button>
 				</div>
 
-				{/* <div> */}
 				<TextField
 					id="examples"
 					name="examples"
@@ -281,10 +274,6 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 					value={formData.examples}
 					variant="outlined"
 				/>
-				{/* <Button className={classes.button} variant="outlined" color="primary" onClick={translateExampleAPI}>
-							Translate
-						</Button>
-					</div> */}
 
 				<div className="VocabComponentForm-groups">
 					<TextField
@@ -326,15 +315,6 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 					value={formData.partOfSpeech}
 				/>
 
-				{/* <TextField
-					id="partOfSpeech"
-					name="partOfSpeech"
-					label="Part of Speech"
-					onChange={handleChange}
-					value={formData.partOfSpeech}
-					variant="outlined"
-				/> */}
-
 				<TextField
 					id="synonyms"
 					name="synonyms"
@@ -360,7 +340,6 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 						label="Add to Existing Word"
 						updateExistingWord={updateExistingWord}
 						wordChoices={wordChoices}
-						// value={formData.existingWord}
 						setShowWordNotes={setShowWordNotes}
 					/>
 				)}

@@ -1,14 +1,20 @@
 import axios from 'axios';
-import { LOGIN_USER, LOGOUT_USER, ADD_ALERT, CLEAR_ALERTS } from './types';
+import { LOGIN_USER, LOGOUT_USER, ADD_ALERT, CLEAR_ALERTS, SET_ALERTS } from './types';
 import { getUserInfo } from './vocab';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/auth';
 
 // REGISTER_USER
-export function registerUserViaAPI(name, email_address, password) {
+export function registerUserViaAPI(name, email_address, password, password_check, source_code) {
 	return async function(dispatch) {
 		try {
-			const res = await axios.post(`${API_URL}/register`, { name, email_address, password });
+			const res = await axios.post(`${API_URL}/register`, {
+				name,
+				email_address,
+				password,
+				password_check,
+				source_code
+			});
 
 			if (res.data.status === 'success') {
 				const access_token = res.data.access_token;
@@ -60,6 +66,13 @@ export function addAlert(alertObj) {
 	return {
 		type  : ADD_ALERT,
 		alert : alertObj
+	};
+}
+
+export function setAlerts(alertArray) {
+	return {
+		type   : SET_ALERTS,
+		alerts : alertArray
 	};
 }
 

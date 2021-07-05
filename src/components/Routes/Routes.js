@@ -11,6 +11,7 @@ import PasswordResetScreen from '../Login/PasswordResetScreen';
 import NewPasswordScreen from '../Login/NewPasswordScreen';
 import VocabWordsAll from '../WordCard/AllWordCards';
 import WordDetail from '../WordDetail/WordDetail';
+import Logout from '../Login/Logout';
 
 export default function Routes() {
 	return (
@@ -38,6 +39,10 @@ export default function Routes() {
 			<Route exact path="/new-password/:token">
 				<NewPasswordScreen />
 			</Route>
+
+			{/* <Route exact path="/logout">
+				<Logout />
+			</Route> */}
 
 			<ProtectedRoute component={RenderTextScreen} path="/read" exact />
 

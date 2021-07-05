@@ -13,6 +13,7 @@ const useStyles = makeStyles(theme => ({
 export default function PasswordResetScreen() {
 	const classes = useStyles();
 	const [ alerts, setAlerts ] = useState([]);
+	const [ showForm, setShowForm ] = useState(true);
 
 	function addAlert(alertObj) {
 		setAlerts([ ...alerts, alertObj ]);
@@ -22,7 +23,8 @@ export default function PasswordResetScreen() {
 		<div>
 			<AlertsContainer alerts={alerts} />
 			<div className={classes.formContainer}>
-				<PasswordResetForm addAlert={addAlert} />
+				{showForm && <PasswordResetForm addAlert={addAlert} setShowForm={setShowForm} />}
+				{!showForm && <h1>Email sent!</h1>}
 			</div>
 		</div>
 	);

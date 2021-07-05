@@ -21,12 +21,12 @@ const useStyles = makeStyles(theme => ({
 		width        : '250px'
 	},
 	button    : {
-        marginTop : '15px'
+		marginTop : '15px'
 	}
 }));
 
-export default function NewPasswordForm({ token, addAlert }) {
-    const classes = useStyles();
+export default function NewPasswordForm({ token, addAlert, setShowForm }) {
+	const classes = useStyles();
 	const [ formData, setFormData ] = useState({
 		password      : '',
 		passwordCheck : ''
@@ -44,6 +44,7 @@ export default function NewPasswordForm({ token, addAlert }) {
 		evt.preventDefault();
 		const res = await resetPasswordViaAPI(token, formData.password, formData.passwordCheck);
 		if (res.status === 'success') {
+			setShowForm(false);
 			addAlert({
 				type  : 'success',
 				title : 'Success!',
@@ -65,7 +66,6 @@ export default function NewPasswordForm({ token, addAlert }) {
 			});
 		}
 	}
-
 
 	return (
 		<div className={classes.container}>

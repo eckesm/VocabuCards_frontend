@@ -12,6 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import SelectLanguage from './SelectLanguage';
+import { createStarterWordsViaAPI } from '../../helpers/API';
 
 const useStyles = makeStyles({
 	list     : {
@@ -62,6 +63,9 @@ export default function NavDrawer() {
 				<ListItem button onClick={goToLanguageCards}>
 					<ListItemText>{language_object[language]} Vocab Words</ListItemText>
 				</ListItem>
+				{/* <ListItem button onClick={createStarterWordsViaAPI}>
+					<ListItemText>Create Starter Words</ListItemText>
+				</ListItem> */}
 			</List>
 		</div>
 	);

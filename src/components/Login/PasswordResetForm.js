@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function PasswordResetForm({ addAlert }) {
+export default function PasswordResetForm({ addAlert, setShowForm }) {
 	const [ formData, setFormData ] = useState({
 		emailAddress : ''
 	});
@@ -42,6 +42,7 @@ export default function PasswordResetForm({ addAlert }) {
 		evt.preventDefault();
 		const res = await sendPasswordResetViaAPI(formData.emailAddress);
 		if (res.status === 'success') {
+			setShowForm(false);
 			addAlert({
 				type  : 'success',
 				title : 'Success!',
