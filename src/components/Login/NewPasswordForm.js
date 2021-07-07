@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router';
+
 import { resetPasswordViaAPI } from '../../helpers/API';
 
 import { TextField, Button } from '@material-ui/core';
@@ -27,6 +29,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function NewPasswordForm({ token, addAlert, setShowForm }) {
 	const classes = useStyles();
+	const history = useHistory();
+
 	const [ formData, setFormData ] = useState({
 		password      : '',
 		passwordCheck : ''
@@ -43,27 +47,32 @@ export default function NewPasswordForm({ token, addAlert, setShowForm }) {
 	async function handleSubmit(evt) {
 		evt.preventDefault();
 		const res = await resetPasswordViaAPI(token, formData.password, formData.passwordCheck);
-		if (res.status === 'success') {
-			setShowForm(false);
-			addAlert({
-				type  : 'success',
-				title : 'Success!',
-				text  : res.message
-			});
-		}
-		if (res.status === 'fail') {
-			addAlert({
-				type  : 'warning',
-				title : 'Password Mismatch!',
-				text  : res.message
-			});
-		}
-		if (res.status === 'error') {
-			addAlert({
-				type  : 'error',
-				title : 'Error!',
-				text  : res.message
-			});
+
+		try {
+			if (res.status === 'success') {
+				setShowForm(false);
+				addAlert({
+					type  : 'success',
+					title : 'Success!',
+					text  : res.message
+				});
+			}
+			if (res.status === 'fail') {
+				addAlert({
+					type  : 'warning',
+					title : 'Password Mismatch!',
+					text  : res.message
+				});
+			}
+			if (res.status === 'error') {
+				addAlert({
+					type  : 'error',
+					title : 'Error!',
+					text  : res.message
+				});
+			}
+		} catch (e) {
+			history.push('/error');
 		}
 	}
 

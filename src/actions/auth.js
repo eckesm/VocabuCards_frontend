@@ -2,7 +2,8 @@ import axios from 'axios';
 import { LOGIN_USER, LOGOUT_USER, ADD_ALERT, CLEAR_ALERTS, SET_ALERTS } from './types';
 import { getUserInfo } from './vocab';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/auth';
+// const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/auth';
+const API_URL = process.env.REACT_APP_API_URL || 'https://vocabucards-backend.herokuapp.com/api/auth';
 
 // REGISTER_USER
 export function registerUserViaAPI(name, email_address, password, password_check, source_code) {
@@ -83,9 +84,33 @@ export function clearAlerts() {
 }
 
 // LOGOUT_USER
+export function logoutUserViaAPI(access_token) {
+	return async function() {
+		try {
+			const headers = {
+				Authorization : 'Bearer ' + access_token
+			};
+			const res = await axios.get(`${API_URL}/logout`, {
+				headers : headers
+			});
+			
+			if (res.data.status === 'success') {
+				return res.data;
+			}
+			else {
+				return res.data;
+			}
+		} catch (e) {
+			console.log(e);
+		}
+	};
+}
+
 export function logoutUser() {
 	localStorage.removeItem('access_token');
-	return {
-		type : LOGOUT_USER
+	return async function(dispatch) {
+		dispatch({
+			type : LOGOUT_USER
+		});
 	};
 }

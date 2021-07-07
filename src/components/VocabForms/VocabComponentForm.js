@@ -124,7 +124,6 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 			);
 			dispatch(editComponentInState(componentRes.component));
 			setVariation(componentRes.component);
-			// history.push(`/words/${variation.root_id}`);
 		}
 		else {
 			if (formData.existingWord === 'NEW') {

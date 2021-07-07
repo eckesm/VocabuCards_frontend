@@ -29,6 +29,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function ConfirmEmailForm({ token, addAlert }) {
+	const classes = useStyles();
+	const history = useHistory();
 
 	const [ formData, setFormData ] = useState({
 		password : ''
@@ -45,23 +47,26 @@ export default function ConfirmEmailForm({ token, addAlert }) {
 	async function handleSubmit(evt) {
 		evt.preventDefault();
 		const res = await confirmEmailViaAPI(token, formData.password);
-		if (res.status === 'success') {
-			addAlert({
-				type  : 'success',
-				title : 'Success!',
-				text  : res.message
-			});
-		}
-		if (res.status === 'fail') {
-			addAlert({
-				type  : 'error',
-				title : 'Error!',
-				text  : res.message
-			});
+		
+		try {
+			if (res.status === 'success') {
+				addAlert({
+					type  : 'success',
+					title : 'Success!',
+					text  : res.message
+				});
+			}
+			if (res.status === 'fail') {
+				addAlert({
+					type  : 'error',
+					title : 'Error!',
+					text  : res.message
+				});
+			}
+		} catch (e) {
+			history.push('/error');
 		}
 	}
-
-	const classes = useStyles();
 
 	return (
 		<div className={classes.container}>

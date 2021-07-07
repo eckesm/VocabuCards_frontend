@@ -45,7 +45,6 @@ export default function SignUpForm({ addAlert }) {
 	});
 
 	function updateStartLanguage(source_code) {
-		// dispatch(setUserLanguage(source_code));
 		setFormData({
 			...formData,
 			startLanguage : source_code
@@ -81,19 +80,24 @@ export default function SignUpForm({ addAlert }) {
 				formData.startLanguage
 			)
 		);
-		if (res.status === 'fail') {
-			addAlert({
-				type  : 'warning',
-				title : 'Incorrect!',
-				text  : res.message
-			});
-		}
-		if (res.status === 'error') {
-			addAlert({
-				type  : 'error',
-				title : 'Error!',
-				text  : res.message
-			});
+
+		try {
+			if (res.status === 'fail') {
+				addAlert({
+					type  : 'warning',
+					title : 'Incorrect!',
+					text  : res.message
+				});
+			}
+			if (res.status === 'error') {
+				addAlert({
+					type  : 'error',
+					title : 'Error!',
+					text  : res.message
+				});
+			}
+		} catch (e) {
+			history.push('/error');
 		}
 	}
 

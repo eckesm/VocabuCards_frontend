@@ -12,6 +12,7 @@ import NewPasswordScreen from '../Login/NewPasswordScreen';
 import VocabWordsAll from '../WordCard/AllWordCards';
 import WordDetail from '../WordDetail/WordDetail';
 import Logout from '../Login/Logout';
+import ErrorScreen from '../ErrorScreen';
 
 export default function Routes() {
 	return (
@@ -40,9 +41,13 @@ export default function Routes() {
 				<NewPasswordScreen />
 			</Route>
 
-			{/* <Route exact path="/logout">
+			<Route exact path="/logout">
 				<Logout />
-			</Route> */}
+			</Route>
+
+			<Route exact path="/error">
+				<ErrorScreen />
+			</Route>
 
 			<ProtectedRoute component={RenderTextScreen} path="/read" exact />
 

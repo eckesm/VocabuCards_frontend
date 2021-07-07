@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import { loginUserViaAPI } from '../../actions/auth';
-
 import { TextField, Button, Link } from '@material-ui/core';
-
 import { makeStyles } from '@material-ui/core/styles';
+
+import { loginUserViaAPI } from '../../actions/auth';
 
 const useStyles = makeStyles(theme => ({
 	container : {
@@ -33,6 +32,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function LoginForm({ addAlert }) {
+	const classes = useStyles();
 	const { user } = useSelector(store => store);
 	const dispatch = useDispatch();
 	const history = useHistory();
@@ -62,23 +62,26 @@ export default function LoginForm({ addAlert }) {
 	async function handleSubmit(evt) {
 		evt.preventDefault();
 		const res = await dispatch(loginUserViaAPI(formData.emailAddress, formData.password));
-		if (res.status === 'fail') {
-			addAlert({
-				type  : 'warning',
-				title : 'Incorrect!',
-				text  : res.message
-			});
-		}
-		if (res.status === 'error') {
-			addAlert({
-				type  : 'error',
-				title : 'Error!',
-				text  : res.message
-			});
+
+		try {
+			if (res.status === 'fail') {
+				addAlert({
+					type  : 'warning',
+					title : 'Incorrect!',
+					text  : res.message
+				});
+			}
+			if (res.status === 'error') {
+				addAlert({
+					type  : 'error',
+					title : 'Error!',
+					text  : res.message
+				});
+			}
+		} catch (e) {
+			history.push('/error');
 		}
 	}
-
-	const classes = useStyles();
 
 	return (
 		<div className={classes.container}>

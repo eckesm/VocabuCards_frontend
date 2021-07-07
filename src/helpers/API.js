@@ -1,8 +1,9 @@
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = process.env.REACT_APP_API_URL || 'https://vocabucards-backend.herokuapp.com/api';
 
-function getAccessToken() {
+export function getAccessToken() {
 	return localStorage.getItem('access_token') || null;
 }
 
@@ -133,8 +134,6 @@ export async function editWord(id, source_code, word, translation, notes) {
 
 	try {
 		const res = await axios.put(`${API_URL}/vocab/words/${id}`, data, { headers: headers });
-
-		// console.log(res.data);
 		return res.data;
 	} catch (e) {
 		console.log(e);
@@ -148,8 +147,6 @@ export async function deleteWord(id) {
 
 	try {
 		const res = await axios.delete(`${API_URL}/vocab/words/${id}`, { headers: headers });
-
-		console.log(res.data);
 		return res.data;
 	} catch (e) {
 		console.log(e);
@@ -186,7 +183,6 @@ export async function createNewVariation(
 
 	try {
 		const res = await axios.post(`${API_URL}/vocab/variations/new`, data, { headers: headers });
-
 		return res.data;
 	} catch (e) {
 		console.log(e);
@@ -208,7 +204,6 @@ export async function editVariation(
 		Authorization : 'Bearer ' + getAccessToken()
 	};
 	const data = {
-		// id             : id,
 		part_of_speech : part_of_speech,
 		word           : word,
 		translation    : translation,
@@ -221,8 +216,6 @@ export async function editVariation(
 
 	try {
 		const res = await axios.put(`${API_URL}/vocab/variations/${id}`, data, { headers: headers });
-
-		// console.log(res.data);
 		return res.data;
 	} catch (e) {
 		console.log(e);
@@ -236,8 +229,6 @@ export async function deleteVariation(id) {
 
 	try {
 		const res = await axios.delete(`${API_URL}/vocab/variations/${id}`, { headers: headers });
-
-		console.log(res.data);
 		return res.data;
 	} catch (e) {
 		console.log(e);

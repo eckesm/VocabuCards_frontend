@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import { logoutUser } from '../../actions/auth';
 
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
@@ -14,6 +13,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 import Button from '@material-ui/core/Button';
 
+import { logoutUser, clearAlerts } from '../../actions/auth';
+
 import NavDrawer from './NavDrawer';
 import VocabForm from '../VocabForms/VocabForm';
 
@@ -23,14 +24,16 @@ const useStyles = makeStyles(theme => ({
 	},
 	links      : {
 		'& > * + *' : {
-			marginLeft : theme.spacing(2)
+			marginLeft  : theme.spacing(2),
+			marginRight : theme.spacing(2)
 		}
 	},
 	menuButton : {
 		marginRight : theme.spacing(2)
 	},
 	title      : {
-		flexGrow : 1
+		flexGrow  : 1,
+		textAlign : 'left'
 	}
 }));
 
@@ -66,15 +69,17 @@ export default function NavBar() {
 	};
 
 	const goToNewUser = () => {
+		dispatch(clearAlerts());
 		history.push('/signup');
 	};
 
 	const goToLogin = () => {
+		dispatch(clearAlerts());
 		history.push('/login');
 	};
 
 	const goToLogout = () => {
-		dispatch(logoutUser());
+		dispatch(clearAlerts());
 		history.push('/logout');
 	};
 
@@ -92,7 +97,9 @@ export default function NavBar() {
 				<Toolbar>
 					{auth && <NavDrawer />}
 					<Typography variant="h6" className={classes.title}>
-						VocabuCards
+						<Link href="#/" color="inherit">
+							VocabuCards
+						</Link>
 					</Typography>
 
 					{auth && (
@@ -108,7 +115,7 @@ export default function NavBar() {
 
 					{auth && (
 						<div>
-							<IconButton
+							{/* <IconButton
 								aria-label="account of current user"
 								aria-controls="menu-appbar"
 								aria-haspopup="true"
@@ -134,7 +141,7 @@ export default function NavBar() {
 							>
 								<MenuItem onClick={handleClose}>Profile</MenuItem>
 								<MenuItem onClick={handleClose}>My account</MenuItem>
-							</Menu>
+							</Menu> */}
 							<Button color="inherit" onClick={goToLogout}>
 								Logout
 							</Button>
