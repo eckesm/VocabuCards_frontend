@@ -15,7 +15,7 @@ import Routes from './components/Routes/Routes';
 
 const useStyles = makeStyles(theme => ({
 	alerts : {
-		marginTop : '60px'
+		marginTop : '15px'
 	}
 }));
 
@@ -39,9 +39,7 @@ function App() {
 
 	return (
 		<div className="App">
-			<div className={classes.alerts}>
-				<AlertsContainer alerts={displayAlerts} />
-			</div>
+			<AlertsContainer alerts={displayAlerts} />
 			<NavBar />
 			<Routes />
 		</div>

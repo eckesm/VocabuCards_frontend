@@ -2,7 +2,6 @@ import axios from 'axios';
 import { LOGIN_USER, LOGOUT_USER, ADD_ALERT, CLEAR_ALERTS, SET_ALERTS } from './types';
 
 import { getUserInfo } from './vocab';
-
 import { API_URL } from '../helpers/API';
 
 

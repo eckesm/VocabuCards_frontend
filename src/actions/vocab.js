@@ -88,19 +88,6 @@ export function getUserInfo() {
 	};
 }
 
-// function loggedInUserInfo(email) {
-// 	return {
-// 		type : LOGGED_IN_USER,
-// 		user : email
-// 	};
-// }
-
-// function storeLastLogininState(last_login) {
-// 	return {
-// 		type       : SET_LAST_LOGIN,
-// 		last_login
-// 	};
-// }
 
 // GET_USER_LANGUAGE_WORDS
 export function getUserLanguageWordsViaAPI(source_code = 'sv') {

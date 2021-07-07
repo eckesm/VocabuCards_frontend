@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import clsx from 'clsx';
@@ -8,11 +8,10 @@ import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+// import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import SelectLanguage from './SelectLanguage';
-import { createStarterWordsViaAPI } from '../../helpers/API';
 
 const useStyles = makeStyles({
 	list     : {
@@ -24,7 +23,7 @@ const useStyles = makeStyles({
 });
 
 export default function NavDrawer() {
-	const { language, language_object } = useSelector(store => store);
+	// const { language, language_object } = useSelector(store => store);
 	const history = useHistory();
 
 	const classes = useStyles();
@@ -43,9 +42,9 @@ export default function NavDrawer() {
 		setState({ ...state, [anchor]: open });
 	};
 
-	const goToLanguageCards = () => {
-		history.push('/words');
-	};
+	// const goToLanguageCards = () => {
+	// 	history.push('/words');
+	// };
 
 	const list = anchor => (
 		<div
@@ -60,9 +59,9 @@ export default function NavDrawer() {
 				<ListItem>
 					<SelectLanguage />
 				</ListItem>
-				<ListItem button onClick={goToLanguageCards}>
+				{/* <ListItem button onClick={goToLanguageCards}>
 					<ListItemText>{language_object[language]} Vocab Words</ListItemText>
-				</ListItem>
+				</ListItem> */}
 				{/* <ListItem button onClick={createStarterWordsViaAPI}>
 					<ListItemText>Create Starter Words</ListItemText>
 				</ListItem> */}

@@ -3,37 +3,44 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Link from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import Typography from '@material-ui/core/Typography';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import Button from '@material-ui/core/Button';
+import MoreIcon from '@material-ui/icons/MoreVert';
 
-import { logoutUser, clearAlerts } from '../../actions/auth';
+import { clearAlerts } from '../../actions/auth';
 
 import NavDrawer from './NavDrawer';
 import VocabForm from '../VocabForms/VocabForm';
 
 const useStyles = makeStyles(theme => ({
-	root       : {
+	grow           : {
 		flexGrow : 1
 	},
-	links      : {
-		'& > * + *' : {
-			marginLeft  : theme.spacing(2),
-			marginRight : theme.spacing(2)
-		}
-	},
-	menuButton : {
+	menuButton     : {
 		marginRight : theme.spacing(2)
 	},
-	title      : {
-		flexGrow  : 1,
-		textAlign : 'left'
+	title          : {
+		display                      : 'none',
+		[theme.breakpoints.up('sm')]: {
+			display : 'block'
+		}
+	},
+	sectionDesktop : {
+		display                      : 'none',
+		[theme.breakpoints.up('md')]: {
+			display : 'flex'
+		}
+	},
+	sectionMobile  : {
+		display                      : 'flex',
+		[theme.breakpoints.up('md')]: {
+			display : 'none'
+		}
 	}
 }));
 
@@ -43,10 +50,7 @@ export default function NavBar() {
 	const history = useHistory();
 	const languageName = language_object[language];
 
-	const classes = useStyles();
 	const [ auth, setAuth ] = useState(false);
-	const [ anchorEl, setAnchorEl ] = useState(null);
-	const open = Boolean(anchorEl);
 
 	useEffect(
 		() => {
@@ -59,14 +63,6 @@ export default function NavBar() {
 		},
 		[ user ]
 	);
-
-	const handleMenu = event => {
-		setAnchorEl(event.currentTarget);
-	};
-
-	const handleClose = () => {
-		setAnchorEl(null);
-	};
 
 	const goToNewUser = () => {
 		dispatch(clearAlerts());
@@ -83,6 +79,14 @@ export default function NavBar() {
 		history.push('/logout');
 	};
 
+	const goToRead = () => {
+		history.push('/read');
+	};
+
+	const goToWords = () => {
+		history.push('/words');
+	};
+
 	const [ modalOpen, setModalOpen ] = useState(false);
 	const handleModalOpen = () => {
 		setModalOpen(true);
@@ -91,80 +95,155 @@ export default function NavBar() {
 		setModalOpen(false);
 	};
 
+	const classes = useStyles();
+	const [ anchorEl, setAnchorEl ] = React.useState(null);
+	const [ mobileMoreAnchorEl, setMobileMoreAnchorEl ] = React.useState(null);
+
+	const isMenuOpen = Boolean(anchorEl);
+	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+	const handleMobileMenuClose = () => {
+		setMobileMoreAnchorEl(null);
+	};
+
+	const handleMenuClose = () => {
+		setAnchorEl(null);
+		handleMobileMenuClose();
+	};
+
+	const handleMobileMenuOpen = event => {
+		setMobileMoreAnchorEl(event.currentTarget);
+	};
+
+	const menuId = 'primary-search-account-menu';
+	const renderMenu = (
+		<Menu
+			anchorEl={anchorEl}
+			anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+			id={menuId}
+			keepMounted
+			transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+			open={isMenuOpen}
+			onClose={handleMenuClose}
+		>
+			<MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+			<MenuItem onClick={handleMenuClose}>My account</MenuItem>
+		</Menu>
+	);
+
+	const mobileMenuId = 'primary-search-account-menu-mobile';
+	const renderMobileMenu = (
+		<Menu
+			anchorEl={mobileMoreAnchorEl}
+			anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+			id={mobileMenuId}
+			keepMounted
+			transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+			open={isMobileMenuOpen}
+			onClose={handleMobileMenuClose}
+		>
+			{auth && (
+				<MenuItem>
+					<Button color="inherit" onClick={goToRead}>
+						Study Foreign Text
+					</Button>
+				</MenuItem>
+			)}
+			{auth && (
+				<MenuItem>
+					<Button color="inherit" onClick={goToWords}>
+						{languageName} Vocab Cards
+					</Button>
+				</MenuItem>
+			)}
+			{auth && (
+				<MenuItem>
+					<Button color="inherit" onClick={handleModalOpen}>
+						Add Word
+					</Button>
+				</MenuItem>
+			)}
+			{auth && (
+				<MenuItem>
+					<Button color="inherit" onClick={goToLogout}>
+						Logout
+					</Button>
+				</MenuItem>
+			)}
+			{!auth && (
+				<MenuItem>
+					<Button color="inherit" onClick={goToNewUser}>
+						New User
+					</Button>
+				</MenuItem>
+			)}
+			{!auth && (
+				<MenuItem>
+					<Button color="inherit" onClick={goToLogin}>
+						Login
+					</Button>
+				</MenuItem>
+			)}
+		</Menu>
+	);
+
 	return (
-		<div className={classes.root}>
+		<div className={classes.grow}>
 			<AppBar position="fixed">
 				<Toolbar>
 					{auth && <NavDrawer />}
-					<Typography variant="h6" className={classes.title}>
-						<Link href="#/" color="inherit">
-							VocabuCards <i className="fad fa-kiwi-bird" />
-						</Link>
+					<Typography className={classes.title} variant="h6" noWrap>
+						VocabuCards <i className="fad fa-kiwi-bird" />
 					</Typography>
-
-					{auth && (
-						<Typography className={classes.links}>
-							<Link href="#/read" color="inherit">
-								Render & Study Foreign Text
-							</Link>
-							<Link href={'#/words'} color="inherit">
-								{languageName}
-							</Link>
-						</Typography>
-					)}
-
-					{auth && (
-						<div>
-							{/* <IconButton
-								aria-label="account of current user"
-								aria-controls="menu-appbar"
-								aria-haspopup="true"
-								onClick={handleMenu}
-								color="inherit"
-							>
-								<AccountCircle />
-							</IconButton>
-							<Menu
-								id="menu-appbar"
-								anchorEl={anchorEl}
-								anchorOrigin={{
-									vertical   : 'top',
-									horizontal : 'right'
-								}}
-								keepMounted
-								transformOrigin={{
-									vertical   : 'top',
-									horizontal : 'right'
-								}}
-								open={open}
-								onClose={handleClose}
-							>
-								<MenuItem onClick={handleClose}>Profile</MenuItem>
-								<MenuItem onClick={handleClose}>My account</MenuItem>
-							</Menu> */}
-							<Button color="inherit" onClick={goToLogout}>
-								Logout
+					<div className={classes.grow} />
+					<div className={classes.sectionDesktop}>
+						{auth && (
+							<Button color="inherit" onClick={goToRead}>
+								Study Foreign Text
 							</Button>
+						)}
+						{auth && (
+							<Button color="inherit" onClick={goToWords}>
+								{languageName} Vocab Cards
+							</Button>
+						)}
+						{auth && (
 							<Button color="inherit" onClick={handleModalOpen}>
 								Add Word
 							</Button>
-							{modalOpen && (
-								<VocabForm open={modalOpen} handleClose={handleModalClose} setting="variation" />
-							)}
-						</div>
-					)}
-					{!auth && (
-						<div>
+						)}
+						{auth && (
+							<Button color="inherit" onClick={goToLogout}>
+								Logout
+							</Button>
+						)}
+						{!auth && (
 							<Button color="inherit" onClick={goToNewUser}>
 								New User
 							</Button>
+						)}
+						{!auth && (
 							<Button color="inherit" onClick={goToLogin}>
 								Login
 							</Button>
-						</div>
-					)}
+						)}
+					</div>
+					<div className={classes.sectionMobile}>
+						<IconButton
+							aria-label="show more"
+							aria-controls={mobileMenuId}
+							aria-haspopup="true"
+							onClick={handleMobileMenuOpen}
+							color="inherit"
+						>
+							<MoreIcon />
+						</IconButton>
+					</div>
 				</Toolbar>
+				{modalOpen && <VocabForm open={modalOpen} handleClose={handleModalClose} setting="variation" />}
 			</AppBar>
+			{renderMobileMenu}
+			{renderMenu}
 		</div>
 	);
 }
