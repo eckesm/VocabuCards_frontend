@@ -5,9 +5,6 @@ import { getUserInfo } from './vocab';
 
 import { API_URL } from '../helpers/API';
 
-// const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/auth';
-// const API_URL = process.env.REACT_APP_API_URL || 'https://vocabucards-backend.herokuapp.com/api/auth';
-// const API_URL = process.env.REACT_APP_API_URL || 'http://api.vocabucards.com/auth';
 
 // REGISTER_USER
 export function registerUserViaAPI(name, email_address, password, password_check, source_code) {

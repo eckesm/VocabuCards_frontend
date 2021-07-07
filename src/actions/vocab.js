@@ -17,9 +17,6 @@ import { setAlerts } from './auth';
 
 import { API_URL } from '../helpers/API';
 
-// const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/vocab';
-// const API_URL = process.env.REACT_APP_API_URL || 'https://vocabucards-backend.herokuapp.com/api/vocab';
-// const API_URL = process.env.REACT_APP_API_URL || 'http://api.vocabucards.com/vocab';
 
 function getAccessToken() {
 	return localStorage.getItem('access_token') || null;
