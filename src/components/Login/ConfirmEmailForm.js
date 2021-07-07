@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import { confirmEmailViaAPI } from '../../helpers/API';

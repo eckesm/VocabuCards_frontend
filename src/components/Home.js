@@ -18,7 +18,9 @@ const useStyles = makeStyles(theme => ({
 		boxShadow       : '5px 5px 8px grey'
 	},
 	button    : {
-		marginTop : '15px'
+		marginTop : '15px',
+		marginLeft:'5px',
+		marginRight:'5px'
 	}
 }));
 
@@ -30,11 +32,15 @@ export default function Home() {
 	function goToLogin() {
 		history.push('/login');
 	}
+	function goToRegister() {
+		history.push('/signup');
+	}
 
 	return (
 		<div className={classes.container}>
 			<h1>Welcome to VocabuCards!</h1>
 			{!user && (
+				<div>
 				<Button
 					variant="contained"
 					type="submit"
@@ -45,6 +51,17 @@ export default function Home() {
 				>
 					Login
 				</Button>
+				<Button
+					variant="contained"
+					type="submit"
+					color="default"
+					size="large"
+					className={classes.button}
+					onClick={goToRegister}
+				>
+					New User
+				</Button>
+				</div>
 			)}
 		</div>
 	);

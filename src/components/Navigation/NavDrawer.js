@@ -1,6 +1,4 @@
 import React from 'react';
-// import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
 
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,7 +6,6 @@ import Drawer from '@material-ui/core/Drawer';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-// import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import SelectLanguage from './SelectLanguage';
@@ -23,9 +20,6 @@ const useStyles = makeStyles({
 });
 
 export default function NavDrawer() {
-	// const { language, language_object } = useSelector(store => store);
-	const history = useHistory();
-
 	const classes = useStyles();
 	const [ state, setState ] = React.useState({
 		top    : false,
@@ -42,10 +36,6 @@ export default function NavDrawer() {
 		setState({ ...state, [anchor]: open });
 	};
 
-	// const goToLanguageCards = () => {
-	// 	history.push('/words');
-	// };
-
 	const list = anchor => (
 		<div
 			className={clsx(classes.list, {
@@ -59,12 +49,6 @@ export default function NavDrawer() {
 				<ListItem>
 					<SelectLanguage />
 				</ListItem>
-				{/* <ListItem button onClick={goToLanguageCards}>
-					<ListItemText>{language_object[language]} Vocab Words</ListItemText>
-				</ListItem> */}
-				{/* <ListItem button onClick={createStarterWordsViaAPI}>
-					<ListItemText>Create Starter Words</ListItemText>
-				</ListItem> */}
 			</List>
 		</div>
 	);

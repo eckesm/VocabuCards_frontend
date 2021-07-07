@@ -4,7 +4,7 @@ import { useHistory } from 'react-router';
 
 import { registerUserViaAPI } from '../../actions/auth';
 import { getUserInfo } from '../../actions/vocab';
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import SelectStartLanguage from './SelectStartLanguage';
@@ -12,7 +12,7 @@ import SelectStartLanguage from './SelectStartLanguage';
 // import { setUserLanguage } from '../../actions/vocab';
 
 const useStyles = makeStyles(theme => ({
-	container : {
+	container     : {
 		margin          : '0 auto',
 		width           : '300px',
 		fontFamily      : 'roboto, sans-serif',
@@ -22,12 +22,19 @@ const useStyles = makeStyles(theme => ({
 		borderRadius    : '3px',
 		boxShadow       : '5px 5px 8px grey'
 	},
-	textInput : {
+	textInput     : {
 		marginBottom : '10px',
 		width        : '250px'
 	},
-	button    : {
+	button        : {
 		marginTop : '15px'
+	},
+	link          : {
+		marginTop    : '5px',
+		marginBottom : '5px'
+	},
+	linkContainer : {
+		marginTop : '25px'
 	}
 }));
 
@@ -141,15 +148,18 @@ export default function SignUpForm({ addAlert }) {
 					onChange={handleChange}
 					value={formData.passwordCheck}
 				/>
-				<SelectStartLanguage
-					// id="startLanguage"
-					// name="startLanguage"
-					updateStartLanguage={updateStartLanguage}
-				/>
+				<SelectStartLanguage updateStartLanguage={updateStartLanguage} />
 				<Button variant="contained" type="submit" color="primary" className={classes.button}>
 					Submit
 				</Button>
 			</form>
+			<div className={classes.linkContainer}>
+				<div className={classes.link}>
+					<Link href="/#/login">
+						<i>Already have an account?</i>
+					</Link>
+				</div>
+			</div>
 		</div>
 	);
 }

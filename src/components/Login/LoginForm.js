@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { loginUserViaAPI } from '../../actions/auth';
 
 const useStyles = makeStyles(theme => ({
-	container : {
+	container     : {
 		margin          : '0 auto',
 		marginTop       : '100px',
 		width           : '300px',
@@ -19,14 +19,18 @@ const useStyles = makeStyles(theme => ({
 		borderRadius    : '3px',
 		boxShadow       : '5px 5px 8px grey'
 	},
-	textInput : {
+	textInput     : {
 		marginBottom : '10px',
 		width        : '250px'
 	},
-	button    : {
+	button        : {
 		marginTop : '15px'
 	},
-	link      : {
+	link          : {
+		marginTop    : '5px',
+		marginBottom : '5px'
+	},
+	linkContainer : {
 		marginTop : '25px'
 	}
 }));
@@ -108,10 +112,17 @@ export default function LoginForm({ addAlert }) {
 					Submit
 				</Button>
 			</form>
-			<div className={classes.link}>
-				<Link href="/#/reset-password">
-					<i>I need to reset my password?</i>
-				</Link>
+			<div className={classes.linkContainer}>
+				<div className={classes.link}>
+					<Link href="/#/signup">
+						<i>Create an account.</i>
+					</Link>
+				</div>
+				<div className={classes.link}>
+					<Link href="/#/reset-password">
+						<i>Forgot password.</i>
+					</Link>
+				</div>
 			</div>
 		</div>
 	);
