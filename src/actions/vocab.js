@@ -1,6 +1,5 @@
 import axios from 'axios';
 import {
-	LOGGED_IN_USER,
 	GET_USER_LANGUAGE_WORDS,
 	SET_USER_LANGUAGE,
 	GET_ALL_LANGUAGE_OPTIONS,
@@ -11,18 +10,16 @@ import {
 	EDIT_COMPONENT,
 	DELETE_COMPONENT,
 	SET_TEXT_INPUT,
-	SET_LAST_LOGIN,
 	GET_USER_INFO
 } from './types';
 
 import { setAlerts } from './auth';
 
-// const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/vocab';
-const API_URL = process.env.REACT_APP_API_URL || 'https://vocabucards-backend.herokuapp.com/api/vocab';
+import { API_URL } from '../helpers/API';
 
-// function getTextInput() {
-// 	return localStorage.getItem('text_input') || null;
-// }
+// const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/vocab';
+// const API_URL = process.env.REACT_APP_API_URL || 'https://vocabucards-backend.herokuapp.com/api/vocab';
+// const API_URL = process.env.REACT_APP_API_URL || 'http://api.vocabucards.com/vocab';
 
 function getAccessToken() {
 	return localStorage.getItem('access_token') || null;
@@ -30,7 +27,6 @@ function getAccessToken() {
 
 // GET_USER_INFO
 export function getUserInfo() {
-	// console.log('getUserInfo() ran!');
 	return async function(dispatch) {
 		const access_token = getAccessToken();
 		if (access_token) {
@@ -38,7 +34,7 @@ export function getUserInfo() {
 				const headers = {
 					Authorization : 'Bearer ' + access_token
 				};
-				const res = await axios.get(`${API_URL}/start`, { headers: headers });
+				const res = await axios.get(`${API_URL}/vocab/start`, { headers: headers });
 
 				let {
 					current_text,
@@ -56,13 +52,6 @@ export function getUserInfo() {
 				languages.forEach(option => {
 					languageObject[option[0]] = option[1];
 				});
-
-				// dispatch(setLanguageOptions(data.languages));
-				// dispatch(setUserLanguage(data.last_source_code));
-				// dispatch(storeUserLanguageWords(data.words_array, data.last_source_code));
-				// dispatch(loggedInUserInfo(data.user));
-				// dispatch(setTextInputInState(data.current_text));
-				// dispatch(storeLastLogininState(data.last_login));
 
 				dispatch({
 					type               : GET_USER_INFO,
@@ -123,7 +112,7 @@ export function getUserLanguageWordsViaAPI(source_code = 'sv') {
 			const headers = {
 				Authorization : 'Bearer ' + getAccessToken()
 			};
-			const res = await axios.get(`${API_URL}/words/${source_code}`, { headers: headers });
+			const res = await axios.get(`${API_URL}/vocab/words/${source_code}`, { headers: headers });
 			const words_array = res.data;
 
 			// return dispatch(storeUserLanguageWords(words_array, source_code));
@@ -149,7 +138,7 @@ export function updateUserLastLanguageViaAPI(source_code) {
 			const headers = {
 				Authorization : 'Bearer ' + getAccessToken()
 			};
-			const res = await axios.get(`${API_URL}/last/${source_code}`, { headers: headers });
+			const res = await axios.get(`${API_URL}/vocab/last/${source_code}`, { headers: headers });
 			let last_source_code = res.data;
 			dispatch(setTextInputInState(null));
 			return dispatch(setUserLanguage(last_source_code));
@@ -164,7 +153,7 @@ export function updateUserLastLanguageViaAPI(source_code) {
 // 			const headers = {
 // 				Authorization : 'Bearer ' + getAccessToken()
 // 			};
-// 			const res = await axios.get(`${API_URL}/last`, { headers: headers });
+// 			const res = await axios.get(`${API_URL}/vocab/last`, { headers: headers });
 // 			const last_source_code = res.data;
 
 // 			return dispatch(setUserLanguage(last_source_code));
@@ -203,7 +192,7 @@ export function getAllLanguageOptionsViaAPI() {
 			const headers = {
 				Authorization : 'Bearer ' + getAccessToken()
 			};
-			const res = await axios.get(`${API_URL}/languages`, { headers: headers });
+			const res = await axios.get(`${API_URL}/vocab/languages`, { headers: headers });
 			const languages = res.data;
 
 			return dispatch(setLanguageOptions(languages));

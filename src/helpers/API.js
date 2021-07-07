@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 // const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-const API_URL = process.env.REACT_APP_API_URL || 'https://vocabucards-backend.herokuapp.com/api';
+// const API_URL = process.env.REACT_APP_API_URL || 'https://vocabucards-backend.herokuapp.com/api';
+export const API_URL = process.env.REACT_APP_API_URL || 'http://api.vocabucards.com';
+// export const API_URL = process.env.REACT_APP_API_URL || 'http://api.vocabucards.com/api';
 
 export function getAccessToken() {
 	return localStorage.getItem('access_token') || null;

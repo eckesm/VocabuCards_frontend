@@ -1,7 +1,5 @@
 import {
-	LOGIN_USER,
 	LOGOUT_USER,
-	LOGGED_IN_USER,
 	GET_USER_LANGUAGE_WORDS,
 	GET_ALL_LANGUAGE_OPTIONS,
 	SET_USER_LANGUAGE,
@@ -15,7 +13,6 @@ import {
 	ADD_ALERT,
 	CLEAR_ALERTS,
 	SET_ALERTS,
-	SET_LAST_LOGIN,
 	GET_USER_INFO
 } from './actions/types';
 
@@ -71,24 +68,6 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 				words_array        : action.words_array
 			};
 
-		// case LOGIN_USER:
-		// 	return {
-		// 		...state,
-		// 		user : action.user
-		// 	};
-
-		// case LOGGED_IN_USER:
-		// 	return {
-		// 		...state,
-		// 		user : action.user
-		// 	};
-
-		// case SET_LAST_LOGIN:
-		// 	return {
-		// 		...state,
-		// 		last_login : action.last_login
-		// 	};
-
 		case ADD_ALERT:
 			return {
 				...state,
@@ -113,7 +92,6 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 		case GET_USER_LANGUAGE_WORDS:
 			return {
 				...state,
-				// words_array : action.words.words_array
 				words_array : action.words_array
 			};
 

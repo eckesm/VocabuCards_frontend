@@ -30,7 +30,7 @@ export default function Logout() {
 		const access_token = getAccessToken();
 		dispatch(logoutUser());
 		const res = await dispatch(logoutUserViaAPI(access_token));
-		
+
 		try {
 			if (res.status === 'success') {
 				dispatch(
@@ -50,6 +50,7 @@ export default function Logout() {
 					})
 				);
 			}
+			history.push('/login');
 		} catch (e) {
 			history.push('/error');
 		}

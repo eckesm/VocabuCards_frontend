@@ -6,8 +6,6 @@ export const SET_ALERTS = 'SET_ALERTS';
 export const CLEAR_ALERTS = 'CLEAR_ALERTS';
 
 // vocabulary
-export const LOGGED_IN_USER = 'LOGGED_IN_USER';
-export const SET_LAST_LOGIN = 'SET_LAST_LOGIN';
 export const GET_USER_INFO = 'GET_USER_INFO';
 export const GET_USER_LANGUAGE_WORDS = 'GET_USER_LANGUAGE_WORDS';
 export const GET_ALL_LANGUAGE_OPTIONS = 'GET_ALL_LANGUAGE_OPTIONS';

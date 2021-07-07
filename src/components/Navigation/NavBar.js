@@ -98,7 +98,7 @@ export default function NavBar() {
 					{auth && <NavDrawer />}
 					<Typography variant="h6" className={classes.title}>
 						<Link href="#/" color="inherit">
-							VocabuCards
+							VocabuCards <i className="fad fa-kiwi-bird" />
 						</Link>
 					</Typography>
 

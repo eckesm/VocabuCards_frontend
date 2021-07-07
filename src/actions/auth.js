@@ -1,15 +1,19 @@
 import axios from 'axios';
 import { LOGIN_USER, LOGOUT_USER, ADD_ALERT, CLEAR_ALERTS, SET_ALERTS } from './types';
+
 import { getUserInfo } from './vocab';
 
+import { API_URL } from '../helpers/API';
+
 // const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/auth';
-const API_URL = process.env.REACT_APP_API_URL || 'https://vocabucards-backend.herokuapp.com/api/auth';
+// const API_URL = process.env.REACT_APP_API_URL || 'https://vocabucards-backend.herokuapp.com/api/auth';
+// const API_URL = process.env.REACT_APP_API_URL || 'http://api.vocabucards.com/auth';
 
 // REGISTER_USER
 export function registerUserViaAPI(name, email_address, password, password_check, source_code) {
 	return async function(dispatch) {
 		try {
-			const res = await axios.post(`${API_URL}/register`, {
+			const res = await axios.post(`${API_URL}/auth/register`, {
 				name,
 				email_address,
 				password,
@@ -37,7 +41,7 @@ export function registerUserViaAPI(name, email_address, password, password_check
 export function loginUserViaAPI(email_address, password) {
 	return async function(dispatch) {
 		try {
-			const res = await axios.post(`${API_URL}/login`, { email_address, password });
+			const res = await axios.post(`${API_URL}/auth/login`, { email_address, password });
 
 			if (res.data.status === 'success') {
 				dispatch(clearAlerts());
@@ -90,10 +94,10 @@ export function logoutUserViaAPI(access_token) {
 			const headers = {
 				Authorization : 'Bearer ' + access_token
 			};
-			const res = await axios.get(`${API_URL}/logout`, {
+			const res = await axios.get(`${API_URL}/auth/logout`, {
 				headers : headers
 			});
-			
+
 			if (res.data.status === 'success') {
 				return res.data;
 			}
