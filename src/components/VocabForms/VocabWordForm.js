@@ -58,10 +58,12 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 
 	useEffect(() => {
 		if (formData.word) {
-			try {
-				translateAPI();
-			} catch (e) {
-				console.log(e);
+			if (formData.translation === '') {
+				try {
+					translateAPI();
+				} catch (e) {
+					console.log(e);
+				}
 			}
 		}
 	}, []);
@@ -112,7 +114,8 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 						onChange={handleChange}
 						value={formData.word}
 						variant="outlined"
-					/>
+						autoCapitalize="false"
+						/>
 					<Button className={classes.button} variant="outlined" color="primary" onClick={handleTranslate}>
 						Translate
 					</Button>
@@ -126,7 +129,8 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 						onChange={handleChange}
 						value={formData.translation}
 						variant="outlined"
-					/>
+						autoCapitalize="false"
+						/>
 				</div>
 
 				<TextField
@@ -136,10 +140,21 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 					onChange={handleChange}
 					value={formData.notes}
 					variant="outlined"
+					autoCapitalize="false"
 				/>
 
 				<Button className={classes.submitButton} variant="contained" type="submit" color="primary" size="large">
 					{word ? 'Save Word' : 'Add Word'}
+				</Button>
+				<Button
+					className={classes.submitButton}
+					variant="contained"
+					type="submit"
+					color="default"
+					size="large"
+					onClick={onClose}
+				>
+					Close
 				</Button>
 			</form>
 		</div>

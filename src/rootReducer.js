@@ -27,7 +27,7 @@ const INITIAL_STATE = {
 	name               : '',
 	text_input         : '',
 	user               : null,
-	words_array        : []
+	words_array        : null
 };
 
 function sortByRoot(words_array) {

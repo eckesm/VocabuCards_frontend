@@ -54,18 +54,20 @@ export default function SelectStartLanguage({ updateStartLanguage }) {
 				<Select
 					className={classes.select}
 					labelId="language-label"
-					id='startLanguage'
-					name='startLanguage'
+					id="startLanguage"
+					name="startLanguage"
 					value={formData.startLanguage}
 					onChange={handleChange}
 					label="Language"
 				>
 					{languages.map(option => {
-						return (
-							<MenuItem key={option[0]} value={option[0]}>
-								{option[1]}
-							</MenuItem>
-						);
+						if (option[0] !== 'en') {
+							return (
+								<MenuItem key={option[0]} value={option[0]}>
+									{option[1]}
+								</MenuItem>
+							);
+						}
 					})}
 				</Select>
 			</FormControl>

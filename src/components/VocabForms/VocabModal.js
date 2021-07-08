@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function VocabForm({
+export default function VocabModal({
 	open,
 	handleClose,
 	wordText = null,

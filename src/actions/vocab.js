@@ -17,7 +17,6 @@ import { setAlerts } from './auth';
 
 import { API_URL } from '../helpers/API';
 
-
 function getAccessToken() {
 	return localStorage.getItem('access_token') || null;
 }
@@ -47,7 +46,9 @@ export function getUserInfo() {
 
 				const languageObject = {};
 				languages.forEach(option => {
-					languageObject[option[0]] = option[1];
+					if (option[0] !== 'en') {
+						languageObject[option[0]] = option[1];
+					}
 				});
 
 				dispatch({
@@ -83,11 +84,11 @@ export function getUserInfo() {
 				dispatch(setAlerts(alerts));
 			} catch (e) {
 				console.log(e);
+				return 'ERROR'
 			}
 		}
 	};
 }
-
 
 // GET_USER_LANGUAGE_WORDS
 export function getUserLanguageWordsViaAPI(source_code = 'sv') {
@@ -99,7 +100,6 @@ export function getUserLanguageWordsViaAPI(source_code = 'sv') {
 			const res = await axios.get(`${API_URL}/vocab/words/${source_code}`, { headers: headers });
 			const words_array = res.data;
 
-			// return dispatch(storeUserLanguageWords(words_array, source_code));
 			return dispatch(storeUserLanguageWords(words_array));
 		} catch (e) {
 			console.log(e);
@@ -110,7 +110,6 @@ export function getUserLanguageWordsViaAPI(source_code = 'sv') {
 function storeUserLanguageWords(words_array) {
 	return {
 		type        : GET_USER_LANGUAGE_WORDS,
-		// words : { words_array, source_code }
 		words_array
 	};
 }

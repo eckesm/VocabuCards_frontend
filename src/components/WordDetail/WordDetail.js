@@ -3,20 +3,29 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
 
+import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-
-import WordDetailAccordian from './WordDetailAccordian';
-import VocabForm from '../VocabForms/VocabForm';
 
 import { deleteWord } from '../../helpers/API';
 import { deleteWordInState } from '../../actions/vocab';
 
+import WordDetailAccordian from './WordDetailAccordian';
+import VocabModal from '../VocabForms/VocabModal';
+import DeleteDialog from '../VocabForms/DeleteDialog';
+
 import './WordDetail.css';
 
+const useStyles = makeStyles(theme => ({
+	buttonGroup : {
+		display : 'flex',
+		gap     : '10px'
+	}
+}));
+
 export default function WordDetail() {
+	const classes = useStyles();
 	const { rootId } = useParams();
 	const dispatch = useDispatch();
 	const history = useHistory();
@@ -26,8 +35,10 @@ export default function WordDetail() {
 
 	useEffect(
 		() => {
-			const thisWord = words_array.filter(w => w.id === rootId)[0];
-			setWord(thisWord);
+			if (words_array !== null) {
+				const thisWord = words_array.filter(w => w.id === rootId)[0];
+				setWord(thisWord);
+			}
 		},
 		[ words_array ]
 	);
@@ -51,7 +62,7 @@ export default function WordDetail() {
 	return (
 		<div>
 			{word && (
-				<Card className='WordDetail'>
+				<Card className="WordDetail">
 					<CardContent>
 						<div className="WordDetail-heading">
 							<div className="WordDetail-topHeading">
@@ -60,20 +71,22 @@ export default function WordDetail() {
 								</p>
 
 								<div className="WordDetail-buttonGroup">
-									<ButtonGroup
-										variant="text"
-										size="large"
-										aria-label="large text primary button group"
-									>
-										<Button color="primary" onClick={handleModalOpen}>
-											<i className="fad fa-pencil" />
+									<div className={classes.buttonGroup}>
+										<Button
+											color="primary"
+											onClick={handleModalOpen}
+											startIcon={<i className="fad fa-pencil" />}
+										>
+											Edit
 										</Button>
-										<Button color="secondary" onClick={handleDelete}>
-											<i className="fad fa-trash-alt" />
-										</Button>
-									</ButtonGroup>
+										<DeleteDialog
+											root={word.root}
+											variations={word.components}
+											handleDelete={handleDelete}
+										/>
+									</div>
 									{modalOpen && (
-										<VocabForm
+										<VocabModal
 											open={modalOpen}
 											handleClose={handleModalClose}
 											word={word}

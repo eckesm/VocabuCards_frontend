@@ -98,7 +98,7 @@ export function renderHtml(pastedText, source_code, translate_code) {
 			sentence = [];
 			paragraph = [];
 		}
-		else if (word === '.' || word === '!' || word === '?') {
+		else if (word === '.' || word === '!' || word === '?' || word === '–') {
 			sentence.push({
 				text : word,
 				type : 'period'

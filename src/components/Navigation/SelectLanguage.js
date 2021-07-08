@@ -66,11 +66,13 @@ export default function SelectLanguage() {
 					label="Language"
 				>
 					{languages.map(option => {
-						return (
-							<MenuItem key={option[0]} value={option[0]}>
-								{option[1]}
-							</MenuItem>
-						);
+						if (option[0] !== 'en') {
+							return (
+								<MenuItem key={option[0]} value={option[0]}>
+									{option[1]}
+								</MenuItem>
+							);
+						}
 					})}
 				</Select>
 			</FormControl>

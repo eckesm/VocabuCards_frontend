@@ -5,19 +5,9 @@ import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { sendPasswordResetViaAPI } from '../../helpers/API';
+import useFields from '../../hooks/useFields';
 
 const useStyles = makeStyles(theme => ({
-	container : {
-		margin          : '0 auto',
-		marginTop       : '100px',
-		width           : '300px',
-		fontFamily      : 'roboto, sans-serif',
-		border          : '1px solid rgb(200, 200, 200)',
-		padding         : '40px',
-		backgroundColor : 'snow',
-		borderRadius    : '3px',
-		boxShadow       : '5px 5px 8px grey'
-	},
 	textInput : {
 		marginBottom : '10px',
 		width        : '250px'
@@ -31,17 +21,9 @@ export default function PasswordResetForm({ addAlert, setShowForm }) {
 	const classes = useStyles();
 	const history = useHistory();
 
-	const [ formData, setFormData ] = useState({
+	const [ formData, handleChange ] = useFields({
 		emailAddress : ''
 	});
-
-	function handleChange(evt) {
-		const { name, value } = evt.target;
-		setFormData(data => ({
-			...data,
-			[name] : value
-		}));
-	}
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
@@ -69,7 +51,7 @@ export default function PasswordResetForm({ addAlert, setShowForm }) {
 	}
 
 	return (
-		<div className={classes.container}>
+		<div>
 			<h1>Reset Password</h1>
 			<form onSubmit={handleSubmit}>
 				<TextField
@@ -79,6 +61,7 @@ export default function PasswordResetForm({ addAlert, setShowForm }) {
 					className={classes.textInput}
 					onChange={handleChange}
 					value={formData.emailAddress}
+					autoCapitalize="false"
 				/>
 				<Button variant="contained" type="submit" color="primary" className={classes.button}>
 					Send Password Reset Link

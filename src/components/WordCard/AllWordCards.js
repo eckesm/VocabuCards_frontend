@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -25,15 +25,31 @@ const useStyles = makeStyles(theme => ({
 export default function VocabWordsAll() {
 	const classes = useStyles();
 	const { words_array } = useSelector(store => store);
+	const [ loading, setLoading ] = useState(true);
 
+	useEffect(
+		() => {
+			if (words_array !== null) {
+				setLoading(false);
+			}
+		},
+		[ words_array ]
+	);
 	return (
 		<div className={classes.root}>
 			<h1>Vocabulary Words</h1>
 			<div className={classes.container}>
-				{words_array &&
+				{!loading &&
+					words_array.length > 0 &&
 					words_array.map(word => {
 						return <WordCard key={word['id']} word={word} />;
 					})}
+				{!loading &&
+				words_array.length === 0 && (
+					<h4>
+						<i>No vocab words yet!</i>
+					</h4>
+				)}
 			</div>
 		</div>
 	);

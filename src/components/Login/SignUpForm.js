@@ -2,26 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import { registerUserViaAPI } from '../../actions/auth';
 import { getUserInfo } from '../../actions/vocab';
 import { TextField, Button, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
+import { registerUserViaAPI } from '../../actions/auth';
+import { clearAlerts } from '../../actions/auth';
 
 import SelectStartLanguage from './SelectStartLanguage';
 
 // import { setUserLanguage } from '../../actions/vocab';
 
 const useStyles = makeStyles(theme => ({
-	container     : {
-		margin          : '0 auto',
-		width           : '300px',
-		fontFamily      : 'roboto, sans-serif',
-		border          : '1px solid rgb(200, 200, 200)',
-		padding         : '40px',
-		backgroundColor : 'snow',
-		borderRadius    : '3px',
-		boxShadow       : '5px 5px 8px grey'
-	},
 	textInput     : {
 		marginBottom : '10px',
 		width        : '250px'
@@ -51,6 +43,14 @@ export default function SignUpForm({ addAlert }) {
 		startLanguage : ''
 	});
 
+	function handleChange(evt) {
+		const { name, value } = evt.target;
+		setFormData(data => ({
+			...data,
+			[name] : value
+		}));
+	}
+
 	function updateStartLanguage(source_code) {
 		setFormData({
 			...formData,
@@ -67,14 +67,6 @@ export default function SignUpForm({ addAlert }) {
 		},
 		[ user, history, dispatch ]
 	);
-
-	function handleChange(evt) {
-		const { name, value } = evt.target;
-		setFormData(data => ({
-			...data,
-			[name] : value
-		}));
-	}
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
@@ -111,7 +103,7 @@ export default function SignUpForm({ addAlert }) {
 	const classes = useStyles();
 
 	return (
-		<div className={classes.container}>
+		<div>
 			<h1>New User</h1>
 			<form onSubmit={handleSubmit}>
 				<TextField
@@ -129,6 +121,7 @@ export default function SignUpForm({ addAlert }) {
 					className={classes.textInput}
 					onChange={handleChange}
 					value={formData.emailAddress}
+					autoCapitalize="false"
 				/>
 				<TextField
 					id="password"
@@ -155,7 +148,7 @@ export default function SignUpForm({ addAlert }) {
 			</form>
 			<div className={classes.linkContainer}>
 				<div className={classes.link}>
-					<Link href="/#/login">
+					<Link href="/#/login" onClick={() => dispatch(clearAlerts())}>
 						<i>Already have an account?</i>
 					</Link>
 				</div>

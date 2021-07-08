@@ -6,7 +6,7 @@ import SingleAlert from './SingleAlert';
 
 const useStyles = makeStyles(theme => ({
 	alerts : {
-		marginTop : '60px',
+		// marginTop : '60px',
 		paddingLeft:'5px',
 		paddingRight:'5px'
 	}

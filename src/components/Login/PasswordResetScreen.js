@@ -5,8 +5,16 @@ import PasswordResetForm from './PasswordResetForm';
 import AlertsContainer from '../Alerts/AlertsContainer';
 
 const useStyles = makeStyles(theme => ({
-	formContainer : {
-		marginTop : '125px'
+	container : {
+		marginTop       : '100px',
+		margin          : '0 auto',
+		width           : '300px',
+		fontFamily      : 'roboto, sans-serif',
+		border          : '1px solid rgb(200, 200, 200)',
+		padding         : '40px',
+		backgroundColor : 'snow',
+		borderRadius    : '3px',
+		boxShadow       : '5px 5px 8px grey'
 	}
 }));
 
@@ -22,9 +30,9 @@ export default function PasswordResetScreen() {
 	return (
 		<div>
 			<AlertsContainer alerts={alerts} />
-			<div className={classes.formContainer}>
+			<div className={classes.container}>
 				{showForm && <PasswordResetForm addAlert={addAlert} setShowForm={setShowForm} />}
-				{!showForm && <h1>Email sent!</h1>}
+				{!showForm && <h1>Email sent.</h1>}
 			</div>
 		</div>
 	);

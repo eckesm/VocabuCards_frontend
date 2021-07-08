@@ -6,7 +6,7 @@ import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import Paragraph from './Paragraph';
-import VocabForm from '../VocabForms/VocabForm';
+import VocabModal from '../VocabForms/VocabModal';
 import { setTextInput } from '../../actions/vocab';
 import { updateSavedRenderedText } from '../../helpers/API';
 
@@ -37,6 +37,9 @@ const useStyles = makeStyles(theme => ({
 		padding         : '15px',
 		textAlign       : 'left',
 		fontSize        : '1.5rem'
+	},
+	empty:{
+		textAlign:'center'
 	}
 }));
 
@@ -115,9 +118,9 @@ export default function RenderTextScreen() {
 
 			<div className={classes.renderTextOutput}>
 				{renderedText.length === 0 && (
-					<h4>
+					<h4 className={classes.empty}>
 						<i>
-							...type or paste {language_object[language]} into the input box then click RENDER to
+							...type or paste {language_object[language]} text into the input box then click RENDER to
 							process...
 						</i>
 					</h4>
@@ -129,7 +132,7 @@ export default function RenderTextScreen() {
 					})}
 			</div>
 
-			<VocabForm
+			<VocabModal
 				open={open}
 				handleOpen={handleOpen}
 				handleClose={handleClose}

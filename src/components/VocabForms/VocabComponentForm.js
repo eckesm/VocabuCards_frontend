@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { useHistory } from 'react-router';
 
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -99,10 +98,12 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 
 	useEffect(() => {
 		if (wordText) {
-			try {
-				translateAPI(formData.variation);
-			} catch (e) {
-				console.log(e);
+			if (formData.translation === '') {
+				try {
+					translateAPI(formData.variation);
+				} catch (e) {
+					console.log(e);
+				}
 			}
 		}
 	}, []);
@@ -258,6 +259,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 						onChange={handleChange}
 						value={formData.variation}
 						variant="outlined"
+						autoCapitalize="false"
 					/>
 					<Button className={classes.button} variant="outlined" color="primary" onClick={translateAPI}>
 						Translate
@@ -271,6 +273,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 					onChange={handleChange}
 					value={formData.examples}
 					variant="outlined"
+					autoCapitalize="false"
 				/>
 
 				<div className="VocabComponentForm-groups">
@@ -281,6 +284,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 						onChange={handleChange}
 						value={formData.translation}
 						variant="outlined"
+						autoCapitalize="false"
 					/>
 					<Button className={classes.button} variant="outlined" color="primary" onClick={handleDictionary}>
 						Search Dictionary
@@ -294,6 +298,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 					onChange={handleChange}
 					value={formData.description}
 					variant="outlined"
+					autoCapitalize="false"
 				/>
 
 				<SelectDictionary
@@ -320,6 +325,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 					onChange={handleChange}
 					value={formData.synonyms}
 					variant="outlined"
+					autoCapitalize="false"
 				/>
 
 				<TextField
@@ -329,6 +335,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 					onChange={handleChange}
 					value={formData.variationNotes}
 					variant="outlined"
+					autoCapitalize="false"
 				/>
 
 				{variation === null && (
@@ -351,11 +358,22 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 						onChange={handleChange}
 						value={formData.wordNotes}
 						variant="outlined"
+						autoCapitalize="false"
 					/>
 				)}
 
 				<Button className={classes.submitButton} variant="contained" type="submit" color="primary" size="large">
 					{variation ? 'Save' : 'Add Word'}
+				</Button>
+				<Button
+					className={classes.submitButton}
+					variant="contained"
+					type="submit"
+					color="default"
+					size="large"
+					onClick={onClose}
+				>
+					Close
 				</Button>
 			</form>
 		</div>

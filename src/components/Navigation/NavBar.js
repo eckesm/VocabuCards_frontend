@@ -15,7 +15,7 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import { clearAlerts } from '../../actions/auth';
 
 import NavDrawer from './NavDrawer';
-import VocabForm from '../VocabForms/VocabForm';
+import VocabModal from '../VocabForms/VocabModal';
 
 const useStyles = makeStyles(theme => ({
 	grow           : {
@@ -240,7 +240,7 @@ export default function NavBar() {
 						</IconButton>
 					</div>
 				</Toolbar>
-				{modalOpen && <VocabForm open={modalOpen} handleClose={handleModalClose} setting="variation" />}
+				{modalOpen && <VocabModal open={modalOpen} handleClose={handleModalClose} setting="variation" />}
 			</AppBar>
 			{renderMobileMenu}
 			{renderMenu}

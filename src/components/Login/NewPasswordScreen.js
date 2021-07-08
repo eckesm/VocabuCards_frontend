@@ -8,8 +8,16 @@ import AlertsContainer from '../Alerts/AlertsContainer';
 import LoginForm from './LoginForm';
 
 const useStyles = makeStyles(theme => ({
-	formContainer : {
-		marginTop : '125px'
+	container : {
+		marginTop       : '100px',
+		margin          : '0 auto',
+		width           : '300px',
+		fontFamily      : 'roboto, sans-serif',
+		border          : '1px solid rgb(200, 200, 200)',
+		padding         : '40px',
+		backgroundColor : 'snow',
+		borderRadius    : '3px',
+		boxShadow       : '5px 5px 8px grey'
 	}
 }));
 
@@ -26,9 +34,14 @@ export default function NewPasswordScreen() {
 	return (
 		<div>
 			<AlertsContainer alerts={alerts} />
-			<div className={classes.formContainer}>
+			<div className={classes.container}>
 				{showForm && <NewPasswordForm token={token} addAlert={addAlert} setShowForm={setShowForm} />}
-				{!showForm && <LoginForm addAlert={addAlert} />}
+				{!showForm && (
+					<div>
+						<h4><i>Please log in again.</i></h4>
+						<LoginForm addAlert={addAlert} />
+					</div>
+				)}
 			</div>
 		</div>
 	);

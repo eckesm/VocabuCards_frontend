@@ -1,17 +1,32 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-
-import VocabForm from '../VocabForms/VocabForm';
+import IconButton from '@material-ui/core/IconButton';
 
 import { deleteVariation } from '../../helpers/API';
 import { deleteComponentInState } from '../../actions/vocab';
 
+import VocabModal from '../VocabForms/VocabModal';
+import DeleteDialog from '../VocabForms/DeleteDialog';
+
 import './VariationCard.css';
 
+const useStyles = makeStyles(theme => ({
+	buttonGroup : {
+		display       : 'flex',
+		verticalAlign : 'middle'
+	},
+	button      : {
+		height : '35px',
+		width  : '35px'
+	}
+}));
+
 export default function VariationCard({ initialVariation }) {
+	const classes = useStyles();
 	const [ variation, setVariation ] = useState(initialVariation);
 	const dispatch = useDispatch();
 
@@ -39,24 +54,22 @@ export default function VariationCard({ initialVariation }) {
 		<div className="VariationCard">
 			<div className="VariationCard-heading">
 				<p className="VariationCard-headingText">{variation.variation}</p>
-				<ButtonGroup variant="text" size="small" aria-label="small text primary button group">
-					<Button color="primary" onClick={handleModalOpen}>
+				<div className={classes.buttonGroup}>
+					<IconButton className={classes.button} color="primary" size="small" onClick={handleModalOpen}>
 						<i className="fad fa-pencil" />
-					</Button>
-					<Button color="secondary" onClick={handleDelete}>
-						<i className="fad fa-trash-alt" />
-					</Button>
-				</ButtonGroup>
+					</IconButton>
+					<DeleteDialog variation={variation.variation} handleDelete={handleDelete} />
+				</div>
+				{modalOpen && (
+					<VocabModal
+						open={modalOpen}
+						handleClose={handleModalClose}
+						variation={variation}
+						setVariation={setVariation}
+						setting="variation"
+					/>
+				)}
 			</div>
-			{modalOpen && (
-				<VocabForm
-					open={modalOpen}
-					handleClose={handleModalClose}
-					variation={variation}
-					setVariation={setVariation}
-					setting="variation"
-				/>
-			)}
 			<div className="VariationCard-body">
 				{translation && (
 					<div className="VariationCard-section">
