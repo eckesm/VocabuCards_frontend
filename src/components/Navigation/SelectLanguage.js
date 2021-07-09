@@ -1,5 +1,5 @@
-// import React, { useState, useEffect } from 'react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+// import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
@@ -34,6 +34,7 @@ export default function SelectLanguage() {
 	const classes = useStyles();
 
 	const { languages } = useSelector(store => store);
+	const [ sortedLanguages, setSortedLanguages ] = useState([]);
 	const [ language, setLanguage ] = useState('');
 	const dispatch = useDispatch();
 	const history = useHistory();
@@ -47,11 +48,17 @@ export default function SelectLanguage() {
 		history.push(`/words`);
 	};
 
-	// useEffect(() => {
-	// 	if (languages.length === 0) {
-	// 		dispatch(getAllLanguageOptionsViaAPI());
-	// 	}
-	// }, []);
+	useEffect(
+		() => {
+			// help: https://stackoverflow.com/questions/3524827/sort-a-2d-array-by-the-second-value
+			setSortedLanguages(
+				languages.sort((a, b) => {
+					return a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0;
+				})
+			);
+		},
+		[ languages ]
+	);
 
 	return (
 		<div>
@@ -65,7 +72,7 @@ export default function SelectLanguage() {
 					onChange={handleChange}
 					label="Language"
 				>
-					{languages.map(option => {
+					{sortedLanguages.map(option => {
 						if (option[0] !== 'en') {
 							return (
 								<MenuItem key={option[0]} value={option[0]}>

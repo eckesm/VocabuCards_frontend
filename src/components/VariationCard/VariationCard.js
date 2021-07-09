@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import IconButton from '@material-ui/core/IconButton';
 
 import { deleteVariation } from '../../helpers/API';
@@ -12,16 +10,50 @@ import { deleteComponentInState } from '../../actions/vocab';
 import VocabModal from '../VocabForms/VocabModal';
 import DeleteDialog from '../VocabForms/DeleteDialog';
 
-import './VariationCard.css';
-
 const useStyles = makeStyles(theme => ({
-	buttonGroup : {
+	buttonGroup     : {
 		display       : 'flex',
 		verticalAlign : 'middle'
 	},
-	button      : {
+	button          : {
 		height : '35px',
 		width  : '35px'
+	},
+	card            : {
+		border       : '1px solid rgb(200, 200, 200)',
+		borderRadius : '3px',
+		width        : '250px',
+		textAlign    : 'left',
+		margin       : '8px',
+		boxShadow    : '5px 5px 8px grey'
+	},
+	cardHeading     : {
+		borderTopLeftRadius  : '3px',
+		borderTopRightRadius : '3px',
+		padding              : '5px',
+		borderBottom         : '1px solid rgb(200, 200, 200)',
+		backgroundColor      : 'rgb(218, 237, 255)',
+		display              : 'flex',
+		justifyContent       : 'space-between'
+	},
+	cardHeadingText : {
+		margin     : '5px',
+		fontSize   : '1.5rem',
+		fontWeight : 'bold',
+		color      : 'blue'
+	},
+	cardBody        : {
+		padding         : '5px',
+		backgroundColor : 'rgb(239, 247, 253)',
+		height          : '150px',
+		overflow        : 'auto'
+	},
+	cardSection: {
+		marginTop: '5px',
+		marginBottom: '5px'
+	},
+	cardContent: {
+		margin: '0px'
 	}
 }));
 
@@ -51,9 +83,9 @@ export default function VariationCard({ initialVariation }) {
 	};
 
 	return (
-		<div className="VariationCard">
-			<div className="VariationCard-heading">
-				<p className="VariationCard-headingText">{variation.variation}</p>
+		<div className={classes.card}>
+			<div className={classes.cardHeading}>
+				<p className={classes.cardHeadingText}>{variation.variation}</p>
 				<div className={classes.buttonGroup}>
 					<IconButton className={classes.button} color="primary" size="small" onClick={handleModalOpen}>
 						<i className="fad fa-pencil" />
@@ -70,45 +102,45 @@ export default function VariationCard({ initialVariation }) {
 					/>
 				)}
 			</div>
-			<div className="VariationCard-body">
+			<div className={classes.cardBody}>
 				{translation && (
-					<div className="VariationCard-section">
-						<p className="VariationCard-content">
+					<div className={classes.cardSection}>
+						<p className={classes.cardContent}>
 							<b>Translation:</b> {translation}
 						</p>
 					</div>
 				)}
 				{examples && (
-					<div className="VariationCard-section">
-						<p className="VariationCard-content">
+					<div className={classes.cardSection}>
+						<p className={classes.cardContent}>
 							<b>Example: </b> {examples}
 						</p>
 					</div>
 				)}
 				{description && (
-					<div className="VariationCard-section">
-						<p className="VariationCard-content">
+					<div className={classes.cardSection}>
+						<p className={classes.cardContent}>
 							<b>Description:</b> {description}
 						</p>
 					</div>
 				)}
 				{definition && (
-					<div className="VariationCard-section">
-						<p className="VariationCard-content">
+					<div className={classes.cardSection}>
+						<p className={classes.cardContent}>
 							<b>Definition:</b> {definition}
 						</p>
 					</div>
 				)}
 				{synonyms && (
-					<div className="VariationCard-section">
-						<p className="VariationCard-content">
+					<div className={classes.cardSection}>
+						<p className={classes.cardContent}>
 							<b>Synonyms:</b> {synonyms}
 						</p>
 					</div>
 				)}
 				{notes && (
-					<div className="VariationCard-section">
-						<p className="VariationCard-content">
+					<div className={classes.cardSection}>
+						<p className={classes.cardContent}>
 							<b>Notes: </b> {notes}
 						</p>
 					</div>

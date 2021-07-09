@@ -14,8 +14,8 @@ import {
 } from './types';
 
 import { setAlerts } from './auth';
-
 import { API_URL } from '../helpers/API';
+import { customAxios } from '../helpers/tokens';
 
 function getAccessToken() {
 	return localStorage.getItem('access_token') || null;
@@ -30,7 +30,7 @@ export function getUserInfo() {
 				const headers = {
 					Authorization : 'Bearer ' + access_token
 				};
-				const res = await axios.get(`${API_URL}/vocab/start`, { headers: headers });
+				const res = await customAxios.get(`${API_URL}/vocab/start`, { headers: headers });
 
 				let {
 					current_text,
@@ -84,7 +84,7 @@ export function getUserInfo() {
 				dispatch(setAlerts(alerts));
 			} catch (e) {
 				console.log(e);
-				return 'ERROR'
+				return 'ERROR';
 			}
 		}
 	};
@@ -97,7 +97,7 @@ export function getUserLanguageWordsViaAPI(source_code = 'sv') {
 			const headers = {
 				Authorization : 'Bearer ' + getAccessToken()
 			};
-			const res = await axios.get(`${API_URL}/vocab/words/${source_code}`, { headers: headers });
+			const res = await customAxios.get(`${API_URL}/vocab/words/${source_code}`, { headers: headers });
 			const words_array = res.data;
 
 			return dispatch(storeUserLanguageWords(words_array));
@@ -121,7 +121,7 @@ export function updateUserLastLanguageViaAPI(source_code) {
 			const headers = {
 				Authorization : 'Bearer ' + getAccessToken()
 			};
-			const res = await axios.get(`${API_URL}/vocab/last/${source_code}`, { headers: headers });
+			const res = await customAxios.get(`${API_URL}/vocab/last/${source_code}`, { headers: headers });
 			let last_source_code = res.data;
 			dispatch(setTextInputInState(null));
 			return dispatch(setUserLanguage(last_source_code));
@@ -175,9 +175,8 @@ export function getAllLanguageOptionsViaAPI() {
 			const headers = {
 				Authorization : 'Bearer ' + getAccessToken()
 			};
-			const res = await axios.get(`${API_URL}/vocab/languages`, { headers: headers });
+			const res = await customAxios.get(`${API_URL}/vocab/languages`, { headers: headers });
 			const languages = res.data;
-
 			return dispatch(setLanguageOptions(languages));
 		} catch (e) {
 			console.log(e);

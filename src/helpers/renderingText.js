@@ -121,7 +121,6 @@ export function renderHtml(pastedText, source_code, translate_code) {
 			});
 		}
 		else {
-			// paragraph.push({
 			sentence.push({
 				text : word,
 				type : 'ignore'
@@ -132,7 +131,4 @@ export function renderHtml(pastedText, source_code, translate_code) {
 	paragraphsArray.push(paragraph);
 
 	return paragraphsArray;
-
-	// updateClickableClickEvent();
-	// updateClickableModals();
 }

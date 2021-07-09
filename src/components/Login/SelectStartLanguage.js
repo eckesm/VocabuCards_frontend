@@ -26,6 +26,7 @@ export default function SelectStartLanguage({ updateStartLanguage }) {
 	const classes = useStyles();
 
 	const { languages } = useSelector(store => store);
+	const [ sortedLanguages, setSortedLanguages ] = useState([]);
 	const dispatch = useDispatch();
 
 	const handleChange = evt => {
@@ -41,11 +42,20 @@ export default function SelectStartLanguage({ updateStartLanguage }) {
 		startLanguage : ''
 	});
 
-	useEffect(() => {
-		if (languages.length === 0) {
-			dispatch(getAllLanguageOptionsViaAPI());
-		}
-	}, []);
+	useEffect(
+		() => {
+			if (languages.length === 0) {
+				dispatch(getAllLanguageOptionsViaAPI());
+			}
+			// help: https://stackoverflow.com/questions/3524827/sort-a-2d-array-by-the-second-value
+			setSortedLanguages(
+				languages.sort((a, b) => {
+					return a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0;
+				})
+			);
+		},
+		[ languages ]
+	);
 
 	return (
 		<div>
@@ -60,7 +70,7 @@ export default function SelectStartLanguage({ updateStartLanguage }) {
 					onChange={handleChange}
 					label="Language"
 				>
-					{languages.map(option => {
+					{sortedLanguages.map(option => {
 						if (option[0] !== 'en') {
 							return (
 								<MenuItem key={option[0]} value={option[0]}>

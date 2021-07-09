@@ -41,7 +41,8 @@ const useStyles = makeStyles(theme => ({
 		margin : '0px'
 	},
 	ul          : {
-		margin : '0px'
+		margin : '0px',
+		paddingLeft:'25px'
 	}
 }));
 

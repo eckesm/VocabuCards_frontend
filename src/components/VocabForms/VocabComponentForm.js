@@ -10,6 +10,7 @@ import {
 	createNewVariation,
 	createNewWord,
 	editVariation
+	// refreshAccessTokenViaAPI
 } from '../../helpers/API';
 import { addWordToState, addComponentToState, editComponentInState } from '../../actions/vocab';
 
@@ -50,6 +51,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 		wordChoices.push({ value: choice.id, name: choice.root });
 	});
 	const [ showWordNotes, setShowWordNotes ] = useState(true);
+	const [ useDictionary, setUseDictionary ] = useState(true);
 
 	let INITIAL_STATE = {
 		partOfSpeech   : '',
@@ -171,6 +173,8 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 	}
 
 	async function translateAPI() {
+		// const access_token = await refreshAccessTokenViaAPI();
+		// console.log(access_token);
 		const results = await getTranslateWordViaAPI(formData.variation, language);
 		setFormData({ ...formData, translation: results });
 	}
@@ -182,7 +186,9 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 		evt.preventDefault();
 		dictionaryAPI();
 	}
+
 	async function dictionaryAPI() {
+		setUseDictionary(false);
 		const results = await getDictionaryWordViaAPI(formData.translation);
 		setDictionaryChoices(results.results);
 	}
@@ -265,18 +271,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 						Translate
 					</Button>
 				</div>
-
-				<TextField
-					id="examples"
-					name="examples"
-					label="Example"
-					onChange={handleChange}
-					value={formData.examples}
-					variant="outlined"
-					autoCapitalize="false"
-				/>
-
-				<div className="VocabComponentForm-groups">
+				<div>
 					<TextField
 						id="translation"
 						name="translation"
@@ -286,11 +281,53 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 						variant="outlined"
 						autoCapitalize="false"
 					/>
-					<Button className={classes.button} variant="outlined" color="primary" onClick={handleDictionary}>
-						Search Dictionary
-					</Button>
+					<div>
+						<Button
+							className={classes.button}
+							variant={!useDictionary ? 'contained' : 'outlined'}
+							color={!useDictionary ? 'default' : 'primary'}
+							onClick={handleDictionary}
+							disabled={useDictionary ? false : true}
+						>
+							{useDictionary ? 'Search Dictionary' : 'Searching Dictionary'}
+						</Button>
+						<Button
+							className={classes.button}
+							variant={useDictionary ? 'contained' : 'outlined'}
+							color={useDictionary ? 'default' : 'primary'}
+							onClick={() => setUseDictionary(true)}
+							disabled={useDictionary ? true : false}
+						>
+							{useDictionary ? 'Entering Info' : 'Enter Info'}
+						</Button>
+					</div>
 				</div>
-
+				{useDictionary ? (
+					<TextField
+						id="definition"
+						name="definition"
+						label="Definition"
+						onChange={handleChange}
+						value={formData.definition}
+						variant="outlined"
+						autoCapitalize="false"
+					/>
+				) : (
+					<SelectDictionary
+						id="dictionary"
+						name="dictionary"
+						label="Definition"
+						updateDictionary={updateDictionary}
+						dictionaryChoices={dictionaryChoices}
+					/>
+				)}
+				<SelectPOS
+					id="partOfSpeech"
+					name="partOfSpeech"
+					label="Part of Speech"
+					updatePOS={updatePOS}
+					value={formData.partOfSpeech}
+				/>
 				<TextField
 					id="description"
 					name="description"
@@ -300,24 +337,6 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 					variant="outlined"
 					autoCapitalize="false"
 				/>
-
-				<SelectDictionary
-					id="dictionary"
-					name="dictionary"
-					label="Dictionary"
-					updateDictionary={updateDictionary}
-					dictionaryChoices={dictionaryChoices}
-					// value={formData.dictionary}
-				/>
-
-				<SelectPOS
-					id="partOfSpeech"
-					name="partOfSpeech"
-					label="Part of Speech"
-					updatePOS={updatePOS}
-					value={formData.partOfSpeech}
-				/>
-
 				<TextField
 					id="synonyms"
 					name="synonyms"
@@ -327,7 +346,15 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 					variant="outlined"
 					autoCapitalize="false"
 				/>
-
+				<TextField
+					id="examples"
+					name="examples"
+					label="Example"
+					onChange={handleChange}
+					value={formData.examples}
+					variant="outlined"
+					autoCapitalize="false"
+				/>
 				<TextField
 					id="variationNotes"
 					name="variationNotes"
@@ -337,7 +364,6 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 					variant="outlined"
 					autoCapitalize="false"
 				/>
-
 				{variation === null && (
 					<SelectWord
 						id="existingWord"
@@ -348,7 +374,6 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 						setShowWordNotes={setShowWordNotes}
 					/>
 				)}
-
 				{showWordNotes &&
 				variation === null && (
 					<TextField
@@ -361,7 +386,6 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 						autoCapitalize="false"
 					/>
 				)}
-
 				<Button className={classes.submitButton} variant="contained" type="submit" color="primary" size="large">
 					{variation ? 'Save' : 'Add Word'}
 				</Button>
