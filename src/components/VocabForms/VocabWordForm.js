@@ -70,6 +70,7 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
+		onClose();
 
 		if (word) {
 			const wordRes = await editWord(
@@ -86,8 +87,6 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 			const wordRes = await createNewWord(language, formData.word, formData.translation, formData.notes);
 			dispatch(addWordToState(wordRes.word));
 		}
-
-		onClose();
 	}
 
 	function handleTranslate(evt) {
@@ -115,7 +114,7 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 						value={formData.word}
 						variant="outlined"
 						autoCapitalize="false"
-						/>
+					/>
 					<Button className={classes.button} variant="outlined" color="primary" onClick={handleTranslate}>
 						Translate
 					</Button>
@@ -130,7 +129,7 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 						value={formData.translation}
 						variant="outlined"
 						autoCapitalize="false"
-						/>
+					/>
 				</div>
 
 				<TextField
