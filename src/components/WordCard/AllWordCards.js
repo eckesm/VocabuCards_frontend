@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import WordCard from './WordCard';
 
 const useStyles = makeStyles(theme => ({
+
 	root      : {
 		fontFamily                     : 'roboto, sans-serif',
 		border                         : '1px solid rgb(200, 200, 200)',
@@ -17,11 +18,11 @@ const useStyles = makeStyles(theme => ({
 			margin : '5px'
 		},
 		[theme.breakpoints.up('md')]: {
-			margin : '15px',
+			margin    : '15px',
 			boxShadow : '5px 5px 8px grey'
 		},
 		[theme.breakpoints.up('lg')]: {
-			margin    : '25px'
+			margin : '25px'
 		}
 	},
 	container : {

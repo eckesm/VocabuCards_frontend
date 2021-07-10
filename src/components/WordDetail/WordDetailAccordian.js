@@ -1,14 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 
+import { makeStyles } from '@material-ui/core/styles';
+
 import { emptyPartsOfSpeechObject } from '../../helpers/partsOfSpeech';
 
 import WordDetailAccordianPanel from './WordDetailAccordianPanel';
 
-import './WordDetail.css';
+const useStyles = makeStyles(theme => ({
+	wordDetailAccordian : {
+		borderRadius                   : '3px',
+		border                         : '1px solid rgb(215, 215, 215)',
+		[theme.breakpoints.down('sm')]: {
+			margin : '5px'
+		},
+		[theme.breakpoints.up('md')]: {
+			boxShadow : '5px 5px 8px grey',
+			margin    : '15px'
+		},
+		// marginTop                      : '10px',
+		// marginBottom                   : '10px'
+	}
+}));
 
 export default function WordDetailAccordian({ wordId }) {
-	const [ expanded, setExpanded ] = useState(false);
+	const classes = useStyles();
+	// const [ expanded, setExpanded ] = useState(false);
 	const [ partsOfSpeechArray, setPartsOfSpeechArray ] = useState(null);
 	const [ partsOfSpeechObj, setPartsOfSpeechObj ] = useState(emptyPartsOfSpeechObject);
 	const { words_array } = useSelector(store => store);
@@ -31,20 +48,20 @@ export default function WordDetailAccordian({ wordId }) {
 		[ words_array ]
 	);
 
-	const handleChange = panel => (event, isExpanded) => {
-		setExpanded(isExpanded ? panel : false);
-	};
+	// const handleChange = panel => (event, isExpanded) => {
+	// 	setExpanded(isExpanded ? panel : false);
+	// };
 
 	if (partsOfSpeechArray && partsOfSpeechObj) {
 		return (
-			<div className="WordDetail-accordian">
+			<div className={classes.wordDetailAccordian}>
 				{partsOfSpeechArray.map((pos, index) => {
 					return (
 						<WordDetailAccordianPanel
 							key={`panel${index}`}
 							panel={index}
-							expanded={expanded === `panel${index}`}
-							onChange={handleChange(`panel${index}`)}
+							// expanded={expanded === `panel${index}`}
+							// onChange={handleChange(`panel${index}`)}
 							pos={pos}
 							wordId={wordId}
 						/>

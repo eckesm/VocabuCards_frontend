@@ -116,6 +116,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
+		onClose();
 
 		if (variation) {
 			const componentRes = await editVariation(
@@ -172,8 +173,6 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 				dispatch(addComponentToState(componentRes.component));
 			}
 		}
-
-		onClose();
 	}
 
 	async function translateAPI() {
@@ -358,7 +357,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 					variant="outlined"
 					autoCapitalize="false"
 				/>
-				<TextField
+				{/* <TextField
 					id="variationNotes"
 					name="variationNotes"
 					label="Variation Notes"
@@ -366,7 +365,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 					value={formData.variationNotes}
 					variant="outlined"
 					autoCapitalize="false"
-				/>
+				/> */}
 				{variation === null && (
 					<SelectWord
 						id="existingWord"

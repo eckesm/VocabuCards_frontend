@@ -10,8 +10,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import AllVariationCards from '../VariationCard/AllVariationCards';
 
-import './WordDetail.css';
-
 const useStyles = makeStyles(theme => ({
 	heading          : {
 		fontSize   : theme.typography.pxToRem(15),
@@ -34,8 +32,6 @@ export default function WordDetailAccordianPanel({ panel, expanded, onChange, po
 	const [ variationHeading, setVariationHeading ] = useState('');
 	const [ hidePanel, setHidePanel ] = useState(true);
 
-	const bull = <span className={classes.bullet}>•</span>;
-
 	useEffect(
 		() => {
 			const word = words_array.filter(w => w.id === wordId)[0];
@@ -50,9 +46,8 @@ export default function WordDetailAccordianPanel({ panel, expanded, onChange, po
 			let varHeading = '';
 			for (let i = 0; i < variations.length; i++) {
 				if (i > 0 && i < variations.length) {
-					// varHeading = varHeading + ' | ';
-					varHeading = varHeading + ' • ';
-					// varHeading = varHeading + {bull};
+					varHeading = varHeading + ' | ';
+					// varHeading = varHeading + ' • ';
 				}
 				varHeading = varHeading + variations[i].variation;
 			}
@@ -62,7 +57,8 @@ export default function WordDetailAccordianPanel({ panel, expanded, onChange, po
 	);
 
 	return (
-		<Accordion className="WordDetail-accordianPanel" expanded={expanded} onChange={onChange} hidden={hidePanel}>
+		// <Accordion expanded={expanded} onChange={onChange} hidden={hidePanel}>
+		<Accordion defaultExpanded={true} hidden={hidePanel}>
 			<AccordionSummary
 				className={classes.summary}
 				expandIcon={<ExpandMoreIcon />}

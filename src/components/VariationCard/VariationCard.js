@@ -11,52 +11,63 @@ import VocabModal from '../VocabForms/VocabModal';
 import DeleteDialog from '../VocabForms/DeleteDialog';
 
 const useStyles = makeStyles(theme => ({
-	buttonGroup     : {
+	buttonGroup              : {
 		display       : 'flex',
 		verticalAlign : 'middle'
 	},
-	button          : {
+	button                   : {
 		height    : '25px',
 		width     : '25px',
 		marginTop : '5px'
 	},
-	card            : {
-		border       : '1px solid rgb(200, 200, 200)',
-		borderRadius : '3px',
-		width        : '250px',
-		textAlign    : 'left',
-		margin       : '8px',
-		boxShadow    : '5px 5px 8px grey'
+	card                     : {
+		border          : '1px solid rgb(200, 200, 200)',
+		borderRadius    : '3px',
+		backgroundColor : 'rgb(239, 247, 253)',
+		width           : '250px',
+		textAlign       : 'left',
+		margin          : '8px',
+		boxShadow       : '5px 5px 8px grey',
+		height          : '250px',
+		overflow        : 'auto'
 	},
-	cardHeading     : {
+	cardHeading              : {
 		borderTopLeftRadius  : '3px',
 		borderTopRightRadius : '3px',
 		padding              : '5px',
 		borderBottom         : '1px solid rgb(200, 200, 200)',
 		backgroundColor      : 'rgb(218, 237, 255)',
-		display              : 'flex',
 		justifyContent       : 'space-between'
 	},
-	cardHeadingText : {
-		margin     : '5px',
-		fontSize   : '1.25rem',
-		fontWeight : 'bold',
-		color      : 'blue',
-		width      : '80%',
-		wordWrap   : 'break-word'
+	cardHeadingText          : {
+		margin       : '5px',
+		marginBottom : '0px',
+		fontSize     : '1.25rem',
+		fontWeight   : 'bold',
+		color        : 'blue',
+		width        : '75%',
+		wordWrap     : 'break-word'
 	},
-	cardBody        : {
-		padding         : '5px',
-		backgroundColor : 'rgb(239, 247, 253)',
-		height          : '150px',
-		overflow        : 'auto'
+	cardHeadingTextContainer : {
+		width   : '100%',
+		display : 'flex'
 	},
-	cardSection     : {
+	description              : {
+		margin      : '0px',
+		paddingLeft : '5px',
+		fontSize    : '0.9rem'
+	},
+	cardBody                 : {
+		padding : '5px'
+	},
+	cardSection              : {
 		marginTop    : '5px',
 		marginBottom : '5px'
 	},
-	cardContent     : {
-		margin : '0px'
+	cardContent              : {
+		margin        : '0px',
+		paddingTop    : '2px',
+		paddingBottom : '2px'
 	}
 }));
 
@@ -88,21 +99,31 @@ export default function VariationCard({ initialVariation }) {
 	return (
 		<div className={classes.card}>
 			<div className={classes.cardHeading}>
-				<p className={classes.cardHeadingText}>{variation.variation}</p>
-				<div className={classes.buttonGroup}>
-					<IconButton className={classes.button} color="primary" size="small" onClick={handleModalOpen}>
-						<i className="fad fa-pencil" />
-					</IconButton>
-					<DeleteDialog variation={variation.variation} handleDelete={handleDelete} />
+				<div className={classes.cardHeadingTextContainer}>
+					<p className={classes.cardHeadingText}>{variation.variation}</p>
+					<div className={classes.buttonGroup}>
+						<IconButton className={classes.button} color="primary" size="small" onClick={handleModalOpen}>
+							<i className="fad fa-pencil" />
+						</IconButton>
+						<DeleteDialog variation={variation.variation} handleDelete={handleDelete} />
+					</div>
+					{modalOpen && (
+						<VocabModal
+							open={modalOpen}
+							handleClose={handleModalClose}
+							variation={variation}
+							setVariation={setVariation}
+							setting="variation"
+						/>
+					)}
 				</div>
-				{modalOpen && (
-					<VocabModal
-						open={modalOpen}
-						handleClose={handleModalClose}
-						variation={variation}
-						setVariation={setVariation}
-						setting="variation"
-					/>
+				{description && (
+					<div>
+						<p className={classes.description}>
+							{/* <b>Description:</b>{' '} */}
+							<i>{description}</i>
+						</p>
+					</div>
 				)}
 			</div>
 			<div className={classes.cardBody}>
@@ -117,13 +138,6 @@ export default function VariationCard({ initialVariation }) {
 					<div className={classes.cardSection}>
 						<p className={classes.cardContent}>
 							<b>Example: </b> {examples}
-						</p>
-					</div>
-				)}
-				{description && (
-					<div className={classes.cardSection}>
-						<p className={classes.cardContent}>
-							<b>Description:</b> {description}
 						</p>
 					</div>
 				)}
