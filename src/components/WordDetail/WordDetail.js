@@ -31,7 +31,6 @@ const useStyles = makeStyles(theme => ({
 		fontFamily : 'roboto, sans-serif',
 		padding    : '0px',
 		paddingTop : '10px'
-		// paddingBottom : '10px'
 	},
 	WordDetailHeading           : {
 		borderRadius                   : '3px',
@@ -48,24 +47,44 @@ const useStyles = makeStyles(theme => ({
 		padding         : '10px',
 		borderBottom    : '1px solid rgb(215, 215, 215)',
 		backgroundColor : 'rgb(218, 237, 255)',
-		fontSize        : '2rem',
 		textAlign       : 'left',
-		color           : 'blue',
 		display         : 'flex',
 		justifyContent  : 'space-between'
 	},
 	wordDetailTitle             : {
-		margin : '10px'
+		margin                         : '10px',
+		wordWrap                       : 'break-word',
+		[theme.breakpoints.down('sm')]: {
+			maxWidth : '70%'
+		},
+		[theme.breakpoints.up('md')]: {
+			maxWidth : '80%'
+		},
+		[theme.breakpoints.up('lg')]: {
+			maxWidth : '90%'
+		}
+	},
+	title                       : {
+		color        : 'blue',
+		fontSize     : '2rem',
+		marginTop    : '0px',
+		marginBottom : '5px'
 	},
 	translation                 : {
-		fontSize : '1.5rem'
+		fontSize     : '1.25rem',
+		marginTop    : '0px',
+		marginBottom : '0px',
+		wordWrap     : 'break-word'
 	},
 	wordDetailButtonGroup       : {
-		position : 'relative',
-		top      : '5px'
+		position  : 'relative',
+		textAlign : 'right',
+		top       : '5px',
+		width     : 'max-content'
 	},
 	buttonGroup                 : {
-		paddingBottom : '5px'
+		paddingBottom : '5px',
+		textAlign     : 'center'
 	},
 	wordDetailCardContent       : {
 		padding                        : '0px',
@@ -99,7 +118,8 @@ export default function WordDetail() {
 	const dispatch = useDispatch();
 	const history = useHistory();
 
-	const { words_array } = useSelector(st => st);
+	const { words_array, language, language_object } = useSelector(st => st);
+	const languageName = language_object[language];
 	const [ word, setWord ] = useState(null);
 
 	useEffect(
@@ -112,12 +132,20 @@ export default function WordDetail() {
 		[ words_array ]
 	);
 
-	const [ modalOpen, setModalOpen ] = useState(false);
-	const handleModalOpen = () => {
-		setModalOpen(true);
+	const [ editModalOpen, setEditModalOpen ] = useState(false);
+	const [ newModalOpen, setNewModalOpen ] = useState(false);
+	const handleEditModalOpen = () => {
+		setEditModalOpen(true);
 	};
-	const handleModalClose = () => {
-		setModalOpen(false);
+	const handleEditModalClose = () => {
+		setEditModalOpen(false);
+	};
+
+	const handleNewModalOpen = () => {
+		setNewModalOpen(true);
+	};
+	const handleNewModalClose = () => {
+		setNewModalOpen(false);
 	};
 
 	const handleDelete = () => {
@@ -136,9 +164,9 @@ export default function WordDetail() {
 					variant="contained"
 					color="primary"
 					className={classes.button}
-					startIcon={<i class="fas fa-arrow-circle-left" />}
+					startIcon={<i className="fas fa-arrow-circle-left" />}
 				>
-					Go to All Words
+					Go to {languageName} Vocab Cards
 				</Button>
 			</div>
 			{word && (
@@ -146,39 +174,53 @@ export default function WordDetail() {
 					<CardContent className={classes.wordDetailCardContent}>
 						<div className={classes.WordDetailHeading}>
 							<div className={classes.wordDetailTopHeading}>
-								<p className={classes.wordDetailTitle}>
-									<b>{word.root.toLowerCase()}</b>
-									{word.translation && ' - '}
+								<div className={classes.wordDetailTitle}>
+									<p className={classes.title}>
+										<b>{word.root.toLowerCase()}</b>
+									</p>
 									{word.translation && (
-										<span className={classes.translation}>
+										<p className={classes.translation}>
 											<i>{word.translation.toLowerCase()}</i>
-										</span>
+										</p>
 									)}
-								</p>
+								</div>
 
 								<div className={classes.wordDetailButtonGroup}>
 									<div className={classes.buttonGroup}>
+										<div>
+											<Button color="primary" onClick={handleNewModalOpen}>
+												Add Variation
+											</Button>
+										</div>
 										<Button
 											color="primary"
-											onClick={handleModalOpen}
+											onClick={handleEditModalOpen}
 											startIcon={<i className="fad fa-pencil" />}
 										>
 											Edit
 										</Button>
-
 										<DeleteDialog
 											root={word.root}
 											variations={word.components}
 											handleDelete={handleDelete}
 										/>
 									</div>
-									{modalOpen && (
+									{editModalOpen && (
 										<VocabModal
-											open={modalOpen}
-											handleClose={handleModalClose}
+											open={editModalOpen}
+											handleClose={handleEditModalClose}
 											word={word}
 											setWord={setWord}
-											setting="root"
+											setting="edit_root"
+										/>
+									)}
+									{newModalOpen && (
+										<VocabModal
+											open={newModalOpen}
+											handleClose={handleNewModalClose}
+											rootId={word.id}
+											rootWord={word.root}
+											setting="add_variation_of_root"
 										/>
 									)}
 								</div>

@@ -21,15 +21,25 @@ const useStyles = makeStyles(theme => ({
 		marginTop : '5px'
 	},
 	card                     : {
-		border          : '1px solid rgb(200, 200, 200)',
-		borderRadius    : '3px',
-		backgroundColor : 'rgb(239, 247, 253)',
-		width           : '250px',
-		textAlign       : 'left',
-		margin          : '8px',
-		boxShadow       : '5px 5px 8px grey',
-		height          : '250px',
-		overflow        : 'auto'
+		border                         : '1px solid rgb(200, 200, 200)',
+		borderRadius                   : '3px',
+		backgroundColor                : 'rgb(239, 247, 253)',
+		height                         : '250px',
+		overflow                       : 'auto',
+		textAlign   : 'left',
+		[theme.breakpoints.down('sm')]: {
+			width       : '100%',
+			margin      : '5px',
+			marginLeft  : '2px',
+			marginRight : '2px'
+		},
+		[theme.breakpoints.up('md')]: {
+			width       : '250px',
+			margin      : '8px',
+			marginLeft  : '8px',
+			marginRight : '8px',
+			boxShadow   : '5px 5px 8px grey'
+		}
 	},
 	cardHeading              : {
 		borderTopLeftRadius  : '3px',
@@ -37,6 +47,7 @@ const useStyles = makeStyles(theme => ({
 		padding              : '5px',
 		borderBottom         : '1px solid rgb(200, 200, 200)',
 		backgroundColor      : 'rgb(218, 237, 255)',
+		textAlign            : 'left',
 		justifyContent       : 'space-between'
 	},
 	cardHeadingText          : {
@@ -58,7 +69,8 @@ const useStyles = makeStyles(theme => ({
 		fontSize    : '0.9rem'
 	},
 	cardBody                 : {
-		padding : '5px'
+		textAlign : 'left',
+		padding   : '5px'
 	},
 	cardSection              : {
 		marginTop    : '5px',
@@ -113,7 +125,7 @@ export default function VariationCard({ initialVariation }) {
 							handleClose={handleModalClose}
 							variation={variation}
 							setVariation={setVariation}
-							setting="variation"
+							setting="edit_variation"
 						/>
 					)}
 				</div>

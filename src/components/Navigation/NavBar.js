@@ -193,7 +193,8 @@ export default function NavBar() {
 				<Toolbar>
 					{auth && <NavDrawer />}
 					<Typography className={classes.title} variant="h6" noWrap>
-						VocabuCards <i className="fad fa-kiwi-bird" />
+						{/* VocabuCards <i className="fad fa-kiwi-bird" /> */}
+						VocabuCards
 					</Typography>
 					<div className={classes.grow} />
 					<div className={classes.sectionDesktop}>
@@ -240,7 +241,9 @@ export default function NavBar() {
 						</IconButton>
 					</div>
 				</Toolbar>
-				{modalOpen && <VocabModal open={modalOpen} handleClose={handleModalClose} setting="variation" />}
+				{modalOpen && (
+					<VocabModal open={modalOpen} handleClose={handleModalClose} setting="add_variation_or_root" />
+				)}
 			</AppBar>
 			{renderMobileMenu}
 			{renderMenu}

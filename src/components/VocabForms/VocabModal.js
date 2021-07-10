@@ -46,7 +46,9 @@ export default function VocabModal({
 	setVariation,
 	word = null,
 	setWord,
-	setting
+	setting,
+	rootId = null,
+	rootWord = null
 }) {
 	const classes = useStyles();
 	// getModalStyle is not a pure function, we roll the style only on the first render
@@ -54,15 +56,25 @@ export default function VocabModal({
 
 	const body = (
 		<div style={modalStyle} className={classes.paper}>
-			{setting === 'variation' && (
+			{setting === 'edit_variation' && (
 				<VocabComponentForm
 					onClose={handleClose}
 					wordText={wordText}
 					variation={variation}
 					setVariation={setVariation}
+					setting={setting}
 				/>
 			)}
-			{setting === 'root' && <VocabWordForm onClose={handleClose} word={word} setWord={setWord} />}
+			{setting === 'add_variation_or_root' && (
+				<VocabComponentForm
+					onClose={handleClose}
+					setting={setting}
+				/>
+			)}
+			{setting === 'add_variation_of_root' && (
+				<VocabComponentForm onClose={handleClose} rootId={rootId} rootWord={rootWord} setting={setting} />
+			)}
+			{setting === 'edit_root' && <VocabWordForm onClose={handleClose} word={word} setWord={setWord} />}
 		</div>
 	);
 

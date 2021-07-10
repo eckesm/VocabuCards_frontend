@@ -6,16 +6,28 @@ import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
 	root        : {
-		border       : '1px solid rgb(200, 200, 200)',
-		borderRadius : '3px',
-		width        : '275px',
-		textAlign    : 'left',
-		margin       : '5px',
-		marginTop    : '10px',
-		marginBottom : '10px',
-		boxShadow    : '5px 5px 8px grey'
+		border                         : '1px solid rgb(200, 200, 200)',
+		borderRadius                   : '3px',
+		backgroundColor                : 'rgb(239, 247, 253)',
+		height                         : '250px',
+		overflow                       : 'auto',
+		textAlign                      : 'left',
+		[theme.breakpoints.down('sm')]: {
+			width       : '100%',
+			margin      : '5px',
+			marginLeft  : '2px',
+			marginRight : '2px'
+		},
+		[theme.breakpoints.up('md')]: {
+			width       : '250px',
+			margin      : '8px',
+			marginLeft  : '8px',
+			marginRight : '8px',
+			boxShadow   : '5px 5px 8px grey'
+		}
 	},
 	heading     : {
+		textAlign            : 'left',
 		borderTopLeftRadius  : '3px',
 		borderTopRightRadius : '3px',
 		padding              : '5px',
@@ -30,10 +42,8 @@ const useStyles = makeStyles(theme => ({
 		wordWrap   : 'break-word'
 	},
 	body        : {
-		padding         : '5px',
-		backgroundColor : 'rgb(239, 247, 253)',
-		height          : '150px',
-		overflow        : 'auto'
+		textAlign : 'left',
+		padding   : '5px'
 	},
 	section     : {
 		marginTop    : '5px',

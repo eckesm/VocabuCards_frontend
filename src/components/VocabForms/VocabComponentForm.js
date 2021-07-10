@@ -39,7 +39,15 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function VocabComponentForm({ onClose, wordText = null, variation = null, setVariation }) {
+export default function VocabComponentForm({
+	onClose,
+	wordText = null,
+	variation = null,
+	setVariation,
+	rootId = null,
+	rootWord = null,
+	setting = null
+}) {
 	const dispatch = useDispatch();
 	// const history = useHistory();
 
@@ -72,7 +80,6 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 		INITIAL_STATE.variation = wordText.text;
 		INITIAL_STATE.examples = wordText.sentence || '';
 	}
-
 	if (variation) {
 		INITIAL_STATE = {
 			partOfSpeech   : variation.part_of_speech,
@@ -87,6 +94,9 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 			existingWord   : variation.root_id,
 			wordNotes      : ''
 		};
+	}
+	if (rootId) {
+		INITIAL_STATE.existingWord = rootId;
 	}
 
 	const [ formData, setFormData ] = useState(INITIAL_STATE);
@@ -256,8 +266,13 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 
 	return (
 		<div className={classes.container}>
-			{variation && <h1>Edit Word</h1>}
-			{!variation && <h1>Add Word</h1>}
+			{setting === 'add_variation' || (setting === 'add_variation_or_root' && <h1>Add Word</h1>)}
+			{setting === 'edit_variation' && <h1>Edit Word</h1>}
+			{setting === 'add_variation_of_root' && (
+				<h1>
+					Add Variation of <i>{rootWord}</i>
+				</h1>
+			)}
 			<form onSubmit={handleSubmit} className={classes.root}>
 				<div>
 					<TextField
@@ -366,7 +381,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 					variant="outlined"
 					autoCapitalize="false"
 				/> */}
-				{variation === null && (
+				{setting === 'add_variation_or_root' && (
 					<SelectWord
 						id="existingWord"
 						name="existingWord"
@@ -377,7 +392,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 					/>
 				)}
 				{showWordNotes &&
-				variation === null && (
+				setting === 'add_variation_or_root' && (
 					<TextField
 						id="wordNotes"
 						name="wordNotes"
@@ -389,7 +404,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 					/>
 				)}
 				<Button className={classes.submitButton} variant="contained" type="submit" color="primary" size="large">
-					{variation ? 'Save' : 'Add Word'}
+					{setting === 'edit_variation' ? 'Save Word' : 'Add Word'}
 				</Button>
 				<Button
 					className={classes.submitButton}
