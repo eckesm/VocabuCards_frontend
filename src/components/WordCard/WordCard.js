@@ -25,7 +25,9 @@ const useStyles = makeStyles(theme => ({
 	headingText : {
 		margin     : '5px',
 		fontSize   : '1.5rem',
-		fontWeight : 'bold'
+		fontWeight : 'bold',
+		width      : '100%',
+		wordWrap   : 'break-word'
 	},
 	body        : {
 		padding         : '5px',
@@ -41,8 +43,8 @@ const useStyles = makeStyles(theme => ({
 		margin : '0px'
 	},
 	ul          : {
-		margin : '0px',
-		paddingLeft:'25px'
+		margin      : '0px',
+		paddingLeft : '25px'
 	}
 }));
 

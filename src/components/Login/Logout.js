@@ -4,7 +4,6 @@ import { useHistory } from 'react-router';
 
 import { logoutUser, logoutUserViaAPI } from '../../actions/auth';
 import { addAlert } from '../../actions/auth';
-import { getAccessToken } from '../../helpers/API';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
@@ -27,10 +26,8 @@ export default function Logout() {
 	const history = useHistory();
 
 	async function handleLogout() {
-		const access_token = getAccessToken();
+		const res = await dispatch(logoutUserViaAPI());
 		dispatch(logoutUser());
-		const res = await dispatch(logoutUserViaAPI(access_token));
-
 		try {
 			if (res.status === 'success') {
 				dispatch(
@@ -40,6 +37,7 @@ export default function Logout() {
 						text  : res.message
 					})
 				);
+				history.push('/login');
 			}
 			else {
 				dispatch(
@@ -49,10 +47,10 @@ export default function Logout() {
 						text  : 'There was an error logging you out.'
 					})
 				);
+				history.push('/error');
 			}
-			history.push('/login');
 		} catch (e) {
-			history.push('/error');
+			console.log(e);
 		}
 	}
 

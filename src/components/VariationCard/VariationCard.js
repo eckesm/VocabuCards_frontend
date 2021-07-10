@@ -16,8 +16,9 @@ const useStyles = makeStyles(theme => ({
 		verticalAlign : 'middle'
 	},
 	button          : {
-		height : '35px',
-		width  : '35px'
+		height    : '25px',
+		width     : '25px',
+		marginTop : '5px'
 	},
 	card            : {
 		border       : '1px solid rgb(200, 200, 200)',
@@ -38,9 +39,11 @@ const useStyles = makeStyles(theme => ({
 	},
 	cardHeadingText : {
 		margin     : '5px',
-		fontSize   : '1.5rem',
+		fontSize   : '1.25rem',
 		fontWeight : 'bold',
-		color      : 'blue'
+		color      : 'blue',
+		width      : '80%',
+		wordWrap   : 'break-word'
 	},
 	cardBody        : {
 		padding         : '5px',
@@ -48,12 +51,12 @@ const useStyles = makeStyles(theme => ({
 		height          : '150px',
 		overflow        : 'auto'
 	},
-	cardSection: {
-		marginTop: '5px',
-		marginBottom: '5px'
+	cardSection     : {
+		marginTop    : '5px',
+		marginBottom : '5px'
 	},
-	cardContent: {
-		margin: '0px'
+	cardContent     : {
+		margin : '0px'
 	}
 }));
 

@@ -1,4 +1,4 @@
-import axios from 'axios';
+// import axios from 'axios';
 import {
 	GET_USER_LANGUAGE_WORDS,
 	SET_USER_LANGUAGE,
@@ -30,7 +30,7 @@ export function getUserInfo() {
 				const headers = {
 					Authorization : 'Bearer ' + access_token
 				};
-				const res = await customAxios.get(`${API_URL}/vocab/start`, { headers: headers });
+				const res = await customAxios.get(`${API_URL}/start`, { headers: headers });
 
 				let {
 					current_text,
@@ -97,7 +97,7 @@ export function getUserLanguageWordsViaAPI(source_code = 'sv') {
 			const headers = {
 				Authorization : 'Bearer ' + getAccessToken()
 			};
-			const res = await customAxios.get(`${API_URL}/vocab/words/${source_code}`, { headers: headers });
+			const res = await customAxios.get(`${API_URL}/words/${source_code}`, { headers: headers });
 			const words_array = res.data;
 
 			return dispatch(storeUserLanguageWords(words_array));
@@ -121,7 +121,7 @@ export function updateUserLastLanguageViaAPI(source_code) {
 			const headers = {
 				Authorization : 'Bearer ' + getAccessToken()
 			};
-			const res = await customAxios.get(`${API_URL}/vocab/last/${source_code}`, { headers: headers });
+			const res = await customAxios.get(`${API_URL}/last/${source_code}`, { headers: headers });
 			let last_source_code = res.data;
 			dispatch(setTextInputInState(null));
 			return dispatch(setUserLanguage(last_source_code));
@@ -136,7 +136,7 @@ export function updateUserLastLanguageViaAPI(source_code) {
 // 			const headers = {
 // 				Authorization : 'Bearer ' + getAccessToken()
 // 			};
-// 			const res = await axios.get(`${API_URL}/vocab/last`, { headers: headers });
+// 			const res = await axios.get(`${API_URL}/last`, { headers: headers });
 // 			const last_source_code = res.data;
 
 // 			return dispatch(setUserLanguage(last_source_code));
@@ -175,7 +175,7 @@ export function getAllLanguageOptionsViaAPI() {
 			const headers = {
 				Authorization : 'Bearer ' + getAccessToken()
 			};
-			const res = await customAxios.get(`${API_URL}/vocab/languages`, { headers: headers });
+			const res = await customAxios.get(`${API_URL}/languages`, { headers: headers });
 			const languages = res.data;
 			return dispatch(setLanguageOptions(languages));
 		} catch (e) {

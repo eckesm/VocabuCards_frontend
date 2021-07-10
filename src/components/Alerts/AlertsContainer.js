@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuid } from 'uuid';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -7,8 +8,8 @@ import SingleAlert from './SingleAlert';
 const useStyles = makeStyles(theme => ({
 	alerts : {
 		// marginTop : '60px',
-		paddingLeft:'5px',
-		paddingRight:'5px'
+		paddingLeft  : '5px',
+		paddingRight : '5px'
 	}
 }));
 
@@ -18,8 +19,8 @@ export default function AlertsContainer({ alerts }) {
 	return (
 		<div className={classes.alerts}>
 			{alerts.length > 0 &&
-				alerts.map((alert, i) => {
-					return <SingleAlert key={i} type={alert.type} title={alert.title} text={alert.text} />;
+				alerts.map(alert => {
+					return <SingleAlert key={uuid()} type={alert.type} title={alert.title} text={alert.text} />;
 				})}
 		</div>
 	);

@@ -12,34 +12,63 @@ import { updateSavedRenderedText } from '../../helpers/API';
 
 const useStyles = makeStyles(theme => ({
 	root             : {
-		'& > *' : {
-			margin : theme.spacing(1),
-			// width: '25ch',
-			width  : '90%'
-		}
+		'& > *'      : {
+			width                          : '97%',
+			// margin : theme.spacing(1),
+			[theme.breakpoints.down('sm')]: {
+				margin : '5px'
+			},
+			[theme.breakpoints.up('md')]: {
+				margin : '15px'
+			},
+			[theme.breakpoints.up('lg')]: {
+				margin : '25px'
+			}
+		},
+		marginBottom : '30px'
 	},
 	renderTextScreen : {
-		border          : '1px solid rgb(200, 200, 200)',
-		borderRadius    : '3px',
-		margin          : '20px',
-		marginTop       : '40px',
-		fontFamily      : 'roboto, sans-serif',
-		backgroundColor : 'snow',
-		boxShadow       : '5px 5px 8px grey'
+		border                         : '1px solid rgb(200, 200, 200)',
+		borderRadius                   : '3px',
+		fontFamily                     : 'roboto, sans-serif',
+		backgroundColor                : 'snow',
+		[theme.breakpoints.down('sm')]: {
+			margin : '5px'
+		},
+		[theme.breakpoints.up('md')]: {
+			margin : '15px',
+			boxShadow : '5px 5px 8px grey'
+		},
+		[theme.breakpoints.up('lg')]: {
+			margin    : '25px'
+		}
 	},
 	renderTextOutput : {
-		border          : '1px solid rgb(200, 200, 200)',
-		borderRadius    : '3px',
-		margin          : '53px',
-		marginTop       : '25px',
-		fontFamily      : 'roboto, sans-serif',
-		backgroundColor : 'snow',
-		padding         : '15px',
-		textAlign       : 'left',
-		fontSize        : '1.5rem'
+		border                         : '1px solid rgb(200, 200, 200)',
+		borderRadius                   : '3px',
+		fontFamily                     : 'roboto, sans-serif',
+		backgroundColor                : 'snow',
+		padding                        : '15px',
+		textAlign                      : 'left',
+		fontSize                       : '1.5rem',
+		[theme.breakpoints.down('sm')]: {
+			margin : '5px'
+		},
+		[theme.breakpoints.up('md')]: {
+			margin : '15px'
+		},
+		[theme.breakpoints.up('lg')]: {
+			margin : '25px'
+		},
+		marginTop                      : '25px'
 	},
-	empty:{
-		textAlign:'center'
+	empty            : {
+		textAlign : 'center'
+	},
+	button           : {
+		width       : '150px',
+		marginLeft  : 'auto',
+		marginRight : 'auto'
 	}
 }));
 
@@ -111,7 +140,7 @@ export default function RenderTextScreen() {
 					variant="outlined"
 					onChange={handleChange}
 				/>
-				<Button variant="contained" type="submit" color="primary">
+				<Button className={classes.button} variant="contained" type="submit" color="primary">
 					Render
 				</Button>
 			</form>

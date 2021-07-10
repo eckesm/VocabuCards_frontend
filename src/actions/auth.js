@@ -1,15 +1,15 @@
-import axios from 'axios';
+// import axios from 'axios';
 import { LOGIN_USER, LOGOUT_USER, ADD_ALERT, CLEAR_ALERTS, SET_ALERTS } from './types';
 import { customAxios } from '../helpers/tokens';
 
 import { getUserInfo } from './vocab';
-import { API_URL } from '../helpers/API';
+import { API_URL, getAccessToken } from '../helpers/API';
 
 // REGISTER_USER
 export function registerUserViaAPI(name, email_address, password, password_check, source_code) {
 	return async function(dispatch) {
 		try {
-			const res = await customAxios.post(`${API_URL}/auth/register`, {
+			const res = await customAxios.post(`${API_URL}/register`, {
 				name,
 				email_address,
 				password,
@@ -37,7 +37,7 @@ export function registerUserViaAPI(name, email_address, password, password_check
 export function loginUserViaAPI(email_address, password) {
 	return async function(dispatch) {
 		try {
-			const res = await customAxios.post(`${API_URL}/auth/login`, { email_address, password });
+			const res = await customAxios.post(`${API_URL}/login`, { email_address, password });
 
 			if (res.data.status === 'success') {
 				dispatch(clearAlerts());
@@ -86,13 +86,13 @@ export function clearAlerts() {
 }
 
 // LOGOUT_USER
-export function logoutUserViaAPI(access_token) {
+export function logoutUserViaAPI() {
 	return async function() {
 		try {
 			const headers = {
-				Authorization : 'Bearer ' + access_token
+				Authorization : 'Bearer ' + getAccessToken()
 			};
-			const res = await customAxios.get(`${API_URL}/auth/logout`, {
+			const res = await customAxios.get(`${API_URL}/logout`, {
 				headers : headers
 			});
 

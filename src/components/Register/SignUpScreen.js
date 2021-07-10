@@ -23,15 +23,11 @@ export default function SignUpScreen() {
 	const classes = useStyles();
 	const [ alerts, setAlerts ] = useState([]);
 
-	function addAlert(alertObj) {
-		setAlerts([ ...alerts, alertObj ]);
-	}
-
 	return (
 		<div>
 			<AlertsContainer alerts={alerts} />
 			<div className={classes.container}>
-				<SignUpForm addAlert={addAlert} />
+				<SignUpForm setAlerts={setAlerts} />
 			</div>
 		</div>
 	);

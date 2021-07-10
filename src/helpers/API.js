@@ -1,8 +1,9 @@
 // import axios from 'axios';
 import { customAxios } from './tokens';
 
-export const API_URL = process.env.REACT_APP_API_URL || 'https://api.vocabucards.com';
+// export const API_URL = process.env.REACT_APP_API_URL || 'https://api.vocabucards.com';
 // export const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000';
+export const API_URL = process.env.REACT_APP_API_URL;
 
 export function getAccessToken() {
 	return localStorage.getItem('access_token') || null;
@@ -35,7 +36,7 @@ export async function createStarterWordsViaAPI() {
 		const headers = {
 			Authorization : 'Bearer ' + getAccessToken()
 		};
-		const res = await customAxios.get(`${API_URL}/auth/starters`, {
+		const res = await customAxios.get(`${API_URL}/starters`, {
 			headers : headers
 		});
 		return res.data;
@@ -49,7 +50,7 @@ export async function getTranslateWordViaAPI(word, source_code, translate_code =
 		const headers = {
 			Authorization : 'Bearer ' + getAccessToken()
 		};
-		const res = await customAxios.get(`${API_URL}/vocab/translate/${word}/${source_code}/${translate_code}`, {
+		const res = await customAxios.get(`${API_URL}/translate/${word}/${source_code}/${translate_code}`, {
 			headers : headers
 		});
 		return res.data;
@@ -102,7 +103,7 @@ export async function getDictionaryWordViaAPI(word) {
 		const headers = {
 			Authorization : 'Bearer ' + getAccessToken()
 		};
-		const res = await customAxios.get(`${API_URL}/vocab/dictionary/${word}`, { headers: headers });
+		const res = await customAxios.get(`${API_URL}/dictionary/${word}`, { headers: headers });
 		return res.data;
 	} catch (e) {
 		console.log(e);
@@ -118,7 +119,7 @@ export async function updateSavedRenderedText(text) {
 	};
 
 	try {
-		const res = await customAxios.put(`${API_URL}/vocab/renderedtext`, data, { headers: headers });
+		const res = await customAxios.put(`${API_URL}/renderedtext`, data, { headers: headers });
 		return res.data;
 	} catch (e) {
 		console.log(e);
@@ -138,7 +139,7 @@ export async function createNewWord(source_code, word, translation, notes) {
 	};
 
 	try {
-		const res = await customAxios.post(`${API_URL}/vocab/words/new`, data, { headers: headers });
+		const res = await customAxios.post(`${API_URL}/words/new`, data, { headers: headers });
 		return res.data;
 	} catch (e) {
 		console.log(e);
@@ -157,7 +158,7 @@ export async function editWord(id, source_code, word, translation, notes) {
 	};
 
 	try {
-		const res = await customAxios.put(`${API_URL}/vocab/words/${id}`, data, { headers: headers });
+		const res = await customAxios.put(`${API_URL}/words/${id}`, data, { headers: headers });
 		return res.data;
 	} catch (e) {
 		console.log(e);
@@ -170,7 +171,7 @@ export async function deleteWord(id) {
 	};
 
 	try {
-		const res = await customAxios.delete(`${API_URL}/vocab/words/${id}`, { headers: headers });
+		const res = await customAxios.delete(`${API_URL}/words/${id}`, { headers: headers });
 		return res.data;
 	} catch (e) {
 		console.log(e);
@@ -206,7 +207,7 @@ export async function createNewVariation(
 	};
 
 	try {
-		const res = await customAxios.post(`${API_URL}/vocab/variations/new`, data, { headers: headers });
+		const res = await customAxios.post(`${API_URL}/variations/new`, data, { headers: headers });
 		return res.data;
 	} catch (e) {
 		console.log(e);
@@ -239,7 +240,7 @@ export async function editVariation(
 	};
 
 	try {
-		const res = await customAxios.put(`${API_URL}/vocab/variations/${id}`, data, { headers: headers });
+		const res = await customAxios.put(`${API_URL}/variations/${id}`, data, { headers: headers });
 		return res.data;
 	} catch (e) {
 		console.log(e);
@@ -252,7 +253,7 @@ export async function deleteVariation(id) {
 	};
 
 	try {
-		const res = await customAxios.delete(`${API_URL}/vocab/variations/${id}`, { headers: headers });
+		const res = await customAxios.delete(`${API_URL}/variations/${id}`, { headers: headers });
 		return res.data;
 	} catch (e) {
 		console.log(e);

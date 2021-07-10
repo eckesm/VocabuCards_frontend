@@ -19,14 +19,22 @@ function getModalStyle() {
 
 const useStyles = makeStyles(theme => ({
 	paper : {
-		position        : 'absolute',
-		width           : 400,
-		backgroundColor : theme.palette.background.paper,
-		border          : '2px solid #000',
-		boxShadow       : theme.shadows[5],
-		padding         : theme.spacing(2, 4, 3),
-		overflow        : 'auto',
-		maxHeight       : '90%'
+		position                       : 'absolute',
+		width                          : 400,
+		backgroundColor                : theme.palette.background.paper,
+		border                         : '2px solid #000',
+		boxShadow                      : theme.shadows[5],
+		padding                        : theme.spacing(2, 4, 3),
+		overflow                       : 'auto',
+		[theme.breakpoints.down('sm')]: {
+			maxHeight : '100%'
+		},
+		[theme.breakpoints.up('md')]: {
+			maxHeight : '90%'
+		},
+		[theme.breakpoints.up('lg')]: {
+			maxHeight : '80%'
+		}
 	}
 }));
 

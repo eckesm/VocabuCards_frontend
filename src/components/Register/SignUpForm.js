@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { registerUserViaAPI } from '../../actions/auth';
 import { clearAlerts } from '../../actions/auth';
 
-import SelectStartLanguage from './SelectStartLanguage';
+import SelectStartLanguage from '../Login/SelectStartLanguage';
 
 // import { setUserLanguage } from '../../actions/vocab';
 
@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function SignUpForm({ addAlert }) {
+export default function SignUpForm({ setAlerts }) {
 	const user = useSelector(store => store.user);
 	const dispatch = useDispatch();
 	const history = useHistory();
@@ -82,18 +82,30 @@ export default function SignUpForm({ addAlert }) {
 
 		try {
 			if (res.status === 'fail') {
-				addAlert({
-					type  : 'warning',
-					title : 'Incorrect!',
-					text  : res.message
-				});
+				setAlerts([
+					{
+						type  : 'warning',
+						title : 'Passwords',
+						text  : res.message
+					}
+				]);
 			}
 			if (res.status === 'error') {
-				addAlert({
-					type  : 'error',
-					title : 'Error!',
-					text  : res.message
-				});
+				try {
+					const newAlerts = [];
+					Object.keys(res.errors).forEach(err => {
+						res.errors[err].forEach(msg => {
+							newAlerts.push({
+								type  : 'error',
+								title : err.toUpperCase(),
+								text  : msg
+							});
+						});
+					});
+					setAlerts(newAlerts);
+				} catch (e) {
+					console.log(e);
+				}
 			}
 		} catch (e) {
 			history.push('/error');

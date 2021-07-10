@@ -52,6 +52,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 	});
 	const [ showWordNotes, setShowWordNotes ] = useState(true);
 	const [ useDictionary, setUseDictionary ] = useState(true);
+	const [ searchDictionaryAble, setSearchDictionaryAble ] = useState(true);
 
 	let INITIAL_STATE = {
 		partOfSpeech   : '',
@@ -96,6 +97,9 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 			...data,
 			[name] : value
 		}));
+		if (name === 'translation') {
+			setSearchDictionaryAble(true);
+		}
 	}
 
 	useEffect(() => {
@@ -173,8 +177,6 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 	}
 
 	async function translateAPI() {
-		// const access_token = await refreshAccessTokenViaAPI();
-		// console.log(access_token);
 		const results = await getTranslateWordViaAPI(formData.variation, language);
 		setFormData({ ...formData, translation: results });
 	}
@@ -189,6 +191,7 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 
 	async function dictionaryAPI() {
 		setUseDictionary(false);
+		setSearchDictionaryAble(false);
 		const results = await getDictionaryWordViaAPI(formData.translation);
 		setDictionaryChoices(results.results);
 	}
@@ -285,11 +288,11 @@ export default function VocabComponentForm({ onClose, wordText = null, variation
 						<Button
 							className={classes.button}
 							variant={!useDictionary ? 'contained' : 'outlined'}
-							color={!useDictionary ? 'default' : 'primary'}
+							color={useDictionary ? 'primary' : 'default'}
 							onClick={handleDictionary}
-							disabled={useDictionary ? false : true}
+							disabled={useDictionary || searchDictionaryAble ? false : true}
 						>
-							{useDictionary ? 'Search Dictionary' : 'Searching Dictionary'}
+							{useDictionary || searchDictionaryAble ? 'Search Dictionary' : 'Searching Dictionary'}
 						</Button>
 						<Button
 							className={classes.button}

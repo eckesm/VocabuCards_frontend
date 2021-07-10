@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -23,15 +23,11 @@ export default function LoginScreen() {
 	const classes = useStyles();
 	const [ alerts, setAlerts ] = useState([]);
 
-	function addAlert(alertObj) {
-		setAlerts([ ...alerts, alertObj ]);
-	}
-
 	return (
 		<div>
 			<AlertsContainer alerts={alerts} />
 			<div className={classes.container}>
-				<LoginForm addAlert={addAlert} />
+				<LoginForm setAlerts={setAlerts} />
 			</div>
 		</div>
 	);

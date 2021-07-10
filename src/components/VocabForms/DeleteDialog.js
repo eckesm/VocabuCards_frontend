@@ -10,8 +10,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
 	button : {
-		height : '35px',
-        width:'35px'
+		height    : '25px',
+		width     : '25px',
+		marginTop : '5px'
 	}
 }));
 
@@ -54,9 +55,9 @@ export default function DeleteDialog({ root = null, variation = null, variations
 		<div>
 			{variation && (
 				// <div>
-					<IconButton className={classes.button} color="secondary" onClick={handleClickOpen} size="small">
-						<i className="fad fa-trash-alt" />
-					</IconButton>
+				<IconButton className={classes.button} color="secondary" onClick={handleClickOpen} size="small">
+					<i className="fad fa-trash-alt" />
+				</IconButton>
 				// </div>
 			)}
 			{variation === null && (

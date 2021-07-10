@@ -5,7 +5,7 @@ import ProtectedRoute from './ProtectedRoute';
 // import ProtectedRouteScreen from './ProtectedRouteScreen';
 import RenderTextScreen from '../RenderedText/RenderTextScreen';
 import LoginScreen from '../Login/LoginScreen';
-import SignUpScreen from '../Login/SignUpScreen';
+import SignUpScreen from '../Register/SignUpScreen';
 import ConfirmEmailScreen from '../Login/ConfirmEmailScreen';
 import PasswordResetScreen from '../Login/PasswordResetScreen';
 import NewPasswordScreen from '../Login/NewPasswordScreen';

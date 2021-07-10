@@ -7,13 +7,22 @@ import WordCard from './WordCard';
 
 const useStyles = makeStyles(theme => ({
 	root      : {
-		marginTop       : '40px',
-		fontFamily      : 'roboto, sans-serif',
-		border          : '1px solid rgb(200, 200, 200)',
-		padding         : '15px',
-		paddingBottom   : '25px',
-		backgroundColor : 'snow',
-		borderRadius    : '3px'
+		fontFamily                     : 'roboto, sans-serif',
+		border                         : '1px solid rgb(200, 200, 200)',
+		padding                        : '15px',
+		paddingBottom                  : '25px',
+		backgroundColor                : 'snow',
+		borderRadius                   : '3px',
+		[theme.breakpoints.down('sm')]: {
+			margin : '5px'
+		},
+		[theme.breakpoints.up('md')]: {
+			margin : '15px',
+			boxShadow : '5px 5px 8px grey'
+		},
+		[theme.breakpoints.up('lg')]: {
+			margin    : '25px'
+		}
 	},
 	container : {
 		display        : 'flex',

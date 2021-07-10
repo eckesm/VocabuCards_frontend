@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function LoginForm({ addAlert }) {
+export default function LoginForm({ setAlerts }) {
 	const classes = useStyles();
 	const { user } = useSelector(store => store);
 	const dispatch = useDispatch();
@@ -50,6 +50,7 @@ export default function LoginForm({ addAlert }) {
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
+
 		const res = await dispatch(loginUserViaAPI(formData.emailAddress, formData.password));
 
 		try {
@@ -57,18 +58,36 @@ export default function LoginForm({ addAlert }) {
 				setEmail(formData.emailAddress);
 			}
 			if (res.status === 'fail') {
-				addAlert({
+				setAlerts([{
 					type  : 'warning',
 					title : 'Incorrect!',
 					text  : res.message
-				});
+				}]);
+			}
+			
+			if (res.status === 'no_user') {
+				setAlerts([{
+					type  : 'warning',
+					title : 'User not found!',
+					text  : res.message
+				}]);
 			}
 			if (res.status === 'error') {
-				addAlert({
-					type  : 'error',
-					title : 'Error!',
-					text  : res.message
-				});
+				try {
+					const newAlerts = [];
+					Object.keys(res.errors).forEach(err => {
+						res.errors[err].forEach(msg => {
+							newAlerts.push({
+								type  : 'error',
+								title : err.toUpperCase(),
+								text  : msg
+							});
+						});
+					});
+					setAlerts(newAlerts);
+				} catch (e) {
+					console.log(e);
+				}
 			}
 		} catch (e) {
 			history.push('/error');
