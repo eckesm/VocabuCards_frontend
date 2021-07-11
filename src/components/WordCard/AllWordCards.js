@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import WordCard from './WordCard';
 
 const useStyles = makeStyles(theme => ({
-	root      : {
+	root           : {
 		fontFamily                     : 'roboto, sans-serif',
 		border                         : '1px solid rgb(200, 200, 200)',
 		padding                        : '15px',
@@ -24,16 +24,19 @@ const useStyles = makeStyles(theme => ({
 			margin : '25px'
 		}
 	},
-	container : {
+	container      : {
 		display  : 'flex',
 		flexWrap : 'wrap'
 		// justifyContent : 'space-around'
+	},
+	emptyContainer : {
+		flexWrap : 'wrap'
 	}
 }));
 
 export default function VocabWordsAll() {
 	const classes = useStyles();
-	const { words_array } = useSelector(store => store);
+	const { words_array = [] } = useSelector(store => store);
 	const [ loading, setLoading ] = useState(true);
 
 	useEffect(
@@ -47,19 +50,24 @@ export default function VocabWordsAll() {
 	return (
 		<div className={classes.root}>
 			<h1>Vocabulary Words</h1>
-			<div className={classes.container}>
-				{!loading &&
-					words_array.length > 0 &&
-					words_array.map(word => {
-						return <WordCard key={word['id']} word={word} />;
-					})}
-				{!loading &&
-				words_array.length === 0 && (
-					<h4>
-						<i>No vocab words yet!</i>
-					</h4>
-				)}
-			</div>
+			{loading && (
+				<h4>
+					<i>Loading...</i>
+				</h4>
+			)}
+			{!loading && (
+				<div className={words_array.length > 0 ? classes.container : classes.emptyContainer}>
+					{words_array.length > 0 &&
+						words_array.map(word => {
+							return <WordCard key={word['id']} word={word} />;
+						})}
+					{words_array.length === 0 && (
+						<h4>
+							<i>No vocab words yet!</i>
+						</h4>
+					)}
+				</div>
+			)}
 		</div>
 	);
 }

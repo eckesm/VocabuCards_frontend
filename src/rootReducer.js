@@ -25,7 +25,7 @@ const INITIAL_STATE = {
 	language_object    : {},
 	last_login         : null,
 	name               : '',
-	text_input         : '',
+	text_input         : null,
 	user               : null,
 	words_array        : null
 };

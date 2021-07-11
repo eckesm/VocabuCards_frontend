@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 // import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
+// import { useHistory } from 'react-router';
 
 import {
 	updateUserLastLanguageViaAPI,
@@ -34,10 +34,11 @@ export default function SelectLanguage() {
 	const classes = useStyles();
 
 	const { languages } = useSelector(store => store);
+	const currentLanguage = useSelector(store => store.language);
 	const [ sortedLanguages, setSortedLanguages ] = useState([]);
 	const [ language, setLanguage ] = useState('');
 	const dispatch = useDispatch();
-	const history = useHistory();
+	// const history = useHistory();
 
 	const handleChange = event => {
 		const newLanguage = event.target.value;
@@ -45,7 +46,7 @@ export default function SelectLanguage() {
 		dispatch(setUserLanguage(newLanguage));
 		dispatch(updateUserLastLanguageViaAPI(newLanguage));
 		dispatch(getUserLanguageWordsViaAPI(newLanguage));
-		history.push(`/words`);
+		// history.push(`/words`);
 	};
 
 	useEffect(
@@ -56,6 +57,7 @@ export default function SelectLanguage() {
 					return a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0;
 				})
 			);
+			setLanguage(currentLanguage);
 		},
 		[ languages ]
 	);
@@ -70,7 +72,7 @@ export default function SelectLanguage() {
 					id="language"
 					value={language}
 					onChange={handleChange}
-					label="Language"
+					label="Change Language"
 				>
 					{sortedLanguages.map(option => {
 						if (option[0] !== 'en') {

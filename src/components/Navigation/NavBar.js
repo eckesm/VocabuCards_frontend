@@ -79,14 +79,6 @@ export default function NavBar() {
 		history.push('/logout');
 	};
 
-	const goToRead = () => {
-		history.push('/read');
-	};
-
-	const goToWords = () => {
-		history.push('/words');
-	};
-
 	const [ modalOpen, setModalOpen ] = useState(false);
 	const handleModalOpen = () => {
 		setModalOpen(true);
@@ -115,21 +107,21 @@ export default function NavBar() {
 		setMobileMoreAnchorEl(event.currentTarget);
 	};
 
-	const menuId = 'primary-search-account-menu';
-	const renderMenu = (
-		<Menu
-			anchorEl={anchorEl}
-			anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-			id={menuId}
-			keepMounted
-			transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-			open={isMenuOpen}
-			onClose={handleMenuClose}
-		>
-			<MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-			<MenuItem onClick={handleMenuClose}>My account</MenuItem>
-		</Menu>
-	);
+	// const menuId = 'primary-search-account-menu';
+	// const renderMenu = (
+	// 	<Menu
+	// 		anchorEl={anchorEl}
+	// 		anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+	// 		id={menuId}
+	// 		keepMounted
+	// 		transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+	// 		open={isMenuOpen}
+	// 		onClose={handleMenuClose}
+	// 	>
+	// 		<MenuItem onClick={handleMenuClose}>Profile</MenuItem>
+	// 		<MenuItem onClick={handleMenuClose}>My account</MenuItem>
+	// 	</Menu>
+	// );
 
 	const mobileMenuId = 'primary-search-account-menu-mobile';
 	const renderMobileMenu = (
@@ -144,14 +136,14 @@ export default function NavBar() {
 		>
 			{auth && (
 				<MenuItem>
-					<Button color="inherit" onClick={goToRead}>
-						Study Foreign Text
+					<Button color="inherit" href="/#/read">
+						Study {languageName} Text
 					</Button>
 				</MenuItem>
 			)}
 			{auth && (
 				<MenuItem>
-					<Button color="inherit" onClick={goToWords}>
+					<Button color="inherit" href="/#/words">
 						{languageName} Vocab Cards
 					</Button>
 				</MenuItem>
@@ -199,18 +191,18 @@ export default function NavBar() {
 					<div className={classes.grow} />
 					<div className={classes.sectionDesktop}>
 						{auth && (
-							<Button color="inherit" onClick={goToRead}>
-								Study Foreign Text
+							<Button color="inherit" href="/#/read">
+								Study {languageName} Text
 							</Button>
 						)}
 						{auth && (
-							<Button color="inherit" onClick={goToWords}>
+							<Button color="inherit" href="/#/words">
 								{languageName} Vocab Cards
 							</Button>
 						)}
 						{auth && (
 							<Button color="inherit" onClick={handleModalOpen}>
-								Add Word
+								Add {languageName} Word
 							</Button>
 						)}
 						{auth && (
@@ -246,7 +238,7 @@ export default function NavBar() {
 				)}
 			</AppBar>
 			{renderMobileMenu}
-			{renderMenu}
+			{/* {renderMenu} */}
 		</div>
 	);
 }

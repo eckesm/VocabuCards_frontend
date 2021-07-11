@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router';
 
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -7,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import MenuIcon from '@material-ui/icons/Menu';
+import { Divider, ListItemIcon, ListItemText } from '@material-ui/core';
 
 import SelectLanguage from './SelectLanguage';
 
@@ -21,6 +23,7 @@ const useStyles = makeStyles({
 
 export default function NavDrawer() {
 	const classes = useStyles();
+	const history = useHistory();
 	const [ state, setState ] = React.useState({
 		top    : false,
 		left   : false,
@@ -46,6 +49,18 @@ export default function NavDrawer() {
 			onKeyDown={toggleDrawer(anchor, false)}
 		>
 			<List>
+				<ListItem
+					button
+					onClick={() => {
+						history.push('/home');
+					}}
+				>
+					<ListItemIcon>
+						<i className="fas fa-home" />
+					</ListItemIcon>
+					<ListItemText primary="Home" />
+				</ListItem>
+				<Divider />
 				<ListItem>
 					<SelectLanguage />
 				</ListItem>

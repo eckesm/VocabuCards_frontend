@@ -42,7 +42,7 @@ export default function LoginForm({ setAlerts }) {
 	useEffect(
 		() => {
 			if (user) {
-				history.push('/words');
+				history.push('/home');
 			}
 		},
 		[ user, history ]
@@ -58,19 +58,23 @@ export default function LoginForm({ setAlerts }) {
 				setEmail(formData.emailAddress);
 			}
 			if (res.status === 'fail') {
-				setAlerts([{
-					type  : 'warning',
-					title : 'Incorrect!',
-					text  : res.message
-				}]);
+				setAlerts([
+					{
+						type  : 'warning',
+						title : 'Incorrect!',
+						text  : res.message
+					}
+				]);
 			}
-			
+
 			if (res.status === 'no_user') {
-				setAlerts([{
-					type  : 'warning',
-					title : 'User not found!',
-					text  : res.message
-				}]);
+				setAlerts([
+					{
+						type  : 'warning',
+						title : 'User not found!',
+						text  : res.message
+					}
+				]);
 			}
 			if (res.status === 'error') {
 				try {

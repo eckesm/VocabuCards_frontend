@@ -5,21 +5,22 @@ import { makeStyles } from '@material-ui/core/styles';
 import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
-	root        : {
+	card        : {
 		border                         : '1px solid rgb(200, 200, 200)',
 		borderRadius                   : '3px',
 		backgroundColor                : 'rgb(239, 247, 253)',
-		height                         : '250px',
 		overflow                       : 'auto',
 		textAlign                      : 'left',
 		[theme.breakpoints.down('sm')]: {
 			width       : '100%',
+			height      : '150px',
 			margin      : '5px',
 			marginLeft  : '2px',
 			marginRight : '2px'
 		},
 		[theme.breakpoints.up('md')]: {
 			width       : '250px',
+			height      : '200px',
 			margin      : '8px',
 			marginLeft  : '8px',
 			marginRight : '8px',
@@ -65,7 +66,7 @@ export default function WordCard({ word }) {
 	const notes = word.notes === '' ? null : word.notes;
 
 	return (
-		<div className={classes.root}>
+		<div className={classes.card}>
 			<div className={classes.heading}>
 				<Link href={'/#/words/' + word.id} className={classes.headingText}>
 					{word.root}

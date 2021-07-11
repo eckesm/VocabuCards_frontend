@@ -123,7 +123,8 @@ export function updateUserLastLanguageViaAPI(source_code) {
 			};
 			const res = await customAxios.get(`${API_URL}/last/${source_code}`, { headers: headers });
 			let last_source_code = res.data;
-			dispatch(setTextInputInState(null));
+			dispatch(setTextInputInState(''));
+			localStorage.removeItem('rss_object');
 			return dispatch(setUserLanguage(last_source_code));
 		} catch (e) {
 			console.log(e);

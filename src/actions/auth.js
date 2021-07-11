@@ -113,6 +113,7 @@ export function logoutUser() {
 	localStorage.removeItem('refresh_token');
 	localStorage.removeItem('access_token_exp');
 	localStorage.removeItem('refresh_token_exp');
+	localStorage.removeItem('rss_object');
 	return async function(dispatch) {
 		dispatch({
 			type : LOGOUT_USER

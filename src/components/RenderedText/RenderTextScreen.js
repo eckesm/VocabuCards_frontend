@@ -5,10 +5,13 @@ import { renderHtml } from '../../helpers/renderingText';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Paragraph from './Paragraph';
-import VocabModal from '../VocabForms/VocabModal';
 import { setTextInput } from '../../actions/vocab';
 import { updateSavedRenderedText } from '../../helpers/API';
+import { getRSSFeed, RSSNewsSources } from '../../helpers/newsSources';
+import useLocalStorageState from '../../hooks/useLocalStorageState';
+
+import Paragraph from './Paragraph';
+import VocabModal from '../VocabForms/VocabModal';
 
 const useStyles = makeStyles(theme => ({
 	root             : {
@@ -52,23 +55,45 @@ const useStyles = makeStyles(theme => ({
 		textAlign                      : 'left',
 		fontSize                       : '1.5rem',
 		[theme.breakpoints.down('sm')]: {
-			margin : '5px'
+			margin    : '5px',
+			marginTop : '0px'
 		},
 		[theme.breakpoints.up('md')]: {
-			margin : '15px'
+			margin    : '15px',
+			marginTop : '0px'
 		},
 		[theme.breakpoints.up('lg')]: {
-			margin : '25px'
-		},
-		marginTop                      : '25px'
+			margin    : '25px',
+			marginTop : '0px'
+		}
 	},
 	empty            : {
 		textAlign : 'center'
 	},
 	button           : {
-		width       : '150px',
-		marginLeft  : 'auto',
-		marginRight : 'auto'
+		width     : '350px',
+		margin    : '10px',
+		minHeight : '50px'
+	},
+	rssTextOutput    : {
+		borderBottom  : '1px solid rgb(200, 200, 200)',
+		paddingBottom : '15px',
+		marginBottom  : '15px'
+	},
+	title            : {
+		fontSize     : '2rem',
+		fontWeight   : 'bold',
+		marginTop    : '5px',
+		marginBottom : '5px'
+	},
+	author           : {
+		fontSize     : '1.5rem',
+		marginTop    : '0px',
+		marginBottom : '5px'
+	},
+	link             : {
+		fontSize  : '1.0rem',
+		marginTop : '0px'
 	}
 }));
 
@@ -76,12 +101,20 @@ export default function RenderTextScreen() {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const { text_input, language, language_object } = useSelector(store => store);
+	const translate_code = 'en';
+	const source_code = language;
+
+	const [ renderedText, setRenderedText ] = useState([]);
+	const [ modalText, setModalText ] = useState(null);
 
 	const [ formData, setFormData ] = useState({
-		foreignText : text_input
+		foreignText : ''
 	});
-	let [ renderedText, setRenderedText ] = useState([]);
-	const [ modalText, setModalText ] = useState('');
+
+	const [ rssObject, setRssObject ] = useLocalStorageState('rss_object', '');
+	const [ rssSource, setRssSource ] = useState(null);
+	const [ enableRss, setEnableRss ] = useState(false);
+	const [ initialLanguage, setInitialLanguage ] = useState(null);
 
 	function handleChange(evt) {
 		const { name, value } = evt.target;
@@ -90,15 +123,30 @@ export default function RenderTextScreen() {
 			[name] : value
 		}));
 	}
-	const source_code = 'sv';
-	const translate_code = 'en';
+
+	async function handleGetArticle() {
+		const res = await getRSSFeed(language);
+		setRssObject(res);
+
+		setFormData({
+			...formData,
+			foreignText : res.text
+		});
+
+		renderAndSaveText(res.text);
+	}
 
 	function handleSubmit(evt) {
 		evt.preventDefault();
-		updateSavedRenderedText(formData.foreignText);
-		dispatch(setTextInput(formData.foreignText));
+		setRssObject('');
+		renderAndSaveText(formData.foreignText);
+	}
 
-		let prepareRenderedText = renderHtml(formData.foreignText, source_code, translate_code);
+	function renderAndSaveText(text) {
+		updateSavedRenderedText(text);
+		dispatch(setTextInput(text));
+
+		let prepareRenderedText = renderHtml(text, source_code, translate_code);
 		setRenderedText(prepareRenderedText);
 	}
 
@@ -117,13 +165,34 @@ export default function RenderTextScreen() {
 
 	useEffect(
 		() => {
+			setEnableRss(false);
+			if (language) {
+				if (initialLanguage !== null) {
+					if (language !== initialLanguage) {
+						setRssObject('');
+						setFormData({
+							...formData,
+							foreignText : ''
+						});
+						setRenderedText([]);
+					}
+				}
+				if (initialLanguage === null) {
+					setInitialLanguage(language);
+				}
+
+				if (RSSNewsSources.hasOwnProperty(language)) {
+					setRssSource(RSSNewsSources[language]['source']);
+					setEnableRss(true);
+				}
+			}
 			if (text_input !== '' && text_input !== null) {
 				setFormData({ ...formData, foreignText: text_input });
 				let prepareRenderedText = renderHtml(text_input, source_code, translate_code);
 				setRenderedText(prepareRenderedText);
 			}
 		},
-		[ text_input ]
+		[ text_input, language ]
 	);
 
 	return (
@@ -140,12 +209,39 @@ export default function RenderTextScreen() {
 					variant="outlined"
 					onChange={handleChange}
 				/>
-				<Button className={classes.button} variant="contained" type="submit" color="primary">
-					Render
-				</Button>
+				<div>
+					<Button className={classes.button} variant="contained" type="submit" color="primary" size="large">
+						Render Pasted/Entered Text
+					</Button>
+					{enableRss && (
+						<Button
+							className={classes.button}
+							variant="contained"
+							color="primary"
+							onClick={() => {
+								handleGetArticle();
+							}}
+							size="small"
+						>
+							Get Article: {rssSource}
+						</Button>
+					)}
+				</div>
 			</form>
 
 			<div className={classes.renderTextOutput}>
+				{enableRss &&
+				rssObject !== '' && (
+					<div className={classes.rssTextOutput}>
+						{rssObject.title !== '' && <p className={classes.title}>{rssObject.title}</p>}
+						{rssObject.author !== '' && <p className={classes.author}>{rssObject.author}</p>}
+						{rssObject.link !== '' && (
+							<a href={rssObject.link} target="_blank">
+								<p className={classes.link}>{rssObject.link}</p>
+							</a>
+						)}
+					</div>
+				)}
 				{renderedText.length === 0 && (
 					<h4 className={classes.empty}>
 						<i>
