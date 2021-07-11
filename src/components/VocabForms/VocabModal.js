@@ -66,10 +66,7 @@ export default function VocabModal({
 				/>
 			)}
 			{setting === 'add_variation_or_root' && (
-				<VocabComponentForm
-					onClose={handleClose}
-					setting={setting}
-				/>
+				<VocabComponentForm onClose={handleClose} wordText={wordText} setting={setting} />
 			)}
 			{setting === 'add_variation_of_root' && (
 				<VocabComponentForm onClose={handleClose} rootId={rootId} rootWord={rootWord} setting={setting} />

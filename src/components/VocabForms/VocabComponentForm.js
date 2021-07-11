@@ -77,7 +77,7 @@ export default function VocabComponentForm({
 	};
 
 	if (wordText) {
-		INITIAL_STATE.variation = wordText.text;
+		INITIAL_STATE.variation = wordText.text.toLowerCase();
 		INITIAL_STATE.examples = wordText.sentence || '';
 	}
 	if (variation) {
