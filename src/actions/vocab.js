@@ -79,7 +79,7 @@ export function getUserInfo() {
 					alerts.push({
 						type  : 'info',
 						title : 'Confirm Email Address',
-						text  : `Please confirm your email address so that it can be used to reset your password... you should already have an email from us in your ${user} inbox.`
+						text  : `Please confirm your email address... you should already have an email from us in your ${user} inbox.`
 					});
 				}
 
@@ -133,21 +133,6 @@ export function updateUserLastLanguageViaAPI(source_code) {
 		}
 	};
 }
-// export function getUserLastLanguageViaAPI() {
-// 	return async function(dispatch) {
-// 		try {
-// 			const headers = {
-// 				Authorization : 'Bearer ' + getAccessToken()
-// 			};
-// 			const res = await axios.get(`${API_URL}/last`, { headers: headers });
-// 			const last_source_code = res.data;
-
-// 			return dispatch(setUserLanguage(last_source_code));
-// 		} catch (e) {
-// 			console.log(e);
-// 		}
-// 	};
-// }
 
 // SET_USER_LANGUAGE
 export function setUserLanguage(source_code) {

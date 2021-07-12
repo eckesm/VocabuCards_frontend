@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 // import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import { useHistory } from 'react-router';
+import { useHistory } from 'react-router';
+import { Redirect } from 'react-router-dom';
 
 import {
 	updateUserLastLanguageViaAPI,
@@ -38,15 +39,13 @@ export default function SelectLanguage() {
 	const [ sortedLanguages, setSortedLanguages ] = useState([]);
 	const [ language, setLanguage ] = useState('');
 	const dispatch = useDispatch();
-	// const history = useHistory();
+	const history = useHistory();
 
 	const handleChange = event => {
 		const newLanguage = event.target.value;
 		setLanguage(newLanguage);
-		dispatch(setUserLanguage(newLanguage));
 		dispatch(updateUserLastLanguageViaAPI(newLanguage));
 		dispatch(getUserLanguageWordsViaAPI(newLanguage));
-		// history.push(`/words`);
 	};
 
 	useEffect(
