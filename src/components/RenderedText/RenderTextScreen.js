@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { renderHtml } from '../../helpers/renderingText';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+// import IconButton from '@material-ui/core/IconButton';
 
 import { setTextInput } from '../../actions/vocab';
 import { updateSavedRenderedText } from '../../helpers/API';
@@ -75,6 +76,24 @@ const useStyles = makeStyles(theme => ({
 		margin    : '10px',
 		minHeight : '50px'
 	},
+	clearButton      : {
+		width                          : 'max-content',
+		marginTop                      : '5px',
+		position                       : 'absolute',
+		zIndex                         : '1',
+		[theme.breakpoints.down('sm')]: {
+			right : '3px',
+			top   : '125px'
+		},
+		[theme.breakpoints.up('md')]: {
+			right : '15px',
+			top   : '145px'
+		},
+		[theme.breakpoints.up('lg')]: {
+			right : '20px',
+			top   : '150px'
+		}
+	},
 	rssTextOutput    : {
 		borderBottom  : '1px solid rgb(200, 200, 200)',
 		paddingBottom : '15px',
@@ -110,7 +129,9 @@ const useStyles = makeStyles(theme => ({
 export default function RenderTextScreen() {
 	const classes = useStyles();
 	const dispatch = useDispatch();
-	const { text_input, language, language_object, news_sources } = useSelector(store => store);
+	const { text_input, language, language_object, news_sources, variations, words_array } = useSelector(
+		store => store
+	);
 	const translate_code = 'en';
 	const source_code = language;
 
@@ -132,6 +153,13 @@ export default function RenderTextScreen() {
 			...data,
 			[name] : value
 		}));
+	}
+
+	function clearForeignText() {
+		setFormData({
+			...formData,
+			foreignText : ''
+		});
 	}
 
 	async function handleGetArticle() {
@@ -157,7 +185,7 @@ export default function RenderTextScreen() {
 		updateSavedRenderedText(text);
 		dispatch(setTextInput(text));
 
-		let prepareRenderedText = renderHtml(text, source_code, translate_code);
+		let prepareRenderedText = renderHtml(text, source_code, translate_code, variations);
 		setRenderedText(prepareRenderedText);
 	}
 
@@ -201,19 +229,41 @@ export default function RenderTextScreen() {
 			if (initialLanguage === null) {
 				if (text_input !== '' && text_input !== null) {
 					setFormData({ ...formData, foreignText: text_input });
-					let prepareRenderedText = renderHtml(text_input, source_code, translate_code);
+					let prepareRenderedText = renderHtml(text_input, source_code, translate_code, variations);
 					setRenderedText(prepareRenderedText);
 				}
 				setInitialLanguage(language);
 			}
+
+			if (words_array !== null && words_array.length > 0 && formData.foreignText !== '') {
+				let prepareRenderedText = renderHtml(text_input, source_code, translate_code, variations);
+				setRenderedText(prepareRenderedText);
+			}
+
+			// if (variations !== null && formData.foreignText !== '') {
+			// 	let prepareRenderedText = renderHtml(formData.foreignText, source_code, translate_code);
+			// 	setRenderedText(prepareRenderedText);
+			// }
 		},
-		[ text_input, language ]
+		[ text_input, language, variations, words_array ]
 	);
 
 	return (
 		<div className={classes.renderTextScreen}>
 			<h1>Study {language_object[language]} Text</h1>
 			<form onSubmit={handleSubmit} className={classes.root}>
+				{formData.foreignText !== '' && (
+					<Button
+						className={classes.clearButton}
+						variant="contained"
+						color="secondary"
+						size="small"
+						onClick={clearForeignText}
+						startIcon={<i className="fad fa-trash-alt" />}
+					>
+						Clear Input
+					</Button>
+				)}
 				<TextField
 					id="foreignText"
 					name="foreignText"

@@ -10,32 +10,59 @@ import {
 	createNewVariation,
 	createNewWord,
 	editVariation
-	// refreshAccessTokenViaAPI
 } from '../../helpers/API';
 import { addWordToState, addComponentToState, editComponentInState } from '../../actions/vocab';
 
 import SelectDictionary from './SelectDictionary';
 import SelectWord from './SelectWord';
 import SelectPOS from './SelectPOS';
+import VocabModal from './VocabModal';
 
 const useStyles = makeStyles(theme => ({
-	root         : {
+	root                : {
 		'& .MuiTextField-root' : {
 			margin : theme.spacing(1),
 			width  : '90%'
 		}
 	},
-	container    : {
+	container           : {
 		fontFamily : 'roboto, sans-serif'
 	},
-	button       : {
+	titleContainer      : {
+		display        : 'flex',
+		justifyContent : 'space-between',
+		padding        : '10px'
+	},
+	button              : {
 		marginBottom : '15px',
 		marginLeft   : '9px'
 	},
-	submitButton : {
+	editSavedbutton     : {
+		width        : 'min-content',
+		marginTop    : 'auto',
+		marginBottom : 'auto'
+	},
+	submitButton        : {
 		marginTop    : '15px',
 		marginBottom : '15px',
 		marginLeft   : '9px'
+	},
+	dictionaryContainer : {
+		border       : '1px solid rgb(200, 200, 200)',
+		borderRadius : '3px',
+		padding      : '5px',
+		paddingTop   : '12px',
+		marginTop    : '15px',
+		marginBottom : '10px',
+		marginLeft   : '-5px'
+	},
+	suggestions         : {
+		fontSize   : '0.75rem',
+		marginTop  : '0px',
+		marginLeft : '10px'
+	},
+	instructions        : {
+		marginTop : '0px'
 	}
 }));
 
@@ -43,7 +70,7 @@ export default function VocabComponentForm({
 	onClose,
 	wordText = null,
 	variation = null,
-	setVariation,
+	setVariation = null,
 	rootId = null,
 	rootWord = null,
 	setting = null
@@ -59,8 +86,10 @@ export default function VocabComponentForm({
 		wordChoices.push({ value: choice.id, name: choice.root });
 	});
 	const [ showWordNotes, setShowWordNotes ] = useState(true);
-	const [ useDictionary, setUseDictionary ] = useState(true);
-	const [ searchDictionaryAble, setSearchDictionaryAble ] = useState(true);
+	const [ useDictionary, setUseDictionary ] = useState(false);
+	const [ searchDictionaryAble, setSearchDictionaryAble ] = useState(false);
+	const [ translateAble, setTranslateAble ] = useState(false);
+	const [ savedVariation, setSavedVariation ] = useState(false);
 
 	let INITIAL_STATE = {
 		partOfSpeech   : '',
@@ -107,8 +136,20 @@ export default function VocabComponentForm({
 			...data,
 			[name] : value
 		}));
+		if (name === 'variation') {
+			if (value === '') {
+				setTranslateAble(false);
+			}
+			else {
+				setTranslateAble(true);
+			}
+		}
 		if (name === 'translation') {
 			setSearchDictionaryAble(true);
+			if (value === '') {
+				setSearchDictionaryAble(false);
+				setUseDictionary(false);
+			}
 		}
 	}
 
@@ -121,14 +162,36 @@ export default function VocabComponentForm({
 					console.log(e);
 				}
 			}
+			if (wordText.savedRoot && wordText.savedComponent) {
+				const word = words_array.filter(w => w.id === wordText.savedRoot)[0];
+				setSavedVariation(word.components.filter(c => c.id === wordText.savedComponent)[0]);
+			}
 		}
 	}, []);
+	useEffect(
+		() => {
+			if (formData.variation === '') {
+				setTranslateAble(false);
+			}
+			else {
+				setTranslateAble(true);
+			}
+			if (formData.translation === '') {
+				setSearchDictionaryAble(false);
+				setUseDictionary(false);
+			}
+			else {
+				setSearchDictionaryAble(true);
+			}
+		},
+		[ formData ]
+	);
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
 		onClose();
 
-		if (variation) {
+		if (setting === 'edit_variation' || setting === 'edit_saved_variation') {
 			const componentRes = await editVariation(
 				variation.id,
 				formData.partOfSpeech,
@@ -141,7 +204,9 @@ export default function VocabComponentForm({
 				formData.variationNotes
 			);
 			dispatch(editComponentInState(componentRes.component));
-			setVariation(componentRes.component);
+			if (setting === 'edit_variation') {
+				setVariation(componentRes.component);
+			}
 		}
 		else {
 			if (formData.existingWord === 'NEW') {
@@ -186,8 +251,10 @@ export default function VocabComponentForm({
 	}
 
 	async function translateAPI() {
-		const results = await getTranslateWordViaAPI(formData.variation, language);
-		setFormData({ ...formData, translation: results });
+		if (formData.variation !== '') {
+			const results = await getTranslateWordViaAPI(formData.variation, language);
+			setFormData({ ...formData, translation: results });
+		}
 	}
 	// async function translateExampleAPI() {
 	// 	const results = await getTranslateWordViaAPI(formData.examples, language);
@@ -195,14 +262,22 @@ export default function VocabComponentForm({
 	// }
 	function handleDictionary(evt) {
 		evt.preventDefault();
+		setUseDictionary(true);
 		dictionaryAPI();
 	}
 
-	async function dictionaryAPI() {
+	function handleEnteringInfo() {
 		setUseDictionary(false);
-		setSearchDictionaryAble(false);
-		const results = await getDictionaryWordViaAPI(formData.translation);
-		setDictionaryChoices(results.results);
+		setSearchDictionaryAble(true);
+	}
+
+	async function dictionaryAPI() {
+		// setUseDictionary(false);
+		if (formData.translation !== '') {
+			setSearchDictionaryAble(false);
+			const results = await getDictionaryWordViaAPI(formData.translation);
+			setDictionaryChoices(results.results);
+		}
 	}
 
 	function updateDictionary(dictionaryChoice) {
@@ -264,15 +339,69 @@ export default function VocabComponentForm({
 
 	const classes = useStyles();
 
+	const [ modalOpen, setModalOpen ] = useState(false);
+	const handleModalOpen = () => {
+		setModalOpen(true);
+	};
+	const handleModalClose = () => {
+		setModalOpen(false);
+	};
+
+	// useEffect(
+	// 	() => {
+	// 		if (savedWord) {
+	// 			const word = words_array.filter(w => w.id === savedWord.root_id)[0];
+	// 			setSavedVariation(word.components.filter(c => c.id === savedWord.component_id)[0]);
+	// 		}
+	// 	},
+	// 	[ words_array, savedWord ]
+	// );
+
 	return (
 		<div className={classes.container}>
-			{setting === 'add_variation' || (setting === 'add_variation_or_root' && <h1>Add Word</h1>)}
-			{setting === 'edit_variation' && <h1>Edit Word</h1>}
-			{setting === 'add_variation_of_root' && (
-				<h1>
-					Add Variation of <i>{rootWord}</i>
-				</h1>
+			<div className={classes.titleContainer}>
+				{setting === 'add_variation' ||
+					(setting === 'add_variation_or_root' && !savedVariation && <h1>Add Word</h1>)}
+				{setting === 'add_variation_or_root' && savedVariation && <h1>Add Duplicate Word</h1>}
+
+				{(setting === 'edit_variation' || setting === 'edit_saved_variation') && <h1>Edit Variation</h1>}
+
+				{setting === 'add_variation_of_root' && (
+					<h1>
+						Add Variation of <i>{rootWord}</i>
+					</h1>
+				)}
+				{savedVariation &&
+				setting !== 'edit_saved_variation' && (
+					<Button
+						className={classes.editSavedbutton}
+						variant="contained"
+						color="primary"
+						onClick={handleModalOpen}
+					>
+						Edit Saved Variation
+					</Button>
+				)}
+				{modalOpen && (
+					<VocabModal
+						open={modalOpen}
+						handleClose={handleModalClose}
+						variation={savedVariation}
+						setting="edit_saved_variation"
+					/>
+				)}
+			</div>
+
+			{setting === 'add_variation_or_root' ? (
+				<p className={classes.instructions}>
+					You must complete: <b>Variation</b>, <b>Part of Speech</b>, and <b>Add to Existing Word</b> fields.
+				</p>
+			) : (
+				<p className={classes.instructions}>
+					You must complete: <b>Variation</b> and <b>Part of Speech</b> fields.
+				</p>
 			)}
+
 			<form onSubmit={handleSubmit} className={classes.root}>
 				<div>
 					<TextField
@@ -283,11 +412,19 @@ export default function VocabComponentForm({
 						value={formData.variation}
 						variant="outlined"
 						autoCapitalize="false"
+						required
 					/>
-					<Button className={classes.button} variant="outlined" color="primary" onClick={translateAPI}>
+					<Button
+						className={classes.button}
+						variant="outlined"
+						color="primary"
+						onClick={translateAPI}
+						disabled={translateAble ? false : true}
+					>
 						Translate
 					</Button>
 				</div>
+
 				<div>
 					<TextField
 						id="translation"
@@ -298,71 +435,79 @@ export default function VocabComponentForm({
 						variant="outlined"
 						autoCapitalize="false"
 					/>
-					<div>
-						<Button
-							className={classes.button}
-							variant={!useDictionary ? 'contained' : 'outlined'}
-							color={useDictionary ? 'primary' : 'default'}
-							onClick={handleDictionary}
-							disabled={useDictionary || searchDictionaryAble ? false : true}
-						>
-							{useDictionary || searchDictionaryAble ? 'Search Dictionary' : 'Searching Dictionary'}
-						</Button>
-						<Button
-							className={classes.button}
-							variant={useDictionary ? 'contained' : 'outlined'}
-							color={useDictionary ? 'default' : 'primary'}
-							onClick={() => setUseDictionary(true)}
-							disabled={useDictionary ? true : false}
-						>
-							{useDictionary ? 'Entering Info' : 'Enter Info'}
-						</Button>
-					</div>
-				</div>
-				{useDictionary ? (
 					<TextField
-						id="definition"
-						name="definition"
-						label="Definition"
+						id="description"
+						name="description"
+						label="Description"
 						onChange={handleChange}
-						value={formData.definition}
+						value={formData.description}
 						variant="outlined"
 						autoCapitalize="false"
 					/>
-				) : (
-					<SelectDictionary
-						id="dictionary"
-						name="dictionary"
-						label="Definition"
-						updateDictionary={updateDictionary}
-						dictionaryChoices={dictionaryChoices}
-					/>
-				)}
-				<SelectPOS
-					id="partOfSpeech"
-					name="partOfSpeech"
-					label="Part of Speech"
-					updatePOS={updatePOS}
-					value={formData.partOfSpeech}
-				/>
-				<TextField
-					id="description"
-					name="description"
-					label="Description"
-					onChange={handleChange}
-					value={formData.description}
-					variant="outlined"
-					autoCapitalize="false"
-				/>
-				<TextField
-					id="synonyms"
-					name="synonyms"
-					label="Synonyms"
-					onChange={handleChange}
-					value={formData.synonyms}
-					variant="outlined"
-					autoCapitalize="false"
-				/>
+					<p className={classes.suggestions}>
+						<b>Suggestions:</b> singular, definite, past tense, etc.
+					</p>
+					<div className={classes.dictionaryContainer}>
+						<div>
+							<Button
+								className={classes.button}
+								variant={useDictionary ? 'contained' : 'outlined'}
+								color={useDictionary ? 'default' : 'primary'}
+								onClick={handleDictionary}
+								// disabled={useDictionary || searchDictionaryAble ? false : true}
+								disabled={searchDictionaryAble ? false : true}
+							>
+								{searchDictionaryAble ? 'Search Dictionary' : 'Searching Dictionary'}
+							</Button>
+							<Button
+								className={classes.button}
+								variant={useDictionary ? 'outlined' : 'contained'}
+								color={useDictionary ? 'primary' : 'default'}
+								onClick={handleEnteringInfo}
+								disabled={useDictionary ? false : true}
+							>
+								{useDictionary ? 'Enter Info' : 'Entering Info'}
+							</Button>
+						</div>
+
+						{useDictionary ? (
+							<SelectDictionary
+								id="dictionary"
+								name="dictionary"
+								label="Definition"
+								updateDictionary={updateDictionary}
+								dictionaryChoices={dictionaryChoices}
+							/>
+						) : (
+							<TextField
+								id="definition"
+								name="definition"
+								label="Definition"
+								onChange={handleChange}
+								value={formData.definition}
+								variant="outlined"
+								autoCapitalize="false"
+							/>
+						)}
+						<SelectPOS
+							id="partOfSpeech"
+							name="partOfSpeech"
+							label="Part of Speech"
+							updatePOS={updatePOS}
+							value={formData.partOfSpeech}
+						/>
+
+						<TextField
+							id="synonyms"
+							name="synonyms"
+							label="Synonyms"
+							onChange={handleChange}
+							value={formData.synonyms}
+							variant="outlined"
+							autoCapitalize="false"
+						/>
+					</div>
+				</div>
 				<TextField
 					id="examples"
 					name="examples"
@@ -404,7 +549,7 @@ export default function VocabComponentForm({
 					/>
 				)}
 				<Button className={classes.submitButton} variant="contained" type="submit" color="primary" size="large">
-					{setting === 'edit_variation' ? 'Save Word' : 'Add Word'}
+					{setting === 'edit_variation' || setting === 'edit_saved_variation' ? 'Save Word' : 'Add Word'}
 				</Button>
 				<Button
 					className={classes.submitButton}

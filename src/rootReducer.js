@@ -28,6 +28,7 @@ const INITIAL_STATE = {
 	news_sources       : {},
 	text_input         : null,
 	user               : null,
+	variations         : {},
 	words_array        : null
 };
 
@@ -46,6 +47,20 @@ function sortByVariation(components_array) {
 		var textB = b.variation.toUpperCase();
 		return textA < textB ? -1 : textA > textB ? 1 : 0;
 	});
+}
+function createVariationsObject(words) {
+	const variationsObject = {};
+	words.forEach(word => {
+		word.components.forEach(component => {
+			variationsObject[component.variation] = {
+				component_id   : component.id,
+				part_of_speech : component.part_of_speech,
+				root_id        : component.root_id,
+				translation    : component.translation
+			};
+		});
+	});
+	return variationsObject;
 }
 
 export default function rootReducer(state = INITIAL_STATE, action) {
@@ -68,6 +83,7 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 				news_sources       : action.news_sources,
 				text_input         : action.text_input,
 				user               : action.user,
+				variations         : createVariationsObject(action.words_array),
 				words_array        : action.words_array
 			};
 
@@ -95,7 +111,8 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 		case GET_USER_LANGUAGE_WORDS:
 			return {
 				...state,
-				words_array : action.words_array
+				words_array : action.words_array,
+				variations  : createVariationsObject(action.words_array)
 			};
 
 		case SET_USER_LANGUAGE:
@@ -114,7 +131,8 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 		case ADD_WORD:
 			return {
 				...state,
-				words_array : sortByRoot([ ...state.words_array, action.word ])
+				words_array : sortByRoot([ ...state.words_array, action.word ]),
+				variations  : createVariationsObject([ ...state.words_array, action.word ])
 			};
 
 		case EDIT_WORD:
@@ -129,7 +147,8 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 			adjustedWordsArray = state.words_array.filter(w => w.id !== action.root_id);
 			return {
 				...state,
-				words_array : adjustedWordsArray
+				words_array : adjustedWordsArray,
+				variations  : createVariationsObject(adjustedWordsArray)
 			};
 
 		case ADD_COMPONENT:
@@ -139,7 +158,8 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 			updatedWord = { ...word, components: sortByVariation([ ...word.components, action.component ]) };
 			return {
 				...state,
-				words_array : sortByRoot([ ...adjustedWordsArray, updatedWord ])
+				words_array : sortByRoot([ ...adjustedWordsArray, updatedWord ]),
+				variations  : createVariationsObject([ ...adjustedWordsArray, updatedWord ])
 			};
 
 		case EDIT_COMPONENT:
@@ -153,7 +173,8 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 			};
 			return {
 				...state,
-				words_array : sortByRoot([ ...adjustedWordsArray, updatedWord ])
+				words_array : sortByRoot([ ...adjustedWordsArray, updatedWord ]),
+				variations  : createVariationsObject([ ...adjustedWordsArray, updatedWord ])
 			};
 
 		case DELETE_COMPONENT:
@@ -166,7 +187,8 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 			};
 			return {
 				...state,
-				words_array : sortByRoot([ ...adjustedWordsArray, updatedWord ])
+				words_array : sortByRoot([ ...adjustedWordsArray, updatedWord ]),
+				variations  : createVariationsObject([ ...adjustedWordsArray, updatedWord ])
 			};
 
 		case SET_TEXT_INPUT:

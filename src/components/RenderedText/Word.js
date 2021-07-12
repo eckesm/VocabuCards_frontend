@@ -16,6 +16,8 @@ const useStyles = makeStyles(theme => ({
 		display   : 'inline-block',
 		margin    : '0px',
 		'&:hover' : {
+			// border          : '1px solid aqua',
+			borderRadius    : '5px',
 			backgroundColor : 'aqua'
 		}
 	},
@@ -23,7 +25,27 @@ const useStyles = makeStyles(theme => ({
 		height          : 'fit-content',
 		display         : 'inline-block',
 		margin          : '0px',
-		backgroundColor : 'yellow'
+		paddingLeft     : '2px',
+		paddingRight    : '2px',
+		// border          : '1px solid pink',
+		borderRadius    : '5px',
+		backgroundColor : 'pink',
+		'&:hover'       : {
+			backgroundColor : 'aqua'
+		}
+	},
+	saved     : {
+		height          : 'fit-content',
+		display         : 'inline-block',
+		margin          : '0px',
+		paddingLeft     : '2px',
+		paddingRight    : '2px',
+		// border          : '1px solid yellow',
+		borderRadius    : '5px',
+		backgroundColor : 'palegoldenrod',
+		'&:hover'       : {
+			backgroundColor : 'aqua'
+		}
 	}
 }));
 
@@ -36,12 +58,36 @@ export default function Word({ wordObject, updateModalText, sentenceText }) {
 		setWordClassName('clicked');
 	}
 
+	function handleSavedClick() {
+		updateModalText({
+			text: wordObject.text,
+			sentence: sentenceText,
+			savedComponent: wordObject.variation.component_id,
+			savedRoot: wordObject.variation.root_id
+		});
+		setWordClassName('clicked');
+	}
+
 	if (wordObject.type === 'space') {
 		return <span className={classes.space} />;
 	}
 
 	if (wordObject.type === 'ignore') {
 		return <span className={classes.span}>{wordObject.text}</span>;
+	}
+
+	if (wordObject.type === 'period') {
+		<span onClick={handleClick} className={classes[wordClassName]}>
+			{wordObject.text}
+		</span>;
+	}
+
+	if (wordObject.type === 'saved') {
+		return (
+			<span onClick={handleSavedClick} className={classes.saved}>
+				{wordObject.text}
+			</span>
+		);
 	}
 
 	return (

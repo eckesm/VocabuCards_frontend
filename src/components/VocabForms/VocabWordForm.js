@@ -47,6 +47,7 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 	}
 
 	const [ formData, setFormData ] = useState(INITIAL_STATE);
+	const [ translateAble, setTranslateAble ] = useState(false);
 
 	function handleChange(evt) {
 		const { name, value } = evt.target;
@@ -54,10 +55,24 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 			...data,
 			[name] : value
 		}));
+		if (name === 'word') {
+			if (value === '') {
+				setTranslateAble(false);
+			}
+			else {
+				setTranslateAble(true);
+			}
+		}
 	}
 
 	useEffect(() => {
 		if (formData.word) {
+			if (formData.word === '') {
+				setTranslateAble(false);
+			}
+			else {
+				setTranslateAble(true);
+			}
 			if (formData.translation === '') {
 				try {
 					translateAPI();
@@ -115,7 +130,7 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 						variant="outlined"
 						autoCapitalize="false"
 					/>
-					<Button className={classes.button} variant="outlined" color="primary" onClick={handleTranslate}>
+					<Button className={classes.button} variant="outlined" color="primary" onClick={handleTranslate} disabled={translateAble ? false : true}>
 						Translate
 					</Button>
 				</div>

@@ -84,7 +84,7 @@ function refineSplitString(wordList) {
 	return wordList;
 }
 
-export function renderHtml(pastedText, source_code, translate_code) {
+export function renderHtml(pastedText, source_code, translate_code, variations = {}) {
 	const unrefinedList = splitString(pastedText);
 	const refinedList = refineSplitString(unrefinedList);
 	const paragraphsArray = [];
@@ -113,12 +113,19 @@ export function renderHtml(pastedText, source_code, translate_code) {
 			});
 		}
 		else if (IGNORED.indexOf(word) === -1) {
-			sentence.push({
+			const wordObject = {
 				text           : word,
 				type           : 'clickable',
 				source_code,
-				translate_code
-			});
+				translate_code,
+				variation      : false
+			};
+			if (variations.hasOwnProperty(word)) {
+				const variation = variations[word];
+				wordObject['variation'] = variation;
+				wordObject['type'] = 'saved';
+			}
+			sentence.push(wordObject);
 		}
 		else {
 			sentence.push({

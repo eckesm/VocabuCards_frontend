@@ -56,7 +56,7 @@ export default function VocabModal({
 
 	const body = (
 		<div style={modalStyle} className={classes.paper}>
-			{setting === 'edit_variation' && (
+			{(setting === 'edit_variation' || setting === 'edit_saved_variation') && (
 				<VocabComponentForm
 					onClose={handleClose}
 					wordText={wordText}
