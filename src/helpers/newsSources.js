@@ -7,16 +7,16 @@ export const RSSNewsSources = {
 	}
 };
 
-export async function getRSSFeed(source_code) {
-	const parser = new Parser();
+const parser = new Parser();
+// const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
 
+export async function getRSSFeed(source_code) {
 	const url = RSSNewsSources[source_code]['url'];
+	// const feed = await parser.parseURL(CORS_PROXY + url);
 	const feed = await parser.parseURL(url);
 
 	const randomNum = Math.floor(Math.random() * feed.items.length);
 	const article = feed.items[randomNum];
-	// console.log(article);
-	// const source = RSSNewsSources[source_code]['source'];
 
 	return {
 		author  : article.author,

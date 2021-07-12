@@ -17,7 +17,6 @@ export async function refreshAccessTokenViaAPI() {
 		const headers = {
 			Authorization : 'Bearer ' + getRefreshToken()
 		};
-		console.log(headers);
 		const res = await customAxios.get(`${API_URL}/refresh`, {
 			headers : headers
 		});
