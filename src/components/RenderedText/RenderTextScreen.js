@@ -218,9 +218,7 @@ export default function RenderTextScreen() {
 							className={classes.button}
 							variant="contained"
 							color="primary"
-							onClick={() => {
-								handleGetArticle();
-							}}
+							onClick={handleGetArticle}
 							size="small"
 						>
 							Get Article: {rssSource}
