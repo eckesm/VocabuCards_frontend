@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { setTextInput } from '../../actions/vocab';
 import { updateSavedRenderedText } from '../../helpers/API';
-import { getRSSFeed, RSSNewsSources } from '../../helpers/newsSources';
+import { getArticleFromServer } from '../../helpers/newsSources';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
 
 import Paragraph from './Paragraph';
@@ -91,16 +91,26 @@ const useStyles = makeStyles(theme => ({
 		marginTop    : '0px',
 		marginBottom : '5px'
 	},
+	linkContainer    : {
+		marginTop    : '20px',
+		marginBottom : '10px'
+	},
+	linkDescription  : {
+		fontSize   : '1.0rem',
+		margin     : '0px',
+		fontWeight : 'bold'
+	},
 	link             : {
-		fontSize  : '1.0rem',
-		marginTop : '0px'
+		fontSize : '1.0rem',
+		margin   : '0px',
+		wordWrap : 'break-word'
 	}
 }));
 
 export default function RenderTextScreen() {
 	const classes = useStyles();
 	const dispatch = useDispatch();
-	const { text_input, language, language_object } = useSelector(store => store);
+	const { text_input, language, language_object, news_sources } = useSelector(store => store);
 	const translate_code = 'en';
 	const source_code = language;
 
@@ -125,7 +135,8 @@ export default function RenderTextScreen() {
 	}
 
 	async function handleGetArticle() {
-		const res = await getRSSFeed(language);
+		// const res = await getRSSFeed(language);
+		const res = await getArticleFromServer(language);
 		setRssObject(res);
 
 		setFormData({
@@ -175,21 +186,25 @@ export default function RenderTextScreen() {
 							foreignText : ''
 						});
 						setRenderedText([]);
+						setInitialLanguage(null);
 					}
 				}
-				if (initialLanguage === null) {
-					setInitialLanguage(language);
-				}
 
-				if (RSSNewsSources.hasOwnProperty(language)) {
-					setRssSource(RSSNewsSources[language]['source']);
-					setEnableRss(true);
+				if (news_sources) {
+					if (news_sources.hasOwnProperty(language)) {
+						setRssSource(news_sources[language]['source']);
+						setEnableRss(true);
+					}
 				}
 			}
-			if (text_input !== '' && text_input !== null) {
-				setFormData({ ...formData, foreignText: text_input });
-				let prepareRenderedText = renderHtml(text_input, source_code, translate_code);
-				setRenderedText(prepareRenderedText);
+
+			if (initialLanguage === null) {
+				if (text_input !== '' && text_input !== null) {
+					setFormData({ ...formData, foreignText: text_input });
+					let prepareRenderedText = renderHtml(text_input, source_code, translate_code);
+					setRenderedText(prepareRenderedText);
+				}
+				setInitialLanguage(language);
 			}
 		},
 		[ text_input, language ]
@@ -224,6 +239,16 @@ export default function RenderTextScreen() {
 							Get Article: {rssSource}
 						</Button>
 					)}
+					{/* <Button
+						className={classes.button}
+						variant="contained"
+						color="primary"
+						size="large"
+						// onClick={() => getArticleFromServer(language)}
+						onClick={handleGetArticle}
+					>
+						GET FROM SERVER
+					</Button> */}
 				</div>
 			</form>
 
@@ -234,9 +259,17 @@ export default function RenderTextScreen() {
 						{rssObject.title !== '' && <p className={classes.title}>{rssObject.title}</p>}
 						{rssObject.author !== '' && <p className={classes.author}>{rssObject.author}</p>}
 						{rssObject.link !== '' && (
-							<a href={rssObject.link} target="_blank">
-								<p className={classes.link}>{rssObject.link}</p>
-							</a>
+							<div className={classes.linkContainer}>
+								{rssObject.fullText === false && (
+									<p className={classes.linkDescription}>The full article is available at: </p>
+								)}
+								{rssObject.fullText === true && (
+									<p className={classes.linkDescription}>Link to article: </p>
+								)}
+								<a href={rssObject.link} target="_blank">
+									<p className={classes.link}>{rssObject.link}</p>
+								</a>
+							</div>
 						)}
 					</div>
 				)}

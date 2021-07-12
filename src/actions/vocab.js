@@ -40,6 +40,7 @@ export function getUserInfo() {
 					last_login,
 					last_source_code,
 					name,
+					news_sources,
 					user,
 					words_array
 				} = res.data;
@@ -60,6 +61,7 @@ export function getUserInfo() {
 					language_object    : languageObject,
 					last_login,
 					name,
+					news_sources,
 					text_input         : current_text,
 					user,
 					words_array

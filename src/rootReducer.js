@@ -25,6 +25,7 @@ const INITIAL_STATE = {
 	language_object    : {},
 	last_login         : null,
 	name               : '',
+	news_sources       : {},
 	text_input         : null,
 	user               : null,
 	words_array        : null
@@ -63,6 +64,8 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 				languages          : action.languages,
 				language_object    : action.language_object,
 				last_login         : action.last_login,
+				name               : action.name,
+				news_sources       : action.news_sources,
 				text_input         : action.text_input,
 				user               : action.user,
 				words_array        : action.words_array
