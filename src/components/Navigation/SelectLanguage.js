@@ -41,12 +41,12 @@ export default function SelectLanguage() {
 	const dispatch = useDispatch();
 	const history = useHistory();
 
-	const handleChange = event => {
+	async function handleChange(event) {
 		const newLanguage = event.target.value;
 		setLanguage(newLanguage);
-		dispatch(updateUserLastLanguageViaAPI(newLanguage));
+		await dispatch(updateUserLastLanguageViaAPI(newLanguage));
 		dispatch(getUserLanguageWordsViaAPI(newLanguage));
-	};
+	}
 
 	useEffect(
 		() => {
