@@ -46,6 +46,7 @@ export default function SelectLanguage() {
 		setLanguage(newLanguage);
 		await dispatch(updateUserLastLanguageViaAPI(newLanguage));
 		dispatch(getUserLanguageWordsViaAPI(newLanguage));
+		history.push('/words');
 	}
 
 	useEffect(
