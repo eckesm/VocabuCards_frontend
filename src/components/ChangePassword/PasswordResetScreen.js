@@ -1,12 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { logoutUser, logoutUserViaAPI } from '../../actions/auth';
-import { getAccessToken } from '../../helpers/API';
-
-import SignUpForm from './SignUpForm';
+import PasswordResetForm from './PasswordResetForm';
 import AlertsContainer from '../Alerts/AlertsContainer';
 
 const useStyles = makeStyles(theme => ({
@@ -23,27 +18,17 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function SignUpScreen() {
+export default function PasswordResetScreen() {
 	const classes = useStyles();
-	const dispatch = useDispatch();
 	const [ alerts, setAlerts ] = useState([]);
-
-	useEffect(() => {
-		if (getAccessToken()) {
-			try {
-				dispatch(logoutUserViaAPI());
-				dispatch(logoutUser());
-			} catch (e) {
-				console.log(e);
-			}
-		}
-	}, []);
+	const [ showForm, setShowForm ] = useState(true);
 
 	return (
 		<div>
 			<AlertsContainer alerts={alerts} />
 			<div className={classes.container}>
-				<SignUpForm setAlerts={setAlerts} />
+				{showForm && <PasswordResetForm setAlerts={setAlerts} setShowForm={setShowForm} />}
+				{!showForm && <h1>Email sent.</h1>}
 			</div>
 		</div>
 	);

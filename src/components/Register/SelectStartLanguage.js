@@ -69,6 +69,7 @@ export default function SelectStartLanguage({ updateStartLanguage }) {
 					value={formData.startLanguage}
 					onChange={handleChange}
 					label="Language"
+					required
 				>
 					{sortedLanguages.map(option => {
 						if (option[0] !== 'en') {

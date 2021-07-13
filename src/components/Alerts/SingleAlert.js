@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import IconButton from '@material-ui/core/IconButton';
 import Collapse from '@material-ui/core/Collapse';
-// import Button from '@material-ui/core/Button';
 import CloseIcon from '@material-ui/icons/Close';
+
+import { removeAlert } from '../../actions/auth';
 
 const useStyles = makeStyles(theme => ({
 	root : {
@@ -19,9 +21,21 @@ const useStyles = makeStyles(theme => ({
 
 // types: error, warning, info, success
 
-export default function SingleAlert({ type = 'info', title, text }) {
+export default function SingleAlert({ id, type = 'info', title, text, closeMs = null }) {
 	const classes = useStyles();
 	const [ open, setOpen ] = React.useState(true);
+
+	useEffect(() => {
+		if (closeMs) {
+			const timer = setTimeout(() => {
+				setOpen(false);
+			}, closeMs);
+			return () => {
+				removeAlert(id);
+				clearTimeout(timer);
+			};
+		}
+	}, []);
 
 	return (
 		<div className={classes.root}>

@@ -91,8 +91,8 @@ export default function NavBar() {
 	const [ anchorEl, setAnchorEl ] = React.useState(null);
 	const [ mobileMoreAnchorEl, setMobileMoreAnchorEl ] = React.useState(null);
 
-	const isMenuOpen = Boolean(anchorEl);
-	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+	// const isMenuOpen = Boolean(anchorEl);
+	// const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
 	const handleMobileMenuClose = () => {
 		setMobileMoreAnchorEl(null);
@@ -107,83 +107,68 @@ export default function NavBar() {
 		setMobileMoreAnchorEl(event.currentTarget);
 	};
 
-	// const menuId = 'primary-search-account-menu';
-	// const renderMenu = (
+	// const mobileMenuId = 'primary-search-account-menu-mobile';
+	// const renderMobileMenu = (
 	// 	<Menu
-	// 		anchorEl={anchorEl}
+	// 		anchorEl={mobileMoreAnchorEl}
 	// 		anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-	// 		id={menuId}
+	// 		id={mobileMenuId}
 	// 		keepMounted
 	// 		transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-	// 		open={isMenuOpen}
-	// 		onClose={handleMenuClose}
+	// 		open={isMobileMenuOpen}
+	// 		onClose={handleMobileMenuClose}
 	// 	>
-	// 		<MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-	// 		<MenuItem onClick={handleMenuClose}>My account</MenuItem>
+	// 		{auth && (
+	// 			<MenuItem>
+	// 				<Button color="inherit" href="/#/read">
+	// 					Study {languageName} Text
+	// 				</Button>
+	// 			</MenuItem>
+	// 		)}
+	// 		{auth && (
+	// 			<MenuItem>
+	// 				<Button color="inherit" href="/#/words">
+	// 					{languageName} Vocab Cards
+	// 				</Button>
+	// 			</MenuItem>
+	// 		)}
+	// 		{auth && (
+	// 			<MenuItem>
+	// 				<Button color="inherit" onClick={handleModalOpen}>
+	// 					Add Word
+	// 				</Button>
+	// 			</MenuItem>
+	// 		)}
+	// 		{auth && (
+	// 			<MenuItem>
+	// 				<Button color="inherit" onClick={goToLogout}>
+	// 					Logout
+	// 				</Button>
+	// 			</MenuItem>
+	// 		)}
+	// 		{!auth && (
+	// 			<MenuItem>
+	// 				<Button color="inherit" onClick={goToNewUser}>
+	// 					New User
+	// 				</Button>
+	// 			</MenuItem>
+	// 		)}
+	// 		{!auth && (
+	// 			<MenuItem>
+	// 				<Button color="inherit" onClick={goToLogin}>
+	// 					Login
+	// 				</Button>
+	// 			</MenuItem>
+	// 		)}
 	// 	</Menu>
 	// );
-
-	const mobileMenuId = 'primary-search-account-menu-mobile';
-	const renderMobileMenu = (
-		<Menu
-			anchorEl={mobileMoreAnchorEl}
-			anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-			id={mobileMenuId}
-			keepMounted
-			transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-			open={isMobileMenuOpen}
-			onClose={handleMobileMenuClose}
-		>
-			{auth && (
-				<MenuItem>
-					<Button color="inherit" href="/#/read">
-						Study {languageName} Text
-					</Button>
-				</MenuItem>
-			)}
-			{auth && (
-				<MenuItem>
-					<Button color="inherit" href="/#/words">
-						{languageName} Vocab Cards
-					</Button>
-				</MenuItem>
-			)}
-			{auth && (
-				<MenuItem>
-					<Button color="inherit" onClick={handleModalOpen}>
-						Add Word
-					</Button>
-				</MenuItem>
-			)}
-			{auth && (
-				<MenuItem>
-					<Button color="inherit" onClick={goToLogout}>
-						Logout
-					</Button>
-				</MenuItem>
-			)}
-			{!auth && (
-				<MenuItem>
-					<Button color="inherit" onClick={goToNewUser}>
-						New User
-					</Button>
-				</MenuItem>
-			)}
-			{!auth && (
-				<MenuItem>
-					<Button color="inherit" onClick={goToLogin}>
-						Login
-					</Button>
-				</MenuItem>
-			)}
-		</Menu>
-	);
 
 	return (
 		<div className={classes.grow}>
 			<AppBar position="fixed">
 				<Toolbar>
-					{auth && <NavDrawer />}
+					{/* {auth && <NavDrawer />} */}
+					<NavDrawer handleModalOpen={handleModalOpen} goToLogin={goToLogin} goToLogout={goToLogout} goToNewUser={goToNewUser}/>
 					<Typography className={classes.title} variant="h6" noWrap>
 						{/* VocabuCards <i className="fad fa-kiwi-bird" /> */}
 						VocabuCards
@@ -221,7 +206,7 @@ export default function NavBar() {
 							</Button>
 						)}
 					</div>
-					<div className={classes.sectionMobile}>
+					{/* <div className={classes.sectionMobile}>
 						<IconButton
 							aria-label="show more"
 							aria-controls={mobileMenuId}
@@ -231,14 +216,13 @@ export default function NavBar() {
 						>
 							<MoreIcon />
 						</IconButton>
-					</div>
+					</div> */}
 				</Toolbar>
 				{modalOpen && (
 					<VocabModal open={modalOpen} handleClose={handleModalClose} setting="add_variation_or_root" />
 				)}
 			</AppBar>
-			{renderMobileMenu}
-			{/* {renderMenu} */}
+			{/* {renderMobileMenu} */}
 		</div>
 	);
 }

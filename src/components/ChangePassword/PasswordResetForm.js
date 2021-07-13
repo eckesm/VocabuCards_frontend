@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router';
 
 import { TextField, Button } from '@material-ui/core';
@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { sendPasswordResetViaAPI } from '../../helpers/API';
 import useFields from '../../hooks/useFields';
+import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
 const useStyles = makeStyles(theme => ({
 	textInput : {
@@ -17,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function PasswordResetForm({ addAlert, setShowForm }) {
+export default function PasswordResetForm({ setAlerts, setShowForm }) {
 	const classes = useStyles();
 	const history = useHistory();
 
@@ -28,23 +29,20 @@ export default function PasswordResetForm({ addAlert, setShowForm }) {
 	async function handleSubmit(evt) {
 		evt.preventDefault();
 		const res = await sendPasswordResetViaAPI(formData.emailAddress);
+		setAlerts([]);
 
 		try {
 			if (res.status === 'success') {
 				setShowForm(false);
-				addAlert({
-					type  : 'success',
-					title : 'Success!',
-					text  : res.message
-				});
 			}
-			if (res.status === 'fail') {
-				addAlert({
-					type  : 'error',
-					title : 'Error!',
-					text  : res.message
-				});
-			}
+			setAlerts([
+				{
+					type    : res.status,
+					title   : res.title,
+					text    : res.message,
+					closeMs : DEFAULT_ALERT_CLOSE_MS
+				}
+			]);
 		} catch (e) {
 			history.push('/error');
 		}

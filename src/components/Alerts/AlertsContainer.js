@@ -20,7 +20,17 @@ export default function AlertsContainer({ alerts }) {
 		<div className={classes.alerts}>
 			{alerts.length > 0 &&
 				alerts.map(alert => {
-					return <SingleAlert key={uuid()} type={alert.type} title={alert.title} text={alert.text} />;
+					const id = alert.id ? alert.id : uuid();
+					return (
+						<SingleAlert
+							key={id}
+							id={id}
+							type={alert.type}
+							title={alert.title}
+							text={alert.text}
+							closeMs={alert.closeMs || null}
+						/>
+					);
 				})}
 		</div>
 	);

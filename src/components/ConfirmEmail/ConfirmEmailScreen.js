@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useHistory } from 'react-router';
 
 import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 
-import NewPasswordForm from './NewPasswordForm';
+import ConfirmEmailForm from './ConfirmEmailForm';
 import AlertsContainer from '../Alerts/AlertsContainer';
-import LoginForm from './LoginForm';
 
 const useStyles = makeStyles(theme => ({
 	container : {
@@ -18,28 +19,35 @@ const useStyles = makeStyles(theme => ({
 		backgroundColor : 'snow',
 		borderRadius    : '3px',
 		boxShadow       : '5px 5px 8px grey'
+	},
+	button    : {
+		marginTop : '15px'
 	}
 }));
 
-export default function NewPasswordScreen() {
+export default function ConfirmEmailScreen() {
 	const classes = useStyles();
+	const history = useHistory();
 	const { token } = useParams();
 	const [ alerts, setAlerts ] = useState([]);
 	const [ showForm, setShowForm ] = useState(true);
-
-	function addAlert(alertObj) {
-		setAlerts([ ...alerts, alertObj ]);
-	}
 
 	return (
 		<div>
 			<AlertsContainer alerts={alerts} />
 			<div className={classes.container}>
-				{showForm && <NewPasswordForm token={token} addAlert={addAlert} setShowForm={setShowForm} />}
+				{showForm && <ConfirmEmailForm token={token} setAlerts={setAlerts} setShowForm={setShowForm} />}
 				{!showForm && (
 					<div>
-						<h4><i>Please log in again.</i></h4>
-						<LoginForm addAlert={addAlert} />
+						<h1>Your email address has been confirmed.</h1>
+						<Button
+							variant="contained"
+							color="primary"
+							className={classes.button}
+							onClick={() => history.push('/words')}
+						>
+							Go to Words
+						</Button>
 					</div>
 				)}
 			</div>

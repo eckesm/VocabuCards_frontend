@@ -1,17 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from 'react';
+// import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import { getUserInfo } from '../../actions/vocab';
 import { TextField, Button, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { registerUserViaAPI } from '../../actions/auth';
 import { clearAlerts } from '../../actions/auth';
+import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
-import SelectStartLanguage from '../Login/SelectStartLanguage';
-
-// import { setUserLanguage } from '../../actions/vocab';
+import SelectStartLanguage from './SelectStartLanguage';
 
 const useStyles = makeStyles(theme => ({
 	textInput     : {
@@ -31,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SignUpForm({ setAlerts }) {
-	const user = useSelector(store => store.user);
+	// const user = useSelector(store => store.user);
 	const dispatch = useDispatch();
 	const history = useHistory();
 
@@ -58,18 +57,11 @@ export default function SignUpForm({ setAlerts }) {
 		});
 	}
 
-	useEffect(
-		() => {
-			if (user) {
-				dispatch(getUserInfo());
-				history.push('/read');
-			}
-		},
-		[ user, history, dispatch ]
-	);
-
 	async function handleSubmit(evt) {
 		evt.preventDefault();
+		dispatch(clearAlerts())
+		setAlerts([]);
+
 		const res = await dispatch(
 			registerUserViaAPI(
 				formData.userName,
@@ -81,12 +73,16 @@ export default function SignUpForm({ setAlerts }) {
 		);
 
 		try {
-			if (res.status === 'fail') {
+			if (res.status === 'success') {
+				history.push('/words');
+			}
+			if (res.status === 'warning') {
 				setAlerts([
 					{
-						type  : 'warning',
-						title : 'Passwords',
-						text  : res.message
+						type    : res.status,
+						title   : res.title,
+						text    : res.message,
+						closeMs : DEFAULT_ALERT_CLOSE_MS
 					}
 				]);
 			}
@@ -96,9 +92,8 @@ export default function SignUpForm({ setAlerts }) {
 					Object.keys(res.errors).forEach(err => {
 						res.errors[err].forEach(msg => {
 							newAlerts.push({
-								type  : 'error',
-								title : err.toUpperCase(),
-								text  : msg
+								type : 'error',
+								text : msg
 							});
 						});
 					});
@@ -125,6 +120,7 @@ export default function SignUpForm({ setAlerts }) {
 					className={classes.textInput}
 					onChange={handleChange}
 					value={formData.userName}
+					required
 				/>
 				<TextField
 					id="emailAddress"
@@ -134,6 +130,7 @@ export default function SignUpForm({ setAlerts }) {
 					onChange={handleChange}
 					value={formData.emailAddress}
 					autoCapitalize="false"
+					required
 				/>
 				<TextField
 					id="password"
@@ -143,6 +140,7 @@ export default function SignUpForm({ setAlerts }) {
 					type="password"
 					onChange={handleChange}
 					value={formData.password}
+					required
 				/>
 				<TextField
 					id="passwordCheck"
@@ -152,6 +150,7 @@ export default function SignUpForm({ setAlerts }) {
 					type="password"
 					onChange={handleChange}
 					value={formData.passwordCheck}
+					required
 				/>
 				<SelectStartLanguage updateStartLanguage={updateStartLanguage} />
 				<Button variant="contained" type="submit" color="primary" className={classes.button}>

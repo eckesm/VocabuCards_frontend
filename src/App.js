@@ -12,7 +12,6 @@ import '@fontsource/roboto';
 
 import NavBar from './components/Navigation/NavBar';
 import Routes from './components/Routes/Routes';
-// import LoginScreen from './components/Login/LoginScreen';
 
 function App() {
 	const history = useHistory();
@@ -20,16 +19,15 @@ function App() {
 	const access_token = localStorage.getItem('access_token') || null;
 	const { user, alerts } = useSelector(store => store);
 	const [ displayAlerts, setDisplayAlerts ] = useState(alerts);
-	// const [promptLogin,setPromptLogin]=useState(false)
 
 	async function attemptGetUserInfo() {
 		const res = await dispatch(getUserInfo());
 
 		if (res === 'ERROR') {
 			console.log('cannot retrieve data - App.js');
-			// setPromptLogin(true)
+
 			dispatch(logoutUser());
-			
+
 			dispatch(
 				addAlert({
 					type  : 'info',
@@ -41,13 +39,21 @@ function App() {
 		}
 	}
 
-	if (access_token && !user) {
-		attemptGetUserInfo();
-	}
+	useEffect(() => {
+		if (access_token && !user) {
+			// console.log('attempt get user info')
+			attemptGetUserInfo();
+		}
+	}, []);
 
 	useEffect(
 		() => {
 			setDisplayAlerts(alerts);
+
+			// const timer = setTimeout(() => {
+			// 	setDisplayAlerts([]);
+			// }, 5000);
+			// return () => clearTimeout(timer);
 		},
 		[ alerts ]
 	);

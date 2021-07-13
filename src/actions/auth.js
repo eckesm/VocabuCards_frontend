@@ -1,5 +1,5 @@
-// import axios from 'axios';
-import { LOGIN_USER, LOGOUT_USER, ADD_ALERT, CLEAR_ALERTS, SET_ALERTS } from './types';
+import { v4 as uuid } from 'uuid';
+import { LOGOUT_USER, ADD_ALERT, CLEAR_ALERTS, SET_ALERTS, REMOVE_ALERT } from './types';
 import { customAxios } from '../helpers/tokens';
 
 import { getUserInfo } from './vocab';
@@ -20,7 +20,6 @@ export function registerUserViaAPI(name, email_address, password, password_check
 			if (res.data.status === 'success') {
 				localStorage.setItem('access_token', res.data.access_token);
 				localStorage.setItem('refresh_token', res.data.refresh_token);
-				dispatch(loggedInUser(email_address));
 				dispatch(getUserInfo());
 				return res.data;
 			}
@@ -40,12 +39,10 @@ export function loginUserViaAPI(email_address, password) {
 			const res = await customAxios.post(`${API_URL}/login`, { email_address, password });
 
 			if (res.data.status === 'success') {
-				dispatch(clearAlerts());
 				localStorage.setItem('access_token', res.data.access_token);
 				localStorage.setItem('refresh_token', res.data.refresh_token);
 				localStorage.setItem('access_token_exp', res.data.access_token_exp);
 				localStorage.setItem('refresh_token_exp', res.data.refresh_token_exp);
-				dispatch(loggedInUser(email_address));
 				dispatch(getUserInfo());
 				return res.data;
 			}
@@ -58,17 +55,11 @@ export function loginUserViaAPI(email_address, password) {
 	};
 }
 
-function loggedInUser(email) {
-	return {
-		type : LOGIN_USER,
-		user : email
-	};
-}
-
 export function addAlert(alertObj) {
+	const newAlertObj = { ...alertObj, id: uuid() };
 	return {
 		type  : ADD_ALERT,
-		alert : alertObj
+		alert : newAlertObj
 	};
 }
 
@@ -82,6 +73,13 @@ export function setAlerts(alertArray) {
 export function clearAlerts() {
 	return {
 		type : CLEAR_ALERTS
+	};
+}
+
+export function removeAlert(alertId) {
+	return {
+		type    : REMOVE_ALERT,
+		alertId
 	};
 }
 

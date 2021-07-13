@@ -1,9 +1,9 @@
 // auth
-export const LOGIN_USER = 'LOGIN_USER';
 export const LOGOUT_USER = 'LOGOUT_USER';
 export const ADD_ALERT = 'ADD_ALERT';
 export const SET_ALERTS = 'SET_ALERTS';
 export const CLEAR_ALERTS = 'CLEAR_ALERTS';
+export const REMOVE_ALERT = 'REMOVE_ALERT';
 
 // vocabulary
 export const GET_USER_INFO = 'GET_USER_INFO';

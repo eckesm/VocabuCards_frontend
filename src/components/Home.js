@@ -9,7 +9,7 @@ import SelectLanguage from './Navigation/SelectLanguage';
 const useStyles = makeStyles(theme => ({
 	container : {
 		margin          : '0 auto',
-		marginTop       : '150px',
+		marginTop       : '100px',
 		width           : '300px',
 		fontFamily      : 'roboto, sans-serif',
 		border          : '1px solid rgb(200, 200, 200)',

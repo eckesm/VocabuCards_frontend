@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+// import React, { useEffect } from 'react';
+import React from 'react';
+// import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import { TextField, Button, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { clearAlerts } from '../../actions/auth';
-import { loginUserViaAPI } from '../../actions/auth';
+import { clearAlerts, addAlert,loginUserViaAPI } from '../../actions/auth';
 import useFields from '../../hooks/useFields';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
+import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
 const useStyles = makeStyles(theme => ({
 	textInput     : {
@@ -29,7 +31,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function LoginForm({ setAlerts }) {
 	const classes = useStyles();
-	const { user } = useSelector(store => store);
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const [ email, setEmail ] = useLocalStorageState('email_address', '');
@@ -39,62 +40,46 @@ export default function LoginForm({ setAlerts }) {
 	};
 	const [ formData, handleChange ] = useFields(initialState);
 
-	useEffect(
-		() => {
-			if (user) {
-				history.push('/home');
-			}
-		},
-		[ user, history ]
-	);
-
 	async function handleSubmit(evt) {
 		evt.preventDefault();
 
 		const res = await dispatch(loginUserViaAPI(formData.emailAddress, formData.password));
+		dispatch(clearAlerts());
+		setAlerts([]);
 
-		try {
-			if (res.status === 'success') {
-				setEmail(formData.emailAddress);
-			}
-			if (res.status === 'fail') {
-				setAlerts([
-					{
-						type  : 'warning',
-						title : 'Incorrect!',
-						text  : res.message
-					}
-				]);
-			}
-
-			if (res.status === 'no_user') {
-				setAlerts([
-					{
-						type  : 'warning',
-						title : 'User not found!',
-						text  : res.message
-					}
-				]);
-			}
-			if (res.status === 'error') {
-				try {
-					const newAlerts = [];
-					Object.keys(res.errors).forEach(err => {
-						res.errors[err].forEach(msg => {
-							newAlerts.push({
-								type  : 'error',
-								title : err.toUpperCase(),
-								text  : msg
-							});
+		if (res.status === 'validation_errors') {
+			try {
+				const newAlerts = [];
+				Object.keys(res.errors).forEach(err => {
+					res.errors[err].forEach(msg => {
+						newAlerts.push({
+							type : 'error',
+							text : msg
 						});
 					});
-					setAlerts(newAlerts);
-				} catch (e) {
-					console.log(e);
-				}
+				});
+				setAlerts(newAlerts);
+			} catch (e) {
+				console.log(e);
 			}
-		} catch (e) {
-			history.push('/error');
+		}
+		else {
+			try {
+				dispatch(
+					addAlert({
+						type    : res.status,
+						title   : res.title,
+						text    : res.message,
+						closeMs : DEFAULT_ALERT_CLOSE_MS
+					})
+				);
+				if (res.status === 'success') {
+					setEmail(formData.emailAddress);
+					history.push('/home');
+				}
+			} catch (e) {
+				history.push('/error');
+			}
 		}
 	}
 
@@ -110,6 +95,7 @@ export default function LoginForm({ setAlerts }) {
 					onChange={handleChange}
 					value={formData.emailAddress}
 					autoCapitalize="false"
+					required
 				/>
 				<TextField
 					id="password"
@@ -119,6 +105,7 @@ export default function LoginForm({ setAlerts }) {
 					type="password"
 					onChange={handleChange}
 					value={formData.password}
+					required
 				/>
 				<Button variant="contained" type="submit" color="primary" className={classes.button}>
 					Submit

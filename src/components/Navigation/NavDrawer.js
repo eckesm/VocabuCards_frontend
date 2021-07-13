@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
+import { useSelector } from 'react-redux';
 
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,24 +13,52 @@ import { Divider, ListItemIcon, ListItemText } from '@material-ui/core';
 
 import SelectLanguage from './SelectLanguage';
 
-const useStyles = makeStyles({
-	list     : {
+const useStyles = makeStyles(theme => ({
+	list           : {
 		width : 250
 	},
-	fullList : {
+	fullList       : {
 		width : 'auto'
+	},
+	sectionDesktop : {
+		display                      : 'none',
+		[theme.breakpoints.up('md')]: {
+			display : 'flex'
+		}
+	},
+	sectionMobile  : {
+		display                      : 'flex',
+		[theme.breakpoints.up('md')]: {
+			display : 'none'
+		}
 	}
-});
+}));
 
-export default function NavDrawer() {
+export default function NavDrawer({ handleModalOpen, goToLogin, goToLogout, goToNewUser }) {
 	const classes = useStyles();
 	const history = useHistory();
+	const { user, language, language_object } = useSelector(store => store);
+	const languageName = language_object[language];
 	const [ state, setState ] = React.useState({
 		top    : false,
 		left   : false,
 		bottom : false,
 		right  : false
 	});
+
+	const [ auth, setAuth ] = useState(false);
+
+	useEffect(
+		() => {
+			if (user) {
+				setAuth(true);
+			}
+			else {
+				setAuth(false);
+			}
+		},
+		[ user ]
+	);
 
 	const toggleDrawer = (anchor, open) => event => {
 		if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -60,10 +89,70 @@ export default function NavDrawer() {
 					</ListItemIcon>
 					<ListItemText primary="Home" />
 				</ListItem>
+
+				{auth && <Divider />}
+
+				{auth && (
+					<ListItem>
+						<SelectLanguage />
+					</ListItem>
+				)}
+
 				<Divider />
-				<ListItem>
-					<SelectLanguage />
-				</ListItem>
+
+				{!auth && (
+					<ListItem
+						button
+						onClick={goToLogin}
+					>
+						<ListItemText>Login</ListItemText>
+					</ListItem>
+				)}
+				{!auth && (
+					<ListItem
+						button
+						onClick={goToNewUser}
+					>
+						<ListItemText>New User</ListItemText>
+					</ListItem>
+				)}
+
+				{auth && (
+					<ListItem
+						button
+						onClick={() => {
+							history.push('/read');
+						}}
+					>
+						<ListItemText>Study {languageName} Text</ListItemText>
+					</ListItem>
+				)}
+				{auth && (
+					<ListItem
+						button
+						onClick={() => {
+							history.push('/words');
+						}}
+					>
+						<ListItemText>{languageName} Vocab Cards</ListItemText>
+					</ListItem>
+				)}
+				{auth && (
+					<ListItem
+						button
+						onClick={handleModalOpen}
+					>
+						<ListItemText>Add Word</ListItemText>
+					</ListItem>
+				)}
+				{auth && (
+					<ListItem
+						button
+						onClick={goToLogout}
+					>
+						<ListItemText>Logout</ListItemText>
+					</ListItem>
+				)}
 			</List>
 		</div>
 	);

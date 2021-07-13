@@ -13,6 +13,7 @@ import {
 	ADD_ALERT,
 	CLEAR_ALERTS,
 	SET_ALERTS,
+	REMOVE_ALERT,
 	GET_USER_INFO
 } from './actions/types';
 
@@ -103,6 +104,12 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 			return {
 				...state,
 				alerts : []
+			};
+
+		case REMOVE_ALERT:
+			return {
+				...state,
+				alerts : state.alerts.filter(alert => alert.id !== action.alertId)
 			};
 
 		case LOGOUT_USER:

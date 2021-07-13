@@ -6,6 +6,8 @@ import { logoutUser, logoutUserViaAPI } from '../../actions/auth';
 import { addAlert } from '../../actions/auth';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
+
 const useStyles = makeStyles(theme => ({
 	container : {
 		margin          : '0 auto',
@@ -29,29 +31,26 @@ export default function Logout() {
 		const res = await dispatch(logoutUserViaAPI());
 		dispatch(logoutUser());
 		try {
-			if (res.status === 'success') {
-				dispatch(
-					addAlert({
-						type  : 'success',
-						title : 'Logged out!',
-						text  : res.message
-					})
-				);
-				history.push('/login');
-			}
-			else {
-				dispatch(
-					addAlert({
-						type  : 'error',
-						title : 'Error!',
-						text  : 'There was an error logging you out.'
-					})
-				);
-				history.push('/error');
-			}
+			dispatch(
+				addAlert({
+					type    : res.status,
+					title   : res.title,
+					text    : res.message,
+					closeMs : DEFAULT_ALERT_CLOSE_MS
+				})
+			);
 		} catch (e) {
 			console.log(e);
+			dispatch(
+				addAlert({
+					type  : 'success',
+					title : 'Logged Out!',
+					text  :
+						'There was an error logging you out via API (perhaps you have a poor netwoek connection) but you have been logged out of the browser.'
+				})
+			);
 		}
+		history.push('/login');
 	}
 
 	useEffect(() => {

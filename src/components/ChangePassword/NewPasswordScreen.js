@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
+
 import { makeStyles } from '@material-ui/core/styles';
 
-import PasswordResetForm from './PasswordResetForm';
+import NewPasswordForm from './NewPasswordForm';
 import AlertsContainer from '../Alerts/AlertsContainer';
+import LoginForm from '../Login/LoginForm';
 
 const useStyles = makeStyles(theme => ({
 	container : {
@@ -18,21 +21,25 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function PasswordResetScreen() {
+export default function NewPasswordScreen() {
 	const classes = useStyles();
+	const { token } = useParams();
 	const [ alerts, setAlerts ] = useState([]);
 	const [ showForm, setShowForm ] = useState(true);
-
-	function addAlert(alertObj) {
-		setAlerts([ ...alerts, alertObj ]);
-	}
 
 	return (
 		<div>
 			<AlertsContainer alerts={alerts} />
 			<div className={classes.container}>
-				{showForm && <PasswordResetForm addAlert={addAlert} setShowForm={setShowForm} />}
-				{!showForm && <h1>Email sent.</h1>}
+				{showForm && <NewPasswordForm token={token} setAlerts={setAlerts} setShowForm={setShowForm} />}
+				{!showForm && (
+					<div>
+						<h4>
+							<i>Please log in again.</i>
+						</h4>
+						<LoginForm setAlerts={setAlerts} />
+					</div>
+				)}
 			</div>
 		</div>
 	);

@@ -13,9 +13,10 @@ import {
 	GET_USER_INFO
 } from './types';
 
-import { setAlerts } from './auth';
+import { addAlert } from './auth';
 import { API_URL } from '../helpers/API';
 import { customAxios } from '../helpers/tokens';
+import { DEFAULT_ALERT_CLOSE_MS } from '../settings';
 
 function getAccessToken() {
 	return localStorage.getItem('access_token') || null;
@@ -24,6 +25,7 @@ function getAccessToken() {
 // GET_USER_INFO
 export function getUserInfo() {
 	return async function(dispatch) {
+		// console.log('getUserInfo() ran!');
 		const access_token = getAccessToken();
 		if (access_token) {
 			try {
@@ -67,23 +69,27 @@ export function getUserInfo() {
 					words_array
 				});
 
-				const alerts = [];
 				if (first_login) {
-					alerts.push({
-						type  : 'success',
-						title : `Welcome to VocabuCards, ${name}!`,
-						text  : 'You have successfully registered for an account.  Time to get studying...'
-					});
+					// console.log('added first login alert');
+					dispatch(
+						addAlert({
+							type  : 'success',
+							title : `Welcome to VocabuCards, ${name}!`,
+							text  : 'You have successfully registered for an account.  Time to get studying...'
+						})
+					);
 				}
 				if (!is_email_confirmed) {
-					alerts.push({
-						type  : 'info',
-						title : 'Confirm Email Address',
-						text  : `Please confirm your email address... you should already have an email from us in your ${user} inbox.`
-					});
+					// console.log('added confirm email alert');
+					dispatch(
+						addAlert({
+							type    : 'info',
+							title   : 'Confirm Email Address',
+							text    : `Please confirm your email address... you should already have an email from us in your ${user} inbox.`,
+							closeMs : DEFAULT_ALERT_CLOSE_MS * 2
+						})
+					);
 				}
-
-				dispatch(setAlerts(alerts));
 			} catch (e) {
 				console.log(e);
 				return 'ERROR';
@@ -108,7 +114,6 @@ export function getUserLanguageWordsViaAPI(source_code = 'sv') {
 		}
 	};
 }
-// function storeUserLanguageWords(words_array, source_code) {
 function storeUserLanguageWords(words_array) {
 	return {
 		type        : GET_USER_LANGUAGE_WORDS,
