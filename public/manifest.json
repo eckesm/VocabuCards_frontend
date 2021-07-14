@@ -1,6 +1,6 @@
 {
 	"short_name": "VocabuCards",
-	"name": "Create React App Sample",
+	"name": "VocabuCards: a website for studying foreign language text.",
 	"icons": [
 		{
 			"src": "pink_kiwi.ico",
@@ -8,13 +8,13 @@
 			"type": "image/x-icon"
 		},
 		{
-			"src": "pink_kiwi.ico",
-			"type": "image/x-icon",
+			"src": "pink_kiwi.png",
+			"type": "image/png",
 			"sizes": "192x192"
 		},
 		{
-			"src": "pink_kiwi.ico",
-			"type": "image/x-icon",
+			"src": "pink_kiwi.png",
+			"type": "image/png",
 			"sizes": "512x512"
 		}
 	],
