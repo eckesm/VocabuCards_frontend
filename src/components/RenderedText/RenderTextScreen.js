@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { renderHtml } from '../../helpers/renderingText';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-// import IconButton from '@material-ui/core/IconButton';
 
 import { setTextInput } from '../../actions/vocab';
 import { updateSavedRenderedText } from '../../helpers/API';
@@ -13,12 +12,12 @@ import useLocalStorageState from '../../hooks/useLocalStorageState';
 
 import Paragraph from './Paragraph';
 import VocabModal from '../VocabForms/VocabModal';
+import CustomButton from '../CustomButton';
 
 const useStyles = makeStyles(theme => ({
 	root             : {
 		'& > *'      : {
-			width                          : '97%',
-			// margin : theme.spacing(1),
+			width                          : '95%',
 			[theme.breakpoints.down('sm')]: {
 				margin : '5px'
 			},
@@ -71,29 +70,31 @@ const useStyles = makeStyles(theme => ({
 	empty            : {
 		textAlign : 'center'
 	},
-	button           : {
-		width     : '350px',
-		margin    : '10px',
-		minHeight : '50px'
-	},
+	// button           : {
+	// 	width     : '350px',
+	// 	margin    : '10px',
+	// 	minHeight : '50px'
+	// },
 	clearButton      : {
 		width                          : 'max-content',
 		marginTop                      : '5px',
-		position                       : 'absolute',
+		position                       : 'relative',
 		zIndex                         : '1',
+		float                          : 'right',
 		[theme.breakpoints.down('sm')]: {
-			right : '3px',
-			top   : '125px'
+			right : '-1px',
+			top   : '18px'
 		},
 		[theme.breakpoints.up('md')]: {
-			right : '15px',
-			top   : '145px'
+			right : '3px',
+			top   : '40px'
 		},
 		[theme.breakpoints.up('lg')]: {
-			right : '20px',
-			top   : '150px'
+			right : '5px',
+			top   : '60px'
 		}
 	},
+
 	rssTextOutput    : {
 		borderBottom  : '1px solid rgb(200, 200, 200)',
 		paddingBottom : '15px',
@@ -275,30 +276,30 @@ export default function RenderTextScreen() {
 					onChange={handleChange}
 				/>
 				<div>
-					<Button className={classes.button} variant="contained" type="submit" color="primary" size="large">
-						Render Pasted/Entered Text
-					</Button>
-					{enableRss && (
-						<Button
-							className={classes.button}
-							variant="contained"
-							color="primary"
-							onClick={handleGetArticle}
-							size="small"
-						>
-							Get Article: {rssSource}
-						</Button>
-					)}
 					{/* <Button
 						className={classes.button}
 						variant="contained"
+						type="submit"
 						color="primary"
-						size="large"
-						// onClick={() => getArticleFromServer(language)}
-						onClick={handleGetArticle}
+						// size="large"
 					>
-						GET FROM SERVER
+						Render Pasted/Entered Text
 					</Button> */}
+					<CustomButton style={{ width: '300px' }}>Render Pasted/Entered Text</CustomButton>
+					{enableRss && (
+						// <Button
+						// 	className={classes.button}
+						// 	variant="contained"
+						// 	color="primary"
+						// 	onClick={handleGetArticle}
+						// 	// size="small"
+						// >
+						// 	Get Article: {rssSource}
+						// </Button>
+						<CustomButton style={{ width: '300px' }} onClick={handleGetArticle}>
+							Get Article: {rssSource}
+						</CustomButton>
+					)}
 				</div>
 			</form>
 

@@ -8,20 +8,23 @@ import { getTranslateWordViaAPI, createNewWord, editWord } from '../../helpers/A
 import { addWordToState, editWordInState } from '../../actions/vocab';
 
 const useStyles = makeStyles(theme => ({
-	root         : {
+	root            : {
 		'& .MuiTextField-root' : {
 			margin : theme.spacing(1),
 			width  : '90%'
 		}
 	},
-	container    : {
+	container       : {
 		fontFamily : 'roboto, sans-serif'
 	},
-	button       : {
+	button          : {
 		marginBottom : '15px',
 		marginLeft   : '9px'
 	},
-	submitButton : {
+	buttonContainer : {
+		textAlign : 'center'
+	},
+	submitButton    : {
 		marginTop    : '15px',
 		marginBottom : '15px',
 		marginLeft   : '9px'
@@ -130,7 +133,14 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 						variant="outlined"
 						autoCapitalize="false"
 					/>
-					<Button className={classes.button} variant="outlined" color="primary" onClick={handleTranslate} disabled={translateAble ? false : true}>
+					<Button
+						className={classes.button}
+						// variant="outlined"
+						variant="contained"
+						color="primary"
+						onClick={handleTranslate}
+						disabled={translateAble ? false : true}
+					>
 						Translate
 					</Button>
 				</div>
@@ -156,20 +166,27 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 					variant="outlined"
 					autoCapitalize="false"
 				/>
-
-				<Button className={classes.submitButton} variant="contained" type="submit" color="primary" size="large">
-					{word ? 'Save Word' : 'Add Word'}
-				</Button>
-				<Button
-					className={classes.submitButton}
-					variant="contained"
-					type="submit"
-					color="default"
-					size="large"
-					onClick={onClose}
-				>
-					Close
-				</Button>
+				<div className={classes.buttonContainer}>
+					<Button
+						className={classes.submitButton}
+						variant="contained"
+						type="submit"
+						color="primary"
+						size="large"
+					>
+						{word ? 'Save Word' : 'Add Word'}
+					</Button>
+					<Button
+						className={classes.submitButton}
+						variant="contained"
+						type="submit"
+						color="default"
+						size="large"
+						onClick={onClose}
+					>
+						Close
+					</Button>
+				</div>
 			</form>
 		</div>
 	);

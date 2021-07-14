@@ -12,11 +12,13 @@ const useStyles = makeStyles(theme => ({
 		overflow                       : 'auto',
 		textAlign                      : 'left',
 		[theme.breakpoints.down('sm')]: {
-			width       : '100%',
-			height      : '150px',
-			margin      : '5px',
-			marginLeft  : '2px',
-			marginRight : '2px'
+			width        : '100%',
+			height       : '200px',
+			margin       : '5px',
+			marginLeft   : '2px',
+			marginRight  : '2px',
+			marginTop    : '10px',
+			marginBottom : '20px'
 		},
 		[theme.breakpoints.up('md')]: {
 			width       : '250px',

@@ -90,7 +90,7 @@ export default function NavDrawer({ handleModalOpen, goToLogin, goToLogout, goTo
 					<ListItemText primary="Home" />
 				</ListItem>
 
-				{auth && <Divider />}
+				{/* {auth && <Divider />} */}
 
 				{auth && (
 					<ListItem>
@@ -101,18 +101,12 @@ export default function NavDrawer({ handleModalOpen, goToLogin, goToLogout, goTo
 				<Divider />
 
 				{!auth && (
-					<ListItem
-						button
-						onClick={goToLogin}
-					>
+					<ListItem button onClick={goToLogin}>
 						<ListItemText>Login</ListItemText>
 					</ListItem>
 				)}
 				{!auth && (
-					<ListItem
-						button
-						onClick={goToNewUser}
-					>
+					<ListItem button onClick={goToNewUser}>
 						<ListItemText>New User</ListItemText>
 					</ListItem>
 				)}
@@ -138,18 +132,15 @@ export default function NavDrawer({ handleModalOpen, goToLogin, goToLogout, goTo
 					</ListItem>
 				)}
 				{auth && (
-					<ListItem
-						button
-						onClick={handleModalOpen}
-					>
+					<ListItem button onClick={handleModalOpen}>
 						<ListItemText>Add Word</ListItemText>
 					</ListItem>
 				)}
+
+				{auth && <Divider />}
+
 				{auth && (
-					<ListItem
-						button
-						onClick={goToLogout}
-					>
+					<ListItem button onClick={goToLogout}>
 						<ListItemText>Logout</ListItemText>
 					</ListItem>
 				)}

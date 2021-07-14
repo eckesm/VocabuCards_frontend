@@ -8,6 +8,8 @@ import { sendPasswordResetViaAPI } from '../../helpers/API';
 import useFields from '../../hooks/useFields';
 import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
+import CustomButton from '../CustomButton';
+
 const useStyles = makeStyles(theme => ({
 	textInput : {
 		marginBottom : '10px',
@@ -61,9 +63,15 @@ export default function PasswordResetForm({ setAlerts, setShowForm }) {
 					value={formData.emailAddress}
 					autoCapitalize="false"
 				/>
-				<Button variant="contained" type="submit" color="primary" className={classes.button}>
+				<CustomButton
+					// variant="contained"
+					type="submit"
+					// color="primary"
+					// className={classes.button}
+					style={{ marginTop: '20px' }}
+				>
 					Send Password Reset Link
-				</Button>
+				</CustomButton>
 			</form>
 		</div>
 	);

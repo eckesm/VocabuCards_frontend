@@ -7,10 +7,12 @@ import { useHistory } from 'react-router';
 import { TextField, Button, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { clearAlerts, addAlert,loginUserViaAPI } from '../../actions/auth';
+import { clearAlerts, addAlert, loginUserViaAPI } from '../../actions/auth';
 import useFields from '../../hooks/useFields';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
 import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
+
+import CustomButton from '../CustomButton';
 
 const useStyles = makeStyles(theme => ({
 	textInput     : {
@@ -47,39 +49,49 @@ export default function LoginForm({ setAlerts }) {
 		dispatch(clearAlerts());
 		setAlerts([]);
 
-		if (res.status === 'validation_errors') {
-			try {
-				const newAlerts = [];
-				Object.keys(res.errors).forEach(err => {
-					res.errors[err].forEach(msg => {
-						newAlerts.push({
-							type : 'error',
-							text : msg
+		try {
+			if (res.status === 'validation_errors') {
+				try {
+					const newAlerts = [];
+					Object.keys(res.errors).forEach(err => {
+						res.errors[err].forEach(msg => {
+							newAlerts.push({
+								type : 'error',
+								text : msg
+							});
 						});
 					});
-				});
-				setAlerts(newAlerts);
-			} catch (e) {
-				console.log(e);
-			}
-		}
-		else {
-			try {
-				dispatch(
-					addAlert({
-						type    : res.status,
-						title   : res.title,
-						text    : res.message,
-						closeMs : DEFAULT_ALERT_CLOSE_MS
-					})
-				);
-				if (res.status === 'success') {
-					setEmail(formData.emailAddress);
-					history.push('/home');
+					setAlerts(newAlerts);
+				} catch (e) {
+					console.log(e);
 				}
-			} catch (e) {
-				history.push('/error');
 			}
+			else {
+				try {
+					dispatch(
+						addAlert({
+							type    : res.status,
+							title   : res.title,
+							text    : res.message,
+							closeMs : DEFAULT_ALERT_CLOSE_MS
+						})
+					);
+					if (res.status === 'success') {
+						setEmail(formData.emailAddress);
+						history.push('/home');
+					}
+				} catch (e) {
+					history.push('/error');
+				}
+			}
+		} catch (e) {
+			dispatch(
+				addAlert({
+					type  : 'error',
+					title : 'Connection Error!',
+					text  : 'There was an error connecting to the server or database.'
+				})
+			);
 		}
 	}
 
@@ -107,9 +119,15 @@ export default function LoginForm({ setAlerts }) {
 					value={formData.password}
 					required
 				/>
-				<Button variant="contained" type="submit" color="primary" className={classes.button}>
+				<CustomButton
+					// variant="contained"
+					type="submit"
+					// color="primary"
+					// className={classes.button}
+					style={{ marginTop: '20px', width: '125px' }}
+				>
 					Submit
-				</Button>
+				</CustomButton>
 			</form>
 			<div className={classes.linkContainer}>
 				<div className={classes.link}>

@@ -14,6 +14,7 @@ import { deleteWordInState } from '../../actions/vocab';
 import WordDetailAccordian from './WordDetailAccordian';
 import VocabModal from '../VocabForms/VocabModal';
 import DeleteDialog from '../VocabForms/DeleteDialog';
+import CustomButton from '../CustomButton';
 
 const useStyles = makeStyles(theme => ({
 	button                      : {
@@ -159,15 +160,15 @@ export default function WordDetail() {
 	return (
 		<div>
 			<div className={classes.button}>
-				<Button
+				<CustomButton
 					href={'/#/words'}
-					variant="contained"
-					color="primary"
-					className={classes.button}
+					// variant="contained"
+					// color="primary"
+					// className={classes.button}
 					startIcon={<i className="fas fa-arrow-circle-left" />}
 				>
 					Go to {languageName} Vocab Cards
-				</Button>
+				</CustomButton>
 			</div>
 			{word && (
 				<Card className={classes.wordDetail}>

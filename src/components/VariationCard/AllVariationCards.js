@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { v4 as uuid } from 'uuid';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -7,7 +8,8 @@ import VariationCard from './VariationCard';
 
 const useStyles = makeStyles(theme => ({
 	allCards  : {
-		fontFamily : 'roboto, sans-serif'
+		fontFamily : 'roboto, sans-serif',
+		width      : '100%'
 	},
 	container : {
 		display  : 'flex',
@@ -33,7 +35,8 @@ export default function AllVariationCards({ pos, wordId }) {
 			<div className={classes.container}>
 				{variations &&
 					variations.map(variation => {
-						return <VariationCard key={variation['id']} initialVariation={variation} />;
+						const id = variation['id'] ? variation['id'] : uuid();
+						return <VariationCard key={id} initialVariation={variation} />;
 					})}
 			</div>
 		</div>

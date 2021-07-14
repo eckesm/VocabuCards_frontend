@@ -5,6 +5,7 @@ import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import SelectLanguage from './Navigation/SelectLanguage';
+import CustomButton from './CustomButton';
 
 const useStyles = makeStyles(theme => ({
 	container : {
@@ -38,26 +39,28 @@ export default function Home() {
 			<h1>Welcome to VocabuCards!</h1>
 			{user && (
 				<div>
-					<Button
-						variant="contained"
-						color="primary"
-						size="large"
-						className={classes.button}
+					<CustomButton
+						// variant="contained"
+						// color="primary"
+						// size="large"
+						// className={classes.button}
+						style={{ width: '275px' }}
 						href="/#/read"
 						endIcon={<i className="fas fa-arrow-circle-right" />}
 					>
 						Study {languageName} Text
-					</Button>
-					<Button
-						variant="contained"
-						color="primary"
-						size="large"
-						className={classes.button}
+					</CustomButton>
+					<CustomButton
+						// variant="contained"
+						// color="primary"
+						// size="large"
+						// className={classes.button}
+						style={{ width: '275px' }}
 						href="/#/words"
 						endIcon={<i className="fas fa-arrow-circle-right" />}
 					>
 						{languageName} Vocab Words
-					</Button>
+					</CustomButton>
 					<div className={classes.select}>
 						<SelectLanguage />
 					</div>
@@ -65,18 +68,22 @@ export default function Home() {
 			)}
 			{!user && (
 				<div>
-					<Button variant="contained" color="primary" size="large" className={classes.button} href="/#/login">
+					<CustomButton // color="primary" // variant="contained"
+					// size="large"
+					// className={classes.button}
+					href="/#/login">
 						Login
-					</Button>
-					<Button
-						variant="contained"
-						color="default"
-						size="large"
-						className={classes.button}
+					</CustomButton>
+					<CustomButton
+						// variant="contained"
+						// color="default"
+						// size="large"
+						// className={classes.button}
 						href="/#/signup"
+						customType="default"
 					>
 						New User
-					</Button>
+					</CustomButton>
 				</div>
 			)}
 		</div>

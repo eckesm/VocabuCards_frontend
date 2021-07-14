@@ -11,6 +11,7 @@ import { clearAlerts } from '../../actions/auth';
 import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
 import SelectStartLanguage from './SelectStartLanguage';
+import CustomButton from '../CustomButton';
 
 const useStyles = makeStyles(theme => ({
 	textInput     : {
@@ -59,7 +60,7 @@ export default function SignUpForm({ setAlerts }) {
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
-		dispatch(clearAlerts())
+		dispatch(clearAlerts());
 		setAlerts([]);
 
 		const res = await dispatch(
@@ -153,9 +154,15 @@ export default function SignUpForm({ setAlerts }) {
 					required
 				/>
 				<SelectStartLanguage updateStartLanguage={updateStartLanguage} />
-				<Button variant="contained" type="submit" color="primary" className={classes.button}>
+				<CustomButton
+					// variant="contained"
+					type="submit"
+					// color="primary"
+					// className={classes.button}
+					style={{ marginTop: '20px', width: '125px' }}
+				>
 					Submit
-				</Button>
+				</CustomButton>
 			</form>
 			<div className={classes.linkContainer}>
 				<div className={classes.link}>

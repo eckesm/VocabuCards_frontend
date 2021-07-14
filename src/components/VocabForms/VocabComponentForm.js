@@ -37,6 +37,9 @@ const useStyles = makeStyles(theme => ({
 		marginBottom : '15px',
 		marginLeft   : '9px'
 	},
+	buttonContainer     : {
+		textAlign : 'center'
+	},
 	editSavedbutton     : {
 		width        : 'min-content',
 		marginTop    : 'auto',
@@ -76,8 +79,6 @@ export default function VocabComponentForm({
 	setting = null
 }) {
 	const dispatch = useDispatch();
-	// const history = useHistory();
-
 	const { language, words_array } = useSelector(store => store);
 	const [ dictionaryChoices, setDictionaryChoices ] = useState([]);
 	const wordChoices = [];
@@ -145,11 +146,14 @@ export default function VocabComponentForm({
 			}
 		}
 		if (name === 'translation') {
-			setSearchDictionaryAble(true);
+			// setSearchDictionaryAble(true);
 			if (value === '') {
 				setSearchDictionaryAble(false);
-				setUseDictionary(false);
 			}
+			else {
+				setSearchDictionaryAble(true);
+			}
+			// setUseDictionary(false);
 		}
 	}
 
@@ -192,20 +196,40 @@ export default function VocabComponentForm({
 		onClose();
 
 		if (setting === 'edit_variation' || setting === 'edit_saved_variation') {
+			const updatedComponent = {
+				root_id        : variation.root_id,
+				id             : variation.id,
+				part_of_speech : formData.partOfSpeech,
+				variation      : formData.variation,
+				translation    : formData.translation,
+				description    : formData.description,
+				definition     : formData.definition,
+				synonyms       : formData.synonyms,
+				examples       : formData.examples,
+				notes          : formData.variationNotes
+			};
+			dispatch(editComponentInState(updatedComponent));
+			if (setting === 'edit_variation') {
+				setVariation(updatedComponent);
+			}
+
 			const componentRes = await editVariation(
 				variation.id,
 				formData.partOfSpeech,
 				formData.variation,
 				formData.translation,
 				formData.description,
-				formData.definition,
+				formData.variationNotes,
 				formData.synonyms,
 				formData.examples,
 				formData.variationNotes
 			);
-			dispatch(editComponentInState(componentRes.component));
-			if (setting === 'edit_variation') {
-				setVariation(componentRes.component);
+			try {
+				if (componentRes.status !== 'success') {
+					console.log('Error updating component in database.');
+				}
+			} catch (e) {
+				console.log('Error connecting to database.');
 			}
 		}
 		else {
@@ -233,6 +257,20 @@ export default function VocabComponentForm({
 				dispatch(addComponentToState(componentRes.component));
 			}
 			else {
+				const newComponent = {
+					root_id        : formData.existingWord,
+					part_of_speech : formData.partOfSpeech,
+					variation      : formData.variation,
+					translation    : formData.translation,
+					description    : formData.description,
+					definition     : formData.definition,
+					synonyms       : formData.synonyms,
+					examples       : formData.examples,
+					notes          : formData.variationNotes
+				};
+				// dispatch(addComponentToState(componentRes.component));
+				dispatch(addComponentToState(newComponent));
+
 				const componentRes = await createNewVariation(
 					formData.existingWord,
 					language,
@@ -245,7 +283,13 @@ export default function VocabComponentForm({
 					formData.examples,
 					formData.variationNotes
 				);
-				dispatch(addComponentToState(componentRes.component));
+				try {
+					if (componentRes.status !== 'success') {
+						console.log('Error adding component to database.');
+					}
+				} catch (e) {
+					console.log('Error connecting to database.');
+				}
 			}
 		}
 	}
@@ -347,16 +391,6 @@ export default function VocabComponentForm({
 		setModalOpen(false);
 	};
 
-	// useEffect(
-	// 	() => {
-	// 		if (savedWord) {
-	// 			const word = words_array.filter(w => w.id === savedWord.root_id)[0];
-	// 			setSavedVariation(word.components.filter(c => c.id === savedWord.component_id)[0]);
-	// 		}
-	// 	},
-	// 	[ words_array, savedWord ]
-	// );
-
 	return (
 		<div className={classes.container}>
 			<div className={classes.titleContainer}>
@@ -416,7 +450,8 @@ export default function VocabComponentForm({
 					/>
 					<Button
 						className={classes.button}
-						variant="outlined"
+						// variant="outlined"
+						variant="contained"
 						color="primary"
 						onClick={translateAPI}
 						disabled={translateAble ? false : true}
@@ -451,17 +486,19 @@ export default function VocabComponentForm({
 						<div>
 							<Button
 								className={classes.button}
-								variant={useDictionary ? 'contained' : 'outlined'}
+								// variant={useDictionary ? 'contained' : 'outlined'}
+								variant="contained"
 								color={useDictionary ? 'default' : 'primary'}
 								onClick={handleDictionary}
-								// disabled={useDictionary || searchDictionaryAble ? false : true}
 								disabled={searchDictionaryAble ? false : true}
 							>
-								{searchDictionaryAble ? 'Search Dictionary' : 'Searching Dictionary'}
+								{/* {searchDictionaryAble ? 'Search Dictionary' : 'Searching Dictionary'} */}
+								Search Dictionary
 							</Button>
 							<Button
 								className={classes.button}
-								variant={useDictionary ? 'outlined' : 'contained'}
+								// variant={useDictionary ? 'outlined' : 'contained'}
+								variant="contained"
 								color={useDictionary ? 'primary' : 'default'}
 								onClick={handleEnteringInfo}
 								disabled={useDictionary ? false : true}
@@ -548,19 +585,27 @@ export default function VocabComponentForm({
 						autoCapitalize="false"
 					/>
 				)}
-				<Button className={classes.submitButton} variant="contained" type="submit" color="primary" size="large">
-					{setting === 'edit_variation' || setting === 'edit_saved_variation' ? 'Save Word' : 'Add Word'}
-				</Button>
-				<Button
-					className={classes.submitButton}
-					variant="contained"
-					type="submit"
-					color="default"
-					size="large"
-					onClick={onClose}
-				>
-					Close
-				</Button>
+				<div className={classes.buttonContainer}>
+					<Button
+						className={classes.submitButton}
+						variant="contained"
+						type="submit"
+						color="primary"
+						size="large"
+					>
+						{setting === 'edit_variation' || setting === 'edit_saved_variation' ? 'Save Word' : 'Add Word'}
+					</Button>
+					<Button
+						className={classes.submitButton}
+						variant="contained"
+						type="submit"
+						color="default"
+						size="large"
+						onClick={onClose}
+					>
+						Close
+					</Button>
+				</div>
 			</form>
 		</div>
 	);

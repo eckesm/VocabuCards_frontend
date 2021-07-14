@@ -8,6 +8,8 @@ import { resetPasswordViaAPI } from '../../helpers/API';
 import useFields from '../../hooks/useFields';
 import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
+import CustomButton from '../CustomButton';
+
 const useStyles = makeStyles(theme => ({
 	textInput : {
 		marginBottom : '10px',
@@ -71,9 +73,15 @@ export default function NewPasswordForm({ token, setAlerts, setShowForm }) {
 					value={formData.passwordCheck}
 					type="password"
 				/>
-				<Button variant="contained" type="submit" color="primary" className={classes.button}>
+				<CustomButton 
+				// variant="contained" 
+				type="submit" 
+				// color="primary" 
+				// className={classes.button}
+				style={{ marginTop: '20px', width:'250px' }}
+				>
 					Change Password
-				</Button>
+				</CustomButton>
 			</form>
 		</div>
 	);

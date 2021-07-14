@@ -16,6 +16,7 @@ import { clearAlerts } from '../../actions/auth';
 
 import NavDrawer from './NavDrawer';
 import VocabModal from '../VocabForms/VocabModal';
+import CustomButton from '../CustomButton';
 
 const useStyles = makeStyles(theme => ({
 	grow           : {
@@ -88,24 +89,24 @@ export default function NavBar() {
 	};
 
 	const classes = useStyles();
-	const [ anchorEl, setAnchorEl ] = React.useState(null);
+	// const [ anchorEl, setAnchorEl ] = React.useState(null);
 	const [ mobileMoreAnchorEl, setMobileMoreAnchorEl ] = React.useState(null);
 
 	// const isMenuOpen = Boolean(anchorEl);
 	// const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-	const handleMobileMenuClose = () => {
-		setMobileMoreAnchorEl(null);
-	};
+	// const handleMobileMenuClose = () => {
+	// 	setMobileMoreAnchorEl(null);
+	// };
 
-	const handleMenuClose = () => {
-		setAnchorEl(null);
-		handleMobileMenuClose();
-	};
+	// const handleMenuClose = () => {
+	// 	setAnchorEl(null);
+	// 	handleMobileMenuClose();
+	// };
 
-	const handleMobileMenuOpen = event => {
-		setMobileMoreAnchorEl(event.currentTarget);
-	};
+	// const handleMobileMenuOpen = event => {
+	// 	setMobileMoreAnchorEl(event.currentTarget);
+	// };
 
 	// const mobileMenuId = 'primary-search-account-menu-mobile';
 	// const renderMobileMenu = (
@@ -168,7 +169,12 @@ export default function NavBar() {
 			<AppBar position="fixed">
 				<Toolbar>
 					{/* {auth && <NavDrawer />} */}
-					<NavDrawer handleModalOpen={handleModalOpen} goToLogin={goToLogin} goToLogout={goToLogout} goToNewUser={goToNewUser}/>
+					<NavDrawer
+						handleModalOpen={handleModalOpen}
+						goToLogin={goToLogin}
+						goToLogout={goToLogout}
+						goToNewUser={goToNewUser}
+					/>
 					<Typography className={classes.title} variant="h6" noWrap>
 						{/* VocabuCards <i className="fad fa-kiwi-bird" /> */}
 						VocabuCards
@@ -176,34 +182,40 @@ export default function NavBar() {
 					<div className={classes.grow} />
 					<div className={classes.sectionDesktop}>
 						{auth && (
-							<Button color="inherit" href="/#/read">
+							<Button color="inherit" href="/#/read" style={{ textTransform: 'none' }}>
 								Study {languageName} Text
 							</Button>
 						)}
 						{auth && (
-							<Button color="inherit" href="/#/words">
+							<Button color="inherit" href="/#/words" style={{ textTransform: 'none' }}>
 								{languageName} Vocab Cards
 							</Button>
 						)}
 						{auth && (
-							<Button color="inherit" onClick={handleModalOpen}>
+							<Button color="inherit" onClick={handleModalOpen} style={{ textTransform: 'none' }}>
 								Add {languageName} Word
 							</Button>
 						)}
-						{auth && (
-							<Button color="inherit" onClick={goToLogout}>
+						{/* {auth && (
+							<Button color="inherit" onClick={goToLogout} style={{ textTransform: 'none' }}>
 								Logout
 							</Button>
-						)}
+						)} */}
 						{!auth && (
-							<Button color="inherit" onClick={goToNewUser}>
+							<Button color="inherit" onClick={goToNewUser} style={{ textTransform: 'none' }}>
 								New User
 							</Button>
 						)}
 						{!auth && (
-							<Button color="inherit" onClick={goToLogin}>
+							<Button color="inherit" onClick={goToLogin} style={{ textTransform: 'none' }}>
 								Login
 							</Button>
+
+							// 	<CustomButton
+							// 	onClick={goToLogin}
+							// 	>
+							// 	Login
+							// </CustomButton>
 						)}
 					</div>
 					{/* <div className={classes.sectionMobile}>
