@@ -37,17 +37,21 @@ const useStyles = makeStyles(theme => ({
 			margin      : '5px',
 			marginLeft  : '2px',
 			marginRight : '2px'
+			// '&:hover'                      : {
+			// transform : 'rotate(1deg)'
+			// boxShadow : '0px 0px 10px blue'
+			// }
 		},
 		[theme.breakpoints.up('md')]: {
 			width       : '250px',
 			margin      : '8px',
 			marginLeft  : '8px',
 			marginRight : '8px',
-			boxShadow   : '5px 5px 8px grey'
-		},
-		'&:hover'                      : {
-			transform : 'rotate(1deg)'
-			// boxShadow : '0px 0px 10px blue'
+			boxShadow   : '5px 5px 8px grey',
+			// '&:hover'   : {
+				// transform : 'rotate(1deg)'
+				// boxShadow : '0px 0px 10px blue'
+			// }
 		}
 	},
 	cardHeading              : {

@@ -30,6 +30,20 @@ export async function refreshAccessTokenViaAPI() {
 	}
 }
 
+export async function testAccessToken() {
+	try {
+		const headers = {
+			Authorization : 'Bearer ' + getAccessToken()
+		};
+		const res = await customAxios.get(`${API_URL}/test`, {
+			headers : headers
+		});
+		return res.data;
+	} catch (e) {
+		console.log(e);
+	}
+}
+
 export async function createStarterWordsViaAPI() {
 	try {
 		const headers = {

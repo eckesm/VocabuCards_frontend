@@ -19,9 +19,11 @@ function App() {
 	const access_token = localStorage.getItem('access_token') || null;
 	const { user, alerts } = useSelector(store => store);
 	const [ displayAlerts, setDisplayAlerts ] = useState(alerts);
+	const [ loading, setLoading ] = useState(true);
 
 	async function attemptGetUserInfo() {
 		const res = await dispatch(getUserInfo());
+		setLoading(false);
 
 		if (res === 'ERROR') {
 			console.log('cannot retrieve data - App.js');
@@ -41,30 +43,31 @@ function App() {
 
 	useEffect(() => {
 		if (access_token && !user) {
-			// console.log('attempt get user info')
 			attemptGetUserInfo();
+		}
+		else {
+			setLoading(false);
 		}
 	}, []);
 
 	useEffect(
 		() => {
 			setDisplayAlerts(alerts);
-
-			// const timer = setTimeout(() => {
-			// 	setDisplayAlerts([]);
-			// }, 5000);
-			// return () => clearTimeout(timer);
 		},
 		[ alerts ]
 	);
 
 	return (
 		<div className="App">
-			<NavBar />
-			<div className="App-content">
-				<AlertsContainer alerts={displayAlerts} />
-				<Routes />
-			</div>
+			{!loading && (
+				<div>
+					<NavBar />
+					<div className="App-content">
+						<AlertsContainer alerts={displayAlerts} />
+						<Routes />
+					</div>
+				</div>
+			)}
 		</div>
 	);
 }

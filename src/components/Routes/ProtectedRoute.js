@@ -2,39 +2,12 @@
 
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { logoutUser } from '../../actions/auth';
-import { getUserInfo } from '../../actions/vocab';
+import { useSelector } from 'react-redux';
 
 import ProtectedRouteScreen from './ProtectedRouteScreen';
 
-const ProtectedRoute = ({ component: Component, path, ...rest }) => {
-	const dispatch = useDispatch();
-	const { user } = useSelector(store => store);
-	const access_token = localStorage.getItem('access_token') || null;
+export default function ProtectedRoute({ component: Component, path, ...rest }) {
+	const { user } = useSelector(st => st);
 
-	if (access_token === null) {
-		dispatch(logoutUser());
-	}
-
-	async function attemptGetUserInfo() {
-		const res = await dispatch(getUserInfo());
-		if (res === 'ERROR') {
-			console.log('cannot retrieve data - ProtectedRoute.js');
-		}
-	}
-
-	if (access_token && !user) {
-		attemptGetUserInfo();
-	}
-
-	return (
-		<Route
-			{...rest}
-			render={props => (access_token ? <Component {...props} {...rest} /> : <ProtectedRouteScreen />)}
-		/>
-	);
-};
-
-export default ProtectedRoute;
+	return <Route {...rest} render={props => (user ? <Component {...props} {...rest} /> : <ProtectedRouteScreen />)} />;
+}

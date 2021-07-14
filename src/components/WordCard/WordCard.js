@@ -20,7 +20,11 @@ const useStyles = makeStyles(theme => ({
 			marginLeft   : '2px',
 			marginRight  : '2px',
 			marginTop    : '10px',
-			marginBottom : '20px'
+			marginBottom : '20px',
+			'&:hover'   : {
+			// 	transform : 'rotate(1deg)',
+				boxShadow : '0px 0px 10px blue'
+			}
 		},
 		[theme.breakpoints.up('md')]: {
 			width       : '250px',
@@ -28,12 +32,12 @@ const useStyles = makeStyles(theme => ({
 			margin      : '8px',
 			marginLeft  : '8px',
 			marginRight : '8px',
-			boxShadow   : '5px 5px 8px grey'
+			boxShadow   : '5px 5px 8px grey',
+			'&:hover'   : {
+				// transform : 'rotate(1deg)',
+				boxShadow : '0px 0px 10px blue'
+			}
 		},
-		'&:hover'   : {
-			transform : 'rotate(2deg)',
-			boxShadow : '0px 0px 10px blue'
-		}
 	},
 	heading     : {
 		textAlign            : 'left',

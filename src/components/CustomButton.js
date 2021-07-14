@@ -53,7 +53,7 @@ const useStyles = makeStyles(theme => ({
 export default function CustomButton(props) {
 	const classes = useStyles();
 
-	if (props.customType === 'default') {
+	if (props.customtype === 'default') {
 		return <Button className={classes.default} {...props} />;
 	}
 	else {

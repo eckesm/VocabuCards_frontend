@@ -52,7 +52,7 @@ export default function Home() {
 			{!user && (
 				<div>
 					<CustomButton href="/#/login">Login</CustomButton>
-					<CustomButton href="/#/signup" customType="default">
+					<CustomButton href="/#/signup" customtype="default">
 						New User
 					</CustomButton>
 				</div>

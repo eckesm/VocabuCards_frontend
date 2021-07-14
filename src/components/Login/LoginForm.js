@@ -31,7 +31,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function LoginForm({ setAlerts }) {
+export default function LoginForm({ setAlerts, forward = false }) {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const history = useHistory();
@@ -78,7 +78,9 @@ export default function LoginForm({ setAlerts }) {
 					);
 					if (res.status === 'success') {
 						setEmail(formData.emailAddress);
-						history.push('/home');
+						if (forward === false) {
+							history.push('/home');
+						}
 					}
 				} catch (e) {
 					history.push('/error');

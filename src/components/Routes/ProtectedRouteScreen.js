@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 
 import LoginForm from '../Login/LoginForm';
+import AlertsContainer from '../Alerts/AlertsContainer';
 
 const useStyles = makeStyles(theme => ({
 	container : {
@@ -20,11 +21,17 @@ const useStyles = makeStyles(theme => ({
 
 export default function ProtectedRouteScreen() {
 	const classes = useStyles();
+	const [ alerts, setAlerts ] = useState([]);
 
 	return (
-		<div className={classes.container}>
-			<h4><i>You must be logged in to access this page.</i></h4>
-			<LoginForm />
+		<div>
+			<AlertsContainer alerts={alerts} />
+			<div className={classes.container}>
+				<h4>
+					<i>You must be logged in to access this page.</i>
+				</h4>
+				<LoginForm setAlerts={setAlerts} forward={true} />
+			</div>
 		</div>
 	);
 }

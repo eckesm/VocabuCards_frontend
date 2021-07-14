@@ -78,6 +78,9 @@ export default function NavDrawer({ handleModalOpen, goToLogin, goToLogout, goTo
 			onKeyDown={toggleDrawer(anchor, false)}
 		>
 			<List>
+				<ListItem>
+					<ListItemText primary={user} style={{ fontStyle: 'italic' }} />
+				</ListItem>
 				<ListItem
 					button
 					onClick={() => {

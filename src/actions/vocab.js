@@ -25,7 +25,6 @@ function getAccessToken() {
 // GET_USER_INFO
 export function getUserInfo() {
 	return async function(dispatch) {
-		// console.log('getUserInfo() ran!');
 		const access_token = getAccessToken();
 		if (access_token) {
 			try {

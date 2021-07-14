@@ -88,8 +88,8 @@ export default function VocabComponentForm({
 	});
 	const [ showWordNotes, setShowWordNotes ] = useState(true);
 	const [ useDictionary, setUseDictionary ] = useState(false);
-	const [ searchDictionaryAble, setSearchDictionaryAble ] = useState(false);
-	const [ translateAble, setTranslateAble ] = useState(false);
+	const [ searchDictionaryAble, setSearchDictionaryAble ] = useState(true);
+	const [ translateAble, setTranslateAble ] = useState(true);
 	const [ savedVariation, setSavedVariation ] = useState(false);
 
 	let INITIAL_STATE = {
@@ -146,14 +146,12 @@ export default function VocabComponentForm({
 			}
 		}
 		if (name === 'translation') {
-			// setSearchDictionaryAble(true);
 			if (value === '') {
 				setSearchDictionaryAble(false);
 			}
 			else {
 				setSearchDictionaryAble(true);
 			}
-			// setUseDictionary(false);
 		}
 	}
 
