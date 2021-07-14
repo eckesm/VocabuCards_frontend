@@ -13,12 +13,16 @@ import DeleteDialog from '../VocabForms/DeleteDialog';
 const useStyles = makeStyles(theme => ({
 	buttonGroup              : {
 		display       : 'flex',
-		verticalAlign : 'middle'
+		verticalAlign : 'middle',
+		// width         : '25%',
+		// alignText     : 'right'
+		marginLeft    : 'auto'
 	},
 	button                   : {
-		height    : '25px',
-		width     : '25px',
-		marginTop : '5px'
+		height      : '25px',
+		width       : '25px',
+		marginTop   : '5px',
+		marginRight : '5px'
 	},
 	card                     : {
 		border                         : '1px solid rgb(200, 200, 200)',
@@ -26,7 +30,8 @@ const useStyles = makeStyles(theme => ({
 		backgroundColor                : 'rgb(239, 247, 253)',
 		height                         : '250px',
 		overflow                       : 'auto',
-		textAlign   : 'left',
+		textAlign                      : 'left',
+		transitionDuration             : '500ms',
 		[theme.breakpoints.down('sm')]: {
 			width       : '100%',
 			margin      : '5px',
@@ -39,6 +44,10 @@ const useStyles = makeStyles(theme => ({
 			marginLeft  : '8px',
 			marginRight : '8px',
 			boxShadow   : '5px 5px 8px grey'
+		},
+		'&:hover'                      : {
+			transform : 'rotate(1deg)'
+			// boxShadow : '0px 0px 10px blue'
 		}
 	},
 	cardHeading              : {

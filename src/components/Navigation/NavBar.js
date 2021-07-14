@@ -6,17 +6,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import MoreIcon from '@material-ui/icons/MoreVert';
+
 
 import { clearAlerts } from '../../actions/auth';
 
 import NavDrawer from './NavDrawer';
 import VocabModal from '../VocabForms/VocabModal';
-import CustomButton from '../CustomButton';
+// import CustomButton from '../CustomButton';
 
 const useStyles = makeStyles(theme => ({
 	grow           : {

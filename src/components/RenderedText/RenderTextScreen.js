@@ -70,24 +70,31 @@ const useStyles = makeStyles(theme => ({
 	empty            : {
 		textAlign : 'center'
 	},
-	// button           : {
-	// 	width     : '350px',
-	// 	margin    : '10px',
-	// 	minHeight : '50px'
-	// },
+	buttonContainer  : {
+		marginBottom                   : '0px',
+		[theme.breakpoints.down('sm')]: {
+			marginTop : '0px'
+		},
+		[theme.breakpoints.up('md')]: {
+			marginTop : '-10px'
+		},
+		[theme.breakpoints.up('lg')]: {
+			marginTop : '-15px'
+		}
+	},
 	clearButton      : {
 		width                          : 'max-content',
-		marginTop                      : '5px',
+		marginTop                      : '-55px',
 		position                       : 'relative',
 		zIndex                         : '1',
 		float                          : 'right',
 		[theme.breakpoints.down('sm')]: {
 			right : '-1px',
-			top   : '18px'
+			top   : '38px'
 		},
 		[theme.breakpoints.up('md')]: {
 			right : '3px',
-			top   : '40px'
+			top   : '50px'
 		},
 		[theme.breakpoints.up('lg')]: {
 			right : '5px',
@@ -164,16 +171,22 @@ export default function RenderTextScreen() {
 	}
 
 	async function handleGetArticle() {
-		// const res = await getRSSFeed(language);
 		const res = await getArticleFromServer(language);
-		setRssObject(res);
 
-		setFormData({
-			...formData,
-			foreignText : res.text
-		});
+		try {
+			if (res.text) {
+				setRssObject(res);
+				setFormData({
+					...formData,
+					foreignText : res.text
+				});
 
-		renderAndSaveText(res.text);
+				renderAndSaveText(res.text);
+			}
+		} catch (e) {
+			console.log('Error getting news article!');
+			console.log(e);
+		}
 	}
 
 	function handleSubmit(evt) {
@@ -275,27 +288,9 @@ export default function RenderTextScreen() {
 					variant="outlined"
 					onChange={handleChange}
 				/>
-				<div>
-					{/* <Button
-						className={classes.button}
-						variant="contained"
-						type="submit"
-						color="primary"
-						// size="large"
-					>
-						Render Pasted/Entered Text
-					</Button> */}
+				<div className={classes.buttonContainer}>
 					<CustomButton style={{ width: '300px' }}>Render Pasted/Entered Text</CustomButton>
 					{enableRss && (
-						// <Button
-						// 	className={classes.button}
-						// 	variant="contained"
-						// 	color="primary"
-						// 	onClick={handleGetArticle}
-						// 	// size="small"
-						// >
-						// 	Get Article: {rssSource}
-						// </Button>
 						<CustomButton style={{ width: '300px' }} onClick={handleGetArticle}>
 							Get Article: {rssSource}
 						</CustomButton>
@@ -305,7 +300,8 @@ export default function RenderTextScreen() {
 
 			<div className={classes.renderTextOutput}>
 				{enableRss &&
-				rssObject !== '' && (
+				rssObject !== '' &&
+				rssObject !== undefined && (
 					<div className={classes.rssTextOutput}>
 						{rssObject.title !== '' && <p className={classes.title}>{rssObject.title}</p>}
 						{rssObject.author !== '' && <p className={classes.author}>{rssObject.author}</p>}

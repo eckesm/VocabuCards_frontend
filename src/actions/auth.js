@@ -20,7 +20,7 @@ export function registerUserViaAPI(name, email_address, password, password_check
 			if (res.data.status === 'success') {
 				localStorage.setItem('access_token', res.data.access_token);
 				localStorage.setItem('refresh_token', res.data.refresh_token);
-				dispatch(getUserInfo());
+				// dispatch(getUserInfo());
 				return res.data;
 			}
 			else {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import Home from '../Home';
+import HomeScreen from '../Home/HomeScreen';
 import ProtectedRoute from './ProtectedRoute';
 // import ProtectedRouteScreen from './ProtectedRouteScreen';
 import RenderTextScreen from '../RenderedText/RenderTextScreen';
@@ -18,7 +18,7 @@ export default function Routes() {
 	return (
 		<Switch>
 			<Route exact path="/">
-				<Home />
+				<HomeScreen />
 			</Route>
 
 			<Route exact path="/login">

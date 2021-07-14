@@ -73,9 +73,10 @@ export function getUserInfo() {
 					// console.log('added first login alert');
 					dispatch(
 						addAlert({
-							type  : 'success',
-							title : `Welcome to VocabuCards, ${name}!`,
-							text  : 'You have successfully registered for an account.  Time to get studying...'
+							type    : 'success',
+							title   : `Welcome to VocabuCards, ${name}!`,
+							text    : 'You have successfully registered for an account.  Time to get studying...',
+							closeMs : DEFAULT_ALERT_CLOSE_MS
 						})
 					);
 				}

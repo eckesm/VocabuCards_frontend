@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { useHistory } from 'react-router';
 
 import Link from '@material-ui/core/Link';
 
@@ -11,6 +12,7 @@ const useStyles = makeStyles(theme => ({
 		backgroundColor                : 'rgb(239, 247, 253)',
 		overflow                       : 'auto',
 		textAlign                      : 'left',
+		transitionDuration             : '500ms',
 		[theme.breakpoints.down('sm')]: {
 			width        : '100%',
 			height       : '200px',
@@ -27,6 +29,10 @@ const useStyles = makeStyles(theme => ({
 			marginLeft  : '8px',
 			marginRight : '8px',
 			boxShadow   : '5px 5px 8px grey'
+		},
+		'&:hover'   : {
+			transform : 'rotate(2deg)',
+			boxShadow : '0px 0px 10px blue'
 		}
 	},
 	heading     : {
@@ -63,12 +69,17 @@ const useStyles = makeStyles(theme => ({
 
 export default function WordCard({ word }) {
 	const classes = useStyles();
+	const history = useHistory();
 	const variations = word.components;
 	const translation = word.translation === '' ? null : word.translation;
 	const notes = word.notes === '' ? null : word.notes;
 
+	const handleLinkedClick = () => {
+		history.push(`/words/${word.id}`);
+	};
+
 	return (
-		<div className={classes.card}>
+		<div className={classes.card} onClick={handleLinkedClick}>
 			<div className={classes.heading}>
 				<Link href={'/#/words/' + word.id} className={classes.headingText}>
 					{word.root}

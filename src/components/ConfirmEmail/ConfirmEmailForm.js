@@ -40,7 +40,7 @@ export default function ConfirmEmailForm({ token, setAlerts, setShowForm }) {
 					type    : res.status,
 					title   : res.title,
 					text    : res.message,
-					closeMs : DEFAULT_ALERT_CLOSE_MS
+					closeMs : DEFAULT_ALERT_CLOSE_MS * 2
 				}
 			]);
 		} catch (e) {
@@ -51,6 +51,7 @@ export default function ConfirmEmailForm({ token, setAlerts, setShowForm }) {
 	return (
 		<div>
 			<h1>Confirm Email</h1>
+			<p>Enter you password to confirm your email address.</p>
 			<form onSubmit={handleSubmit}>
 				<TextField
 					id="password"
@@ -60,6 +61,7 @@ export default function ConfirmEmailForm({ token, setAlerts, setShowForm }) {
 					onChange={handleChange}
 					value={formData.password}
 					type="password"
+					required
 				/>
 				<Button variant="contained" type="submit" color="primary" className={classes.button}>
 					Confirm Email Address
