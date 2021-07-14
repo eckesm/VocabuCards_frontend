@@ -289,7 +289,7 @@ export default function RenderTextScreen() {
 					onChange={handleChange}
 				/>
 				<div className={classes.buttonContainer}>
-					<CustomButton style={{ width: '300px' }}>Render Pasted/Entered Text</CustomButton>
+					<CustomButton onClick={handleSubmit} style={{ width: '300px' }}>Render Pasted/Entered Text</CustomButton>
 					{enableRss && (
 						<CustomButton style={{ width: '300px' }} onClick={handleGetArticle}>
 							Get Article: {rssSource}
