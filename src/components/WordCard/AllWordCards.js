@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 
 import { makeStyles } from '@material-ui/core/styles';
 
 import WordCard from './WordCard';
+import SelectWord from '../SelectWord';
 
 const useStyles = makeStyles(theme => ({
 	root           : {
@@ -27,7 +29,6 @@ const useStyles = makeStyles(theme => ({
 	container      : {
 		display  : 'flex',
 		flexWrap : 'wrap'
-		// justifyContent : 'space-around'
 	},
 	emptyContainer : {
 		flexWrap : 'wrap'
@@ -36,7 +37,12 @@ const useStyles = makeStyles(theme => ({
 
 export default function VocabWordsAll() {
 	const classes = useStyles();
+	const history = useHistory();
 	const { words_array = [] } = useSelector(store => store);
+	const wordChoices = [];
+	words_array.forEach(choice => {
+		wordChoices.push({ value: choice.id, name: choice.root });
+	});
 	const [ loading, setLoading ] = useState(true);
 
 	useEffect(
@@ -47,6 +53,11 @@ export default function VocabWordsAll() {
 		},
 		[ words_array ]
 	);
+
+	function returnSelection(wordChoice) {
+		history.push(`/words/${wordChoice}`);
+	}
+
 	return (
 		<div className={classes.root}>
 			<h1>Vocabulary Words</h1>
@@ -56,16 +67,25 @@ export default function VocabWordsAll() {
 				</h4>
 			)}
 			{!loading && (
-				<div className={words_array.length > 0 ? classes.container : classes.emptyContainer}>
-					{words_array.length > 0 &&
-						words_array.map(word => {
-							return <WordCard key={word['id']} word={word} />;
-						})}
-					{words_array.length === 0 && (
-						<h4>
-							<i>No vocab words yet!</i>
-						</h4>
-					)}
+				<div>
+					<SelectWord
+						id="word"
+						name="word"
+						label="Go To Word"
+						wordChoices={wordChoices}
+						returnSelection={returnSelection}
+					/>
+					<div className={words_array.length > 0 ? classes.container : classes.emptyContainer}>
+						{words_array.length > 0 &&
+							words_array.map(word => {
+								return <WordCard key={word['id']} word={word} />;
+							})}
+						{words_array.length === 0 && (
+							<h4>
+								<i>No vocab words yet!</i>
+							</h4>
+						)}
+					</div>
 				</div>
 			)}
 		</div>

@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
+import CustomButton from '../CustomButton';
+
 import {
 	getDictionaryWordViaAPI,
 	getTranslateWordViaAPI,
@@ -14,7 +16,7 @@ import {
 import { addWordToState, addComponentToState, editComponentInState } from '../../actions/vocab';
 
 import SelectDictionary from './SelectDictionary';
-import SelectWord from './SelectWord';
+import SelectWord from '../SelectWord';
 import SelectPOS from './SelectPOS';
 import VocabModal from './VocabModal';
 
@@ -50,7 +52,7 @@ const useStyles = makeStyles(theme => ({
 		marginBottom : '15px',
 		marginLeft   : '9px'
 	},
-	dictionaryContainer : {
+	sectionContainer    : {
 		border       : '1px solid rgb(200, 200, 200)',
 		borderRadius : '3px',
 		padding      : '5px',
@@ -66,6 +68,14 @@ const useStyles = makeStyles(theme => ({
 	},
 	instructions        : {
 		marginTop : '0px'
+	},
+	sectionInstructions : {
+		marginTop   : '0px',
+		marginLeft  : '10px',
+		marginRight : '10px'
+	},
+	wordAndButton       : {
+		display : 'flex'
 	}
 }));
 
@@ -86,7 +96,7 @@ export default function VocabComponentForm({
 	words_array.forEach(choice => {
 		wordChoices.push({ value: choice.id, name: choice.root });
 	});
-	const [ showWordNotes, setShowWordNotes ] = useState(true);
+	const [ showNewWord, setShowNewWord ] = useState(true);
 	const [ useDictionary, setUseDictionary ] = useState(false);
 	const [ searchDictionaryAble, setSearchDictionaryAble ] = useState(true);
 	const [ translateAble, setTranslateAble ] = useState(true);
@@ -103,14 +113,16 @@ export default function VocabComponentForm({
 		examples       : '',
 		variationNotes : '',
 		existingWord   : 'NEW',
+		newWord        : '',
 		wordNotes      : ''
 	};
 
 	if (wordText) {
 		INITIAL_STATE.variation = wordText.text.toLowerCase();
 		INITIAL_STATE.examples = wordText.sentence || '';
+		INITIAL_STATE.newWord = wordText.text.toLowerCase();
 	}
-	if (variation) {
+	if (setting === 'edit_variation' || setting === 'edit_saved_variation') {
 		INITIAL_STATE = {
 			partOfSpeech   : variation.part_of_speech,
 			variation      : variation.variation,
@@ -122,10 +134,12 @@ export default function VocabComponentForm({
 			examples       : variation.examples,
 			variationNotes : variation.notes,
 			existingWord   : variation.root_id,
+			newWord        : '',
 			wordNotes      : ''
 		};
 	}
-	if (rootId) {
+	if (setting === 'add_variation_of_root') {
+		INITIAL_STATE.variation = rootWord;
 		INITIAL_STATE.existingWord = rootId;
 	}
 
@@ -137,22 +151,6 @@ export default function VocabComponentForm({
 			...data,
 			[name] : value
 		}));
-		if (name === 'variation') {
-			if (value === '') {
-				setTranslateAble(false);
-			}
-			else {
-				setTranslateAble(true);
-			}
-		}
-		if (name === 'translation') {
-			if (value === '') {
-				setSearchDictionaryAble(false);
-			}
-			else {
-				setSearchDictionaryAble(true);
-			}
-		}
 	}
 
 	useEffect(() => {
@@ -170,6 +168,7 @@ export default function VocabComponentForm({
 			}
 		}
 	}, []);
+
 	useEffect(
 		() => {
 			if (formData.variation === '') {
@@ -234,7 +233,8 @@ export default function VocabComponentForm({
 			if (formData.existingWord === 'NEW') {
 				const wordRes = await createNewWord(
 					language,
-					formData.variation,
+					// formData.variation,
+					formData.newWord,
 					formData.translation,
 					formData.wordNotes
 				);
@@ -333,11 +333,21 @@ export default function VocabComponentForm({
 		});
 	}
 
-	function updateExistingWord(wordChoice) {
+	function showWordTab() {
+		window.open(`/#/words/${formData.existingWord}`, '_blank');
+	}
+
+	function returnSelection(wordChoice) {
 		setFormData({
 			...formData,
 			existingWord : wordChoice
 		});
+		if (wordChoice === 'NEW') {
+			setShowNewWord(true);
+		}
+		else {
+			setShowNewWord(false);
+		}
 	}
 
 	function updatePOS(pos) {
@@ -426,11 +436,12 @@ export default function VocabComponentForm({
 
 			{setting === 'add_variation_or_root' ? (
 				<p className={classes.instructions}>
-					You must complete: <b>Variation</b>, <b>Part of Speech</b>, and <b>Add to Existing Word</b> fields.
+					You must complete <b>Variation</b>, <b>Part of Speech</b>, and the <b>Add to Existing Word</b>{' '}
+					section.
 				</p>
 			) : (
 				<p className={classes.instructions}>
-					You must complete: <b>Variation</b> and <b>Part of Speech</b> fields.
+					You must complete <b>Variation</b> and <b>Part of Speech</b>.
 				</p>
 			)}
 
@@ -480,22 +491,19 @@ export default function VocabComponentForm({
 					<p className={classes.suggestions}>
 						<b>Suggestions:</b> singular, definite, past tense, etc.
 					</p>
-					<div className={classes.dictionaryContainer}>
+					<div className={classes.sectionContainer}>
 						<div>
 							<Button
 								className={classes.button}
-								// variant={useDictionary ? 'contained' : 'outlined'}
 								variant="contained"
 								color={useDictionary ? 'default' : 'primary'}
 								onClick={handleDictionary}
 								disabled={searchDictionaryAble ? false : true}
 							>
-								{/* {searchDictionaryAble ? 'Search Dictionary' : 'Searching Dictionary'} */}
 								Search Dictionary
 							</Button>
 							<Button
 								className={classes.button}
-								// variant={useDictionary ? 'outlined' : 'contained'}
 								variant="contained"
 								color={useDictionary ? 'primary' : 'default'}
 								onClick={handleEnteringInfo}
@@ -562,47 +570,59 @@ export default function VocabComponentForm({
 					autoCapitalize="false"
 				/> */}
 				{setting === 'add_variation_or_root' && (
-					<SelectWord
-						id="existingWord"
-						name="existingWord"
-						label="Add to Existing Word"
-						updateExistingWord={updateExistingWord}
-						wordChoices={wordChoices}
-						setShowWordNotes={setShowWordNotes}
-					/>
-				)}
-				{showWordNotes &&
-				setting === 'add_variation_or_root' && (
-					<TextField
-						id="wordNotes"
-						name="wordNotes"
-						label="Word Notes"
-						onChange={handleChange}
-						value={formData.wordNotes}
-						variant="outlined"
-						autoCapitalize="false"
-					/>
+					<div className={classes.sectionContainer}>
+						<div className={classes.wordAndButton}>
+							<SelectWord
+								id="existingWord"
+								name="existingWord"
+								label="Add to Existing Word"
+								wordChoices={wordChoices}
+								returnSelection={returnSelection}
+							/>
+							{!showNewWord && (
+								<CustomButton customtype="small" onClick={showWordTab}>
+									Show in New Tab
+								</CustomButton>
+							)}
+						</div>
+
+						{showNewWord && (
+							<p className={classes.sectionInstructions}>
+								If adding a new new word, you must complete <b>New Word</b>.
+							</p>
+						)}
+						{showNewWord && (
+							<TextField
+								id="newWord"
+								name="newWord"
+								label="New Word"
+								onChange={handleChange}
+								value={formData.newWord}
+								variant="outlined"
+								autoCapitalize="false"
+								required
+							/>
+						)}
+						{showNewWord && (
+							<TextField
+								id="wordNotes"
+								name="wordNotes"
+								label="Word Notes"
+								onChange={handleChange}
+								value={formData.wordNotes}
+								variant="outlined"
+								autoCapitalize="false"
+							/>
+						)}
+					</div>
 				)}
 				<div className={classes.buttonContainer}>
-					<Button
-						className={classes.submitButton}
-						variant="contained"
-						type="submit"
-						color="primary"
-						size="large"
-					>
+					<CustomButton type="submit">
 						{setting === 'edit_variation' || setting === 'edit_saved_variation' ? 'Save Word' : 'Add Word'}
-					</Button>
-					<Button
-						className={classes.submitButton}
-						variant="contained"
-						type="submit"
-						color="default"
-						size="large"
-						onClick={onClose}
-					>
+					</CustomButton>
+					<CustomButton customtype="default" onClick={onClose}>
 						Close
-					</Button>
+					</CustomButton>
 				</div>
 			</form>
 		</div>

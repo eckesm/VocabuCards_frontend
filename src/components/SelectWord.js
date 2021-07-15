@@ -16,19 +16,28 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function SelectWord({ id, label, updateExistingWord, wordChoices = [], setShowWordNotes }) {
+export default function SelectWord({ id, 
+	label, 
+	// updateExistingWord, 
+	wordChoices = [], 
+	// setShowNewWord 
+	returnSelection
+}) {
 	const classes = useStyles();
 	const [ data, setData ] = useState('NEW');
 
+	
+
 	const handleChange = event => {
 		setData(event.target.value);
-		updateExistingWord(event.target.value);
-		if (event.target.value === 'NEW') {
-			setShowWordNotes(true);
-		}
-		else {
-			setShowWordNotes(false);
-		}
+		// updateExistingWord(event.target.value);
+		// if (event.target.value === 'NEW') {
+		// 	setShowNewWord(true);
+		// }
+		// else {
+		// 	setShowNewWord(false);
+		// }
+		returnSelection(event.target.value)
 	};
 
 	return (

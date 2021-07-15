@@ -112,11 +112,24 @@ export async function resetPasswordViaAPI(token, password, password_check) {
 }
 
 export async function getDictionaryWordViaAPI(word) {
+	let adjustedWord = word;
+	let length = word.length;
+
+	if (word.startsWith('a ')) {
+		adjustedWord = word.substr(2, length);
+	}
+	if (word.startsWith('an ')) {
+		adjustedWord = word.substr(3, length);
+	}
+	if (word.startsWith('the ')) {
+		adjustedWord = word.substr(4, length);
+	}
+
 	try {
 		const headers = {
 			Authorization : 'Bearer ' + getAccessToken()
 		};
-		const res = await customAxios.get(`${API_URL}/dictionary/${word}`, { headers: headers });
+		const res = await customAxios.get(`${API_URL}/dictionary/${adjustedWord}`, { headers: headers });
 		return res.data;
 	} catch (e) {
 		console.log(e);

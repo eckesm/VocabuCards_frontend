@@ -121,7 +121,7 @@ export default function NavDrawer({ handleModalOpen, goToLogin, goToLogout, goTo
 							history.push('/read');
 						}}
 					>
-						<ListItemText>Study {languageName} Text</ListItemText>
+						<ListItemText>Study Text</ListItemText>
 					</ListItem>
 				)}
 				{auth && (
@@ -131,7 +131,7 @@ export default function NavDrawer({ handleModalOpen, goToLogin, goToLogout, goTo
 							history.push('/words');
 						}}
 					>
-						<ListItemText>{languageName} Vocab Cards</ListItemText>
+						<ListItemText>Vocab Cards</ListItemText>
 					</ListItem>
 				)}
 				{auth && (

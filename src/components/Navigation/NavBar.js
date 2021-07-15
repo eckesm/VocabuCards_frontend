@@ -8,7 +8,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
-
 import { clearAlerts } from '../../actions/auth';
 
 import NavDrawer from './NavDrawer';
@@ -172,25 +171,37 @@ export default function NavBar() {
 						goToLogout={goToLogout}
 						goToNewUser={goToNewUser}
 					/>
-					<Typography className={classes.title} variant="h6" noWrap>
+					<Typography className={classes.title} variant="h5" noWrap>
 						{/* VocabuCards <i className="fad fa-kiwi-bird" /> */}
 						VocabuCards
 					</Typography>
+					<div className={classes.sectionDesktop}>
+						{auth && (
+							<Typography
+								className={classes.title}
+								variant="h6"
+								style={{ marginLeft: '15px', fontStyle: 'italic' }}
+								noWrap
+							>
+								{languageName}
+							</Typography>
+						)}
+					</div>
 					<div className={classes.grow} />
 					<div className={classes.sectionDesktop}>
 						{auth && (
 							<Button color="inherit" href="/#/read" style={{ textTransform: 'none' }}>
-								Study {languageName} Text
+								Study Text
 							</Button>
 						)}
 						{auth && (
 							<Button color="inherit" href="/#/words" style={{ textTransform: 'none' }}>
-								{languageName} Vocab Cards
+								Vocab Cards
 							</Button>
 						)}
 						{auth && (
 							<Button color="inherit" onClick={handleModalOpen} style={{ textTransform: 'none' }}>
-								Add {languageName} Word
+								Add Word
 							</Button>
 						)}
 						{/* {auth && (
@@ -215,8 +226,18 @@ export default function NavBar() {
 							// </CustomButton>
 						)}
 					</div>
-					{/* <div className={classes.sectionMobile}>
-						<IconButton
+					<div className={classes.sectionMobile}>
+						{auth && (
+							<Typography
+								className={classes.title}
+								variant="h6"
+								style={{ fontSize: '1rem', marginLeft: '15px', fontStyle: 'italic' }}
+								noWrap
+							>
+								{languageName}
+							</Typography>
+						)}
+						{/* <IconButton
 							aria-label="show more"
 							aria-controls={mobileMenuId}
 							aria-haspopup="true"
@@ -224,8 +245,8 @@ export default function NavBar() {
 							color="inherit"
 						>
 							<MoreIcon />
-						</IconButton>
-					</div> */}
+						</IconButton> */}
+					</div>
 				</Toolbar>
 				{modalOpen && (
 					<VocabModal open={modalOpen} handleClose={handleModalClose} setting="add_variation_or_root" />
