@@ -21,19 +21,18 @@ const useStyles = makeStyles(theme => ({
 			backgroundColor : 'aqua'
 		}
 	},
-	clicked   : {
-		height          : 'fit-content',
-		display         : 'inline-block',
-		margin          : '0px',
-		paddingLeft     : '2px',
-		paddingRight    : '2px',
-		// border          : '1px solid pink',
-		borderRadius    : '5px',
-		backgroundColor : 'pink',
-		'&:hover'       : {
-			backgroundColor : 'aqua'
-		}
-	},
+	// clicked   : {
+	// 	height          : 'fit-content',
+	// 	display         : 'inline-block',
+	// 	margin          : '0px',
+	// 	paddingLeft     : '2px',
+	// 	paddingRight    : '2px',
+	// 	borderRadius    : '5px',
+	// 	backgroundColor : 'pink',
+	// 	'&:hover'       : {
+	// 		backgroundColor : 'aqua'
+	// 	}
+	// },
 	saved     : {
 		height          : 'fit-content',
 		display         : 'inline-block',
@@ -51,21 +50,23 @@ const useStyles = makeStyles(theme => ({
 
 export default function Word({ wordObject, updateModalText, sentenceText }) {
 	const classes = useStyles();
-	const [ wordClassName, setWordClassName ] = useState(wordObject.type);
+	// const [ wordClassName, setWordClassName ] = useState(wordObject.type);
+	// const [ clicked, setClicked ] = useState(false);
 
 	function handleClick() {
 		updateModalText({ text: wordObject.text, sentence: sentenceText });
-		setWordClassName('clicked');
+		// setWordClassName('clicked');
+		// setClicked(true);
+		// console.log(clicked);
 	}
 
 	function handleSavedClick() {
 		updateModalText({
-			text: wordObject.text,
-			sentence: sentenceText,
-			savedComponent: wordObject.variation.component_id,
-			savedRoot: wordObject.variation.root_id
+			text           : wordObject.text,
+			sentence       : sentenceText,
+			savedComponent : wordObject.variation.component_id,
+			savedRoot      : wordObject.variation.root_id
 		});
-		setWordClassName('clicked');
 	}
 
 	if (wordObject.type === 'space') {
@@ -77,7 +78,7 @@ export default function Word({ wordObject, updateModalText, sentenceText }) {
 	}
 
 	if (wordObject.type === 'period') {
-		<span onClick={handleClick} className={classes[wordClassName]}>
+		<span onClick={handleClick} className={classes.period}>
 			{wordObject.text}
 		</span>;
 	}
@@ -90,9 +91,18 @@ export default function Word({ wordObject, updateModalText, sentenceText }) {
 		);
 	}
 
+	// if (clicked) {
+	// 	return (
+	// 		<span onClick={handleClick} className={classes[wordClassName]}>
+	// 			{wordObject.text}
+	// 		</span>
+	// 	);
+	// }
+	// if (!clicked) {
 	return (
-		<span onClick={handleClick} className={classes[wordClassName]}>
+		<span onClick={handleClick} className={classes[wordObject.type]}>
 			{wordObject.text}
 		</span>
 	);
+	// }
 }

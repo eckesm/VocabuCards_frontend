@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+// import {v4 as uuid} from 'uuid'
 
 import { renderHtml } from '../../helpers/renderingText';
 import { TextField, Button } from '@material-ui/core';
@@ -13,6 +14,7 @@ import useLocalStorageState from '../../hooks/useLocalStorageState';
 import Paragraph from './Paragraph';
 import VocabModal from '../VocabForms/VocabModal';
 import CustomButton from '../CustomButton';
+// import useFields from '../../hooks/useFields';
 
 const useStyles = makeStyles(theme => ({
 	root             : {
@@ -150,6 +152,10 @@ export default function RenderTextScreen() {
 		foreignText : ''
 	});
 
+	// const [ formData, setFormData, resetFormData ] = useFields({
+	// 	foreignText : ''
+	// });
+
 	const [ rssObject, setRssObject ] = useLocalStorageState('rss_object', '');
 	const [ rssSource, setRssSource ] = useState(null);
 	const [ enableRss, setEnableRss ] = useState(false);
@@ -193,11 +199,14 @@ export default function RenderTextScreen() {
 		evt.preventDefault();
 		setRssObject('');
 		renderAndSaveText(formData.foreignText);
+		// this.forceUpdate();
 	}
 
 	function renderAndSaveText(text) {
 		updateSavedRenderedText(text);
 		dispatch(setTextInput(text));
+
+		setRenderedText(null);
 
 		let prepareRenderedText = renderHtml(text, source_code, translate_code, variations);
 		setRenderedText(prepareRenderedText);
@@ -253,11 +262,6 @@ export default function RenderTextScreen() {
 				let prepareRenderedText = renderHtml(text_input, source_code, translate_code, variations);
 				setRenderedText(prepareRenderedText);
 			}
-
-			// if (variations !== null && formData.foreignText !== '') {
-			// 	let prepareRenderedText = renderHtml(formData.foreignText, source_code, translate_code);
-			// 	setRenderedText(prepareRenderedText);
-			// }
 		},
 		[ text_input, language, variations, words_array ]
 	);
@@ -289,9 +293,11 @@ export default function RenderTextScreen() {
 					onChange={handleChange}
 				/>
 				<div className={classes.buttonContainer}>
-					<CustomButton onClick={handleSubmit} customtype='width_resize'>Render Pasted/Entered Text</CustomButton>
+					<CustomButton onClick={handleSubmit} customtype="width_resize">
+						Render Pasted/Entered Text
+					</CustomButton>
 					{enableRss && (
-						<CustomButton customtype='width_resize' onClick={handleGetArticle}>
+						<CustomButton customtype="width_resize" onClick={handleGetArticle}>
 							Get Article: {rssSource}
 						</CustomButton>
 					)}
@@ -320,7 +326,8 @@ export default function RenderTextScreen() {
 						)}
 					</div>
 				)}
-				{renderedText.length === 0 && (
+				{renderedText &&
+				renderedText.length === 0 && (
 					<h4 className={classes.empty}>
 						<i>
 							...type or paste {language_object[language]} text into the input box then click RENDER to
@@ -329,7 +336,8 @@ export default function RenderTextScreen() {
 					</h4>
 				)}
 
-				{renderedText.length > 0 &&
+				{renderedText &&
+					renderedText.length > 0 &&
 					renderedText.map((paragraphArray, i) => {
 						return <Paragraph key={i} paragraphArray={paragraphArray} updateModalText={updateModalText} />;
 					})}
