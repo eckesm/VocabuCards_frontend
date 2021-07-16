@@ -206,13 +206,11 @@ export default function RenderTextScreen() {
 		evt.preventDefault();
 		setRssObject('');
 		renderAndSaveText(formData.foreignText);
-		// this.forceUpdate();
 	}
 
 	function renderAndSaveText(text) {
 		updateSavedRenderedText(text);
 		dispatch(setTextInput(text));
-		// setRenderedText(null);
 		setClickedArray([]);
 
 		let prepareRenderedText = renderHtml(text, source_code, translate_code, variations);
