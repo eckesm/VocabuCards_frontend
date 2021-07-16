@@ -42,10 +42,17 @@ const useStyles = makeStyles(theme => ({
 	buttonContainer     : {
 		textAlign : 'center'
 	},
-	editSavedbutton     : {
-		width        : 'min-content',
-		marginTop    : 'auto',
-		marginBottom : 'auto'
+	// editSavedbutton     : {
+	// 	width        : '125px',
+	// 	marginTop    : '3px',
+	// 	marginBottom : '3px'
+	// },
+	savedButtonGroup    : {
+		width        : '100%',
+		// marginTop    : 'auto',
+		// marginBottom : 'auto',
+		// marginRight  : '0px',
+		textAlign:'center'
 	},
 	submitButton        : {
 		marginTop    : '15px',
@@ -333,8 +340,12 @@ export default function VocabComponentForm({
 		});
 	}
 
-	function showWordTab() {
+	function showExistingWordTab() {
 		window.open(`/#/words/${formData.existingWord}`, '_blank');
+	}
+
+	function showSavedWordTab() {
+		window.open(`/#/words/${savedVariation.root_id}`, '_blank');
 	}
 
 	function returnSelection(wordChoice) {
@@ -401,10 +412,33 @@ export default function VocabComponentForm({
 
 	return (
 		<div className={classes.container}>
+				{savedVariation &&
+				setting !== 'edit_saved_variation' && (
+					<div className={classes.savedButtonGroup}>
+						<CustomButton
+							// className={classes.editSavedbutton}
+							// variant="contained"
+							// color="primary"
+							// customtype='fixed_width_125'
+							onClick={showSavedWordTab}
+							>
+							View Saved Root Word
+						</CustomButton>
+						<CustomButton
+							// className={classes.editSavedbutton}
+							// variant="contained"
+							// color="primary"
+							// customtype='fixed_width_125'
+							onClick={handleModalOpen}
+						>
+							Edit Saved Variation
+						</CustomButton>
+					</div>
+				)}
 			<div className={classes.titleContainer}>
 				{setting === 'add_variation' ||
 					(setting === 'add_variation_or_root' && !savedVariation && <h1>Add Word</h1>)}
-				{setting === 'add_variation_or_root' && savedVariation && <h1>Add Duplicate Word</h1>}
+				{setting === 'add_variation_or_root' && savedVariation && <h1>Add Duplicate Variation</h1>}
 
 				{(setting === 'edit_variation' || setting === 'edit_saved_variation') && <h1>Edit Variation</h1>}
 
@@ -412,17 +446,6 @@ export default function VocabComponentForm({
 					<h1>
 						Add Variation of <i>{rootWord}</i>
 					</h1>
-				)}
-				{savedVariation &&
-				setting !== 'edit_saved_variation' && (
-					<Button
-						className={classes.editSavedbutton}
-						variant="contained"
-						color="primary"
-						onClick={handleModalOpen}
-					>
-						Edit Saved Variation
-					</Button>
 				)}
 				{modalOpen && (
 					<VocabModal
@@ -580,7 +603,7 @@ export default function VocabComponentForm({
 								returnSelection={returnSelection}
 							/>
 							{!showNewWord && (
-								<CustomButton customtype="small" onClick={showWordTab}>
+								<CustomButton customtype="small" onClick={showExistingWordTab}>
 									Show in New Tab
 								</CustomButton>
 							)}

@@ -6,7 +6,7 @@ import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(theme => ({
-	root         : {
+	root            : {
 		background         : 'rgb(16,110,148)',
 		background         : 'linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 90%)',
 		borderRadius       : 3,
@@ -28,7 +28,30 @@ const useStyles = makeStyles(theme => ({
 			opacity : '1'
 		}
 	},
-	small        : {
+	fixed_width_125 : {
+		background         : 'rgb(16,110,148)',
+		background         : 'linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 90%)',
+		borderRadius       : 3,
+		border             : 0,
+		color              : 'white',
+		fontFamily         : 'roboto, sans-serif',
+		fontWeight         : 'bold',
+		fontSize           : '.85rem',
+		// height             : 'min-content',
+		width              : '125px',
+		marginTop          : '3px',
+		marginBottom       : '3px',
+		padding            : '5px 8px',
+		boxShadow          : '0 3px 5px 2px rgba(16,110,148,.3)',
+		textTransform      : 'none',
+		opacity            : '.85',
+		transitionDuration : '500ms',
+		transitionProperty : 'opacity',
+		'&:hover'          : {
+			opacity : '1'
+		}
+	},
+	small           : {
 		background         : 'rgb(16,110,148)',
 		background         : 'linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 90%)',
 		borderRadius       : 3,
@@ -52,7 +75,7 @@ const useStyles = makeStyles(theme => ({
 			opacity : '1'
 		}
 	},
-	width_resize : {
+	width_resize    : {
 		background                     : 'rgb(16,110,148)',
 		background                     : 'linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 90%)',
 		borderRadius                   : 3,
@@ -79,7 +102,7 @@ const useStyles = makeStyles(theme => ({
 			width : '300px'
 		}
 	},
-	default      : {
+	default         : {
 		background         : 'darkgrey',
 		borderRadius       : 3,
 		border             : 0,

@@ -1,6 +1,6 @@
 import React from 'react';
 import Word from './Word';
-// import {v4 as uuid} from 'uuid'
+import { v4 as uuid } from 'uuid';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function Paragraph({ paragraphArray, updateModalText }) {
+export default function Paragraph({ paragraphArray, updateModalText, clickedArray, addToClickedArray }) {
 	const classes = useStyles();
 
 	function formSentenceText(sentenceArray) {
@@ -28,15 +28,20 @@ export default function Paragraph({ paragraphArray, updateModalText }) {
 
 	return (
 		<div className={classes.paragraph}>
-			{paragraphArray.map((sentence, i) => {
+			{/* {paragraphArray.map((sentence, i) => { */}
+			{paragraphArray.map(sentence => {
 				const sentenceText = formSentenceText(sentence);
-				return sentence.map((word, idx) => {
+				// return sentence.map((word, idx) => {
+				return sentence.map(word => {
 					return (
 						<Word
-							key={`${i}-${idx}`}
+							// key={`${i}-${idx}`}
+							key={uuid()}
 							wordObject={word}
 							updateModalText={updateModalText}
 							sentenceText={sentenceText}
+							clickedArray={clickedArray}
+							addToClickedArray={addToClickedArray}
 						/>
 					);
 				});

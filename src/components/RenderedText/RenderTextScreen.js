@@ -157,6 +157,7 @@ export default function RenderTextScreen() {
 	// });
 
 	const [ rssObject, setRssObject ] = useLocalStorageState('rss_object', '');
+	const [ clickedArray, setClickedArray ] = useLocalStorageState('clicked_words_array', []);
 	const [ rssSource, setRssSource ] = useState(null);
 	const [ enableRss, setEnableRss ] = useState(false);
 	const [ initialLanguage, setInitialLanguage ] = useState(null);
@@ -174,6 +175,12 @@ export default function RenderTextScreen() {
 			...formData,
 			foreignText : ''
 		});
+	}
+
+	function addToClickedArray(word) {
+		if (clickedArray.indexOf(word) === -1){
+			setClickedArray([ ...clickedArray, word ]);
+		}
 	}
 
 	async function handleGetArticle() {
@@ -205,6 +212,8 @@ export default function RenderTextScreen() {
 	function renderAndSaveText(text) {
 		updateSavedRenderedText(text);
 		dispatch(setTextInput(text));
+		// setRenderedText(null);
+		setClickedArray([]);
 
 		setRenderedText(null);
 
@@ -339,7 +348,15 @@ export default function RenderTextScreen() {
 				{renderedText &&
 					renderedText.length > 0 &&
 					renderedText.map((paragraphArray, i) => {
-						return <Paragraph key={i} paragraphArray={paragraphArray} updateModalText={updateModalText} />;
+						return (
+							<Paragraph
+								key={i}
+								paragraphArray={paragraphArray}
+								updateModalText={updateModalText}
+								clickedArray={clickedArray}
+								addToClickedArray={addToClickedArray}
+							/>
+						);
 					})}
 			</div>
 
