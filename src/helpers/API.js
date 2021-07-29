@@ -1,6 +1,8 @@
 // import axios from 'axios';
 import { customAxios } from './tokens';
 
+import { MAX_TRANSLATION_TEXT_LENGTH } from '../settings';
+
 // export const API_URL = process.env.REACT_APP_API_URL || 'https://api.vocabucards.com';
 // export const API_URL = process.env.REACT_APP_API_URL || 'http://127.0.0.1:5000';
 export const API_URL = process.env.REACT_APP_API_URL;
@@ -58,15 +60,26 @@ export async function createStarterWordsViaAPI() {
 	}
 }
 
-export async function getTranslateWordViaAPI(word, source_code, translate_code = 'en') {
+export async function getTranslateWordViaAPI(text, source_code, translate_code = 'en') {
+	const maxLength = MAX_TRANSLATION_TEXT_LENGTH;
+	if (text.length > maxLength) {
+		return {
+			status    : 'error',
+			maxLength,
+			length    : text.length
+		};
+	}
 	try {
 		const headers = {
 			Authorization : 'Bearer ' + getAccessToken()
 		};
-		const res = await customAxios.get(`${API_URL}/translate/${word}/${source_code}/${translate_code}`, {
+		const res = await customAxios.get(`${API_URL}/translate/${text}/${source_code}/${translate_code}`, {
 			headers : headers
 		});
-		return res.data;
+		return {
+			status : 'success',
+			data   : res.data
+		};
 	} catch (e) {
 		console.log(e);
 	}
@@ -214,22 +227,24 @@ export async function createNewVariation(
 	definition,
 	synonyms,
 	examples,
+	examples_translation,
 	notes
 ) {
 	const headers = {
 		Authorization : 'Bearer ' + getAccessToken()
 	};
 	const data = {
-		root_id        : root_id,
-		source_code    : source_code,
-		part_of_speech : part_of_speech,
-		word           : word,
-		translation    : translation,
-		description    : description,
-		definition     : definition,
-		synonyms       : synonyms,
-		examples       : examples,
-		notes          : notes
+		root_id              : root_id,
+		source_code          : source_code,
+		part_of_speech       : part_of_speech,
+		word                 : word,
+		translation          : translation,
+		description          : description,
+		definition           : definition,
+		synonyms             : synonyms,
+		examples             : examples,
+		examples_translation : examples_translation,
+		notes                : notes
 	};
 
 	try {
@@ -249,20 +264,22 @@ export async function editVariation(
 	definition,
 	synonyms,
 	examples,
+	examples_translation,
 	notes
 ) {
 	const headers = {
 		Authorization : 'Bearer ' + getAccessToken()
 	};
 	const data = {
-		part_of_speech : part_of_speech,
-		word           : word,
-		translation    : translation,
-		description    : description,
-		definition     : definition,
-		synonyms       : synonyms,
-		examples       : examples,
-		notes          : notes
+		part_of_speech       : part_of_speech,
+		word                 : word,
+		translation          : translation,
+		description          : description,
+		definition           : definition,
+		synonyms             : synonyms,
+		examples             : examples,
+		examples_translation : examples_translation,
+		notes                : notes
 	};
 
 	try {

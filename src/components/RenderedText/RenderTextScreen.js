@@ -178,7 +178,7 @@ export default function RenderTextScreen() {
 	}
 
 	function addToClickedArray(word) {
-		if (clickedArray.indexOf(word) === -1) {
+		if (clickedArray.indexOf(word) === -1){
 			setClickedArray([ ...clickedArray, word ]);
 		}
 	}
@@ -211,6 +211,7 @@ export default function RenderTextScreen() {
 	function renderAndSaveText(text) {
 		updateSavedRenderedText(text);
 		dispatch(setTextInput(text));
+		// setRenderedText(null);
 		setClickedArray([]);
 
 		let prepareRenderedText = renderHtml(text, source_code, translate_code, variations);

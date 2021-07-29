@@ -27,7 +27,8 @@ const useStyles = makeStyles(theme => ({
 		padding                        : theme.spacing(2, 4, 3),
 		overflow                       : 'auto',
 		[theme.breakpoints.down('sm')]: {
-			maxHeight : '100%'
+			maxHeight : '100%',
+			width     : '100%'
 		},
 		[theme.breakpoints.up('md')]: {
 			maxHeight : '90%'

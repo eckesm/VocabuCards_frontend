@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-// import { useSelector, useDispatch } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
+// import ReactFaker from 'react-faker';
 
 import { TextField, Button, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -109,6 +109,7 @@ export default function SignUpForm({ setAlerts }) {
 	}
 
 	const classes = useStyles();
+
 
 	return (
 		<div>

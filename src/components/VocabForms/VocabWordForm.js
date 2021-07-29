@@ -5,6 +5,7 @@ import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { getTranslateWordViaAPI, createNewWord, editWord } from '../../helpers/API';
+import { MAX_TRANSLATION_TEXT_LENGTH } from '../../settings';
 import { addWordToState, editWordInState } from '../../actions/vocab';
 
 const useStyles = makeStyles(theme => ({
@@ -51,6 +52,7 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 
 	const [ formData, setFormData ] = useState(INITIAL_STATE);
 	const [ translateAble, setTranslateAble ] = useState(false);
+	const [ translateLength, setTranslateLength ] = useState(true);
 
 	function handleChange(evt) {
 		const { name, value } = evt.target;
@@ -88,11 +90,18 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 
 	useEffect(
 		() => {
-			if (formData.word === '') {
+			if (formData.word === '' || formData.word.length > MAX_TRANSLATION_TEXT_LENGTH) {
 				setTranslateAble(false);
 			}
 			else {
 				setTranslateAble(true);
+			}
+
+			if (formData.word.length > MAX_TRANSLATION_TEXT_LENGTH) {
+				setTranslateLength(false);
+			}
+			else {
+				setTranslateLength(true);
 			}
 		},
 		[ formData ]
@@ -124,8 +133,22 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 		translateAPI();
 	}
 	async function translateAPI() {
-		const results = await getTranslateWordViaAPI(formData.word, language);
-		setFormData({ ...formData, translation: results });
+		// const results = await getTranslateWordViaAPI(formData.word, language);
+		// setFormData({ ...formData, translation: results });
+
+		if (formData.word !== '') {
+			const results = await getTranslateWordViaAPI(formData.word, language);
+			try {
+				if (results.status === 'success') {
+					setFormData({ ...formData, translation: results.data });
+				}
+				else if (results.status === 'error') {
+					console.log(results.length);
+				}
+			} catch (e) {
+				console.log(e);
+			}
+		}
 	}
 
 	const classes = useStyles();
@@ -153,7 +176,7 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 						onClick={handleTranslate}
 						disabled={translateAble ? false : true}
 					>
-						Translate
+						{translateLength ? 'Translate' : 'Too Long to Translate'}
 					</Button>
 				</div>
 
@@ -173,6 +196,8 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 					id="notes"
 					name="notes"
 					label="Notes"
+					multiline
+					maxRows={4}
 					onChange={handleChange}
 					value={formData.notes}
 					variant="outlined"
