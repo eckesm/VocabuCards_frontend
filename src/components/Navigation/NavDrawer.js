@@ -173,17 +173,6 @@ export default function NavDrawer({
 					</ListItem>
 				)}
 				{auth && (
-					<ListItem>
-						<SelectWord
-							id="word"
-							name="word"
-							label="Go To Word"
-							returnSelection={returnSelection}
-							isRequired={false}
-						/>
-					</ListItem>
-				)}
-				{auth && (
 					<ListItem button onClick={handleModalOpen}>
 						<ListItemText>Add Word</ListItemText>
 					</ListItem>
