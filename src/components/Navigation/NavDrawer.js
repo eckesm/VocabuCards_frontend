@@ -113,12 +113,6 @@ export default function NavDrawer({
 						<SelectLanguage />
 					</ListItem>
 				)}
-				{auth && (
-					<ListItem button onClick={goToPlans}>
-						<ListItemText>Subscriptions</ListItemText>
-					</ListItem>
-				)}
-
 				<ListItem button onClick={goToGettingStarted}>
 					<ListItemText>Getting Started</ListItemText>
 				</ListItem>
