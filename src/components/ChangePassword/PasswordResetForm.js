@@ -1,12 +1,14 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import { TextField, Button } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { sendPasswordResetViaAPI } from '../../helpers/API';
 import useFields from '../../hooks/useFields';
-import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
+import { clearAlerts, addAlert } from '../../actions/auth';
+// import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
 import CustomButton from '../CustomButton';
 
@@ -22,6 +24,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function PasswordResetForm({ setAlerts, setShowForm }) {
 	const classes = useStyles();
+	const dispatch = useDispatch();
 	const history = useHistory();
 
 	const [ formData, handleChange ] = useFields({
@@ -31,20 +34,21 @@ export default function PasswordResetForm({ setAlerts, setShowForm }) {
 	async function handleSubmit(evt) {
 		evt.preventDefault();
 		const res = await sendPasswordResetViaAPI(formData.emailAddress);
-		setAlerts([]);
+		// setAlerts([]);
+		dispatch(clearAlerts())
 
 		try {
 			if (res.status === 'success') {
 				setShowForm(false);
 			}
-			setAlerts([
+			dispatch(addAlert(
 				{
 					type    : res.status,
 					title   : res.title,
 					text    : res.message,
-					closeMs : DEFAULT_ALERT_CLOSE_MS
+					closeMs : true
 				}
-			]);
+			));
 		} catch (e) {
 			history.push('/error');
 		}

@@ -17,7 +17,7 @@ import { addAlert } from './auth';
 import { API_URL } from '../helpers/API';
 import { customAxios } from '../helpers/tokens';
 import { stripeCurrentAlert, stripeExpiringAlert, stripeTrialAlert, stripeNoPaymentAlert } from '../helpers/Stripe';
-import { DEFAULT_ALERT_CLOSE_MS } from '../settings';
+// import { DEFAULT_ALERT_CLOSE_MS } from '../settings';
 
 function getAccessToken() {
 	return localStorage.getItem('access_token') || null;
@@ -35,6 +35,7 @@ export function getUserInfo() {
 				const res = await customAxios.get(`${API_URL}/start`, { headers: headers });
 
 				let {
+					account_override,
 					current_plan,
 					current_text,
 					first_login,
@@ -63,6 +64,7 @@ export function getUserInfo() {
 
 				dispatch({
 					type                  : GET_USER_INFO,
+					account_override,
 					current_plan,
 					first_login,
 					is_email_confirmed,
@@ -85,7 +87,6 @@ export function getUserInfo() {
 
 				let closeMs = true;
 				if (first_login) {
-					// console.log('added first login alert');
 					dispatch(
 						addAlert({
 							type    : 'success',
@@ -96,24 +97,23 @@ export function getUserInfo() {
 					);
 					closeMs = false;
 				}
-				// console.log(trial_end);
-				// console.log(Date.now() / 1000);
-				// console.log('TRIAL', trial_end > Date.now()/1000);
-				if (!stripe_payment_method) {
-					dispatch(addAlert(stripeNoPaymentAlert(current_plan, stripe_period_end, false)));
-				}
-				else if (trial_end > Date.now() / 1000) {
-					dispatch(addAlert(stripeTrialAlert(current_plan, stripe_period_end, closeMs)));
-				}
-				else if (subscription_status === 'expiring') {
-					dispatch(addAlert(stripeExpiringAlert(current_plan, stripe_period_end, false)));
-				}
-				else {
-					dispatch(addAlert(stripeCurrentAlert(current_plan, stripe_period_end, closeMs)));
+
+				if (account_override !== 'full_access') {
+					if (!stripe_payment_method) {
+						dispatch(addAlert(stripeNoPaymentAlert(current_plan, stripe_period_end, false)));
+					}
+					else if (trial_end > Date.now() / 1000) {
+						dispatch(addAlert(stripeTrialAlert(current_plan, stripe_period_end, closeMs)));
+					}
+					else if (subscription_status === 'expiring') {
+						dispatch(addAlert(stripeExpiringAlert(current_plan, stripe_period_end, false)));
+					}
+					else {
+						dispatch(addAlert(stripeCurrentAlert(current_plan, stripe_period_end, closeMs)));
+					}
 				}
 
 				if (!is_email_confirmed) {
-					// console.log('added confirm email alert');
 					dispatch(
 						addAlert({
 							type    : 'info',

@@ -19,6 +19,12 @@ import CustomButton from '../CustomButton';
 import UnauthorizedRouteNotice from '../Routes/UnauthorizedRouteNotice';
 
 const useStyles = makeStyles(theme => ({
+	screen                      : {
+		margin     : '0px',
+		height     : '100vh',
+		marginTop  : '-10px',
+		paddingTop : '15px'
+	},
 	button                      : {
 		[theme.breakpoints.down('sm')]: {
 			textAlign : 'center'
@@ -163,8 +169,12 @@ export default function WordDetail() {
 
 	const notes = word ? word.notes : null;
 
+	const backgroundImageUrl =
+		'https://images.unsplash.com/photo-1596779845727-d88eb78a1b08?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2091&q=80';
+
 	return (
-		<div>
+		// <div className={classes.screen} style={{ backgroundImage: `url(${backgroundImageUrl})` }}>
+		<div className={classes.screen}>
 			{access &&
 			word && (
 				<div>

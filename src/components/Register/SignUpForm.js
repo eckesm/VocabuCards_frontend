@@ -3,12 +3,12 @@ import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 // import ReactFaker from 'react-faker';
 
-import { TextField, Button, Link } from '@material-ui/core';
+import { TextField, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { registerUserViaAPI } from '../../actions/auth';
-import { clearAlerts } from '../../actions/auth';
-import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
+import { clearAlerts, addAlert } from '../../actions/auth';
+// import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
 import SelectStartLanguage from './SelectStartLanguage';
 import CustomButton from '../CustomButton';
@@ -30,8 +30,8 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function SignUpForm({ setAlerts }) {
-	// const user = useSelector(store => store.user);
+export default function SignUpForm() {
+	const classes = useStyles();
 	const dispatch = useDispatch();
 	const history = useHistory();
 
@@ -50,18 +50,18 @@ export default function SignUpForm({ setAlerts }) {
 			[name] : value
 		}));
 	}
-
+	
 	function updateStartLanguage(source_code) {
 		setFormData({
 			...formData,
 			startLanguage : source_code
 		});
 	}
-
+	
 	async function handleSubmit(evt) {
 		evt.preventDefault();
 		dispatch(clearAlerts());
-		setAlerts([]);
+		// setAlerts([]);
 
 		const res = await dispatch(
 			registerUserViaAPI(
@@ -75,31 +75,42 @@ export default function SignUpForm({ setAlerts }) {
 
 		try {
 			if (res.status === 'success') {
-				history.push('/words');
+				history.push('/getting-started');
 			}
 			if (res.status === 'warning') {
-				setAlerts([
+				dispatch(addAlert(
 					{
 						type    : res.status,
 						title   : res.title,
 						text    : res.message,
-						// closeMs : DEFAULT_ALERT_CLOSE_MS
 						closeMs : false
 					}
-				]);
+				));
+				// setAlerts([
+				// 	{
+				// 		type    : res.status,
+				// 		title   : res.title,
+				// 		text    : res.message,
+				// 		closeMs : false
+				// 	}
+				// ]);
 			}
 			if (res.status === 'error') {
 				try {
-					const newAlerts = [];
+					// const newAlerts = [];
 					Object.keys(res.errors).forEach(err => {
 						res.errors[err].forEach(msg => {
-							newAlerts.push({
+							dispatch(addAlert({
 								type : 'error',
 								text : msg
-							});
+							}));
+							// newAlerts.push({
+							// 	type : 'error',
+							// 	text : msg
+							// });
 						});
 					});
-					setAlerts(newAlerts);
+					// setAlerts(newAlerts);
 				} catch (e) {
 					console.log(e);
 				}
@@ -109,7 +120,6 @@ export default function SignUpForm({ setAlerts }) {
 		}
 	}
 
-	const classes = useStyles();
 
 
 	return (

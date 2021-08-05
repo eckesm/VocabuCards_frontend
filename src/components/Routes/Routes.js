@@ -15,6 +15,7 @@ import WordDetail from '../WordDetail/WordDetail';
 import Logout from '../Login/Logout';
 import StripeScreen from '../Stripe/StripeScreen';
 import ErrorScreen from '../ErrorScreen';
+import InstructionsScreen from '../Home/InstructionsScreen';
 
 export default function Routes() {
 	return (
@@ -25,6 +26,10 @@ export default function Routes() {
 
 			<Route exact path="/login">
 				<LoginScreen />
+			</Route>
+
+			<Route exact path="/getting-started">
+				<InstructionsScreen />
 			</Route>
 
 			<Route exact path="/signup">
@@ -43,6 +48,7 @@ export default function Routes() {
 				<NewPasswordScreen />
 			</Route>
 
+<<<<<<< HEAD
 			{/* <Route exact path="/plans">
 				<StripeScreen />
 			</Route> */}
@@ -73,6 +79,14 @@ export default function Routes() {
 				<StripeScreen status="updated" />
 			</Route> */}
 
+=======
+			<ProtectedRoute component={StripeScreen} path="/plans" exact />
+
+			<ProtectedRoute component={StripeScreen} status="success" path="/plans/success" exact />
+
+			<ProtectedRoute component={StripeScreen} status="updated" path="/plans/updated" exact />
+
+>>>>>>> dev
 			<Route exact path="/logout">
 				<Logout />
 			</Route>
@@ -81,6 +95,7 @@ export default function Routes() {
 				<ErrorScreen />
 			</Route>
 
+<<<<<<< HEAD
 			{/* <ProtectedRoute component={RenderTextScreen} path="/read" exact /> */}
 			<RestrictedRoute component={RenderTextScreen} path="/read" exact />
 
@@ -88,6 +103,12 @@ export default function Routes() {
 			<RestrictedRoute component={VocabWordsAll} path="/words" exact />
 
 			{/* <ProtectedRoute component={WordDetail} path="/words/:rootId" exact /> */}
+=======
+			<RestrictedRoute component={RenderTextScreen} path="/read" exact />
+
+			<RestrictedRoute component={VocabWordsAll} path="/words" exact />
+
+>>>>>>> dev
 			<RestrictedRoute component={WordDetail} path="/words/:rootId" exact />
 
 			<Redirect to="/" />

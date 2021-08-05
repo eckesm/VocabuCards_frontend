@@ -19,6 +19,7 @@ import {
 } from './actions/types';
 
 const INITIAL_STATE = {
+	account_override      : null,
 	alerts                : [],
 	current_plan          : null,
 	first_login           : null,
@@ -83,6 +84,7 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 		case GET_USER_INFO:
 			return {
 				...state,
+				account_override      : action.account_override,
 				current_plan          : action.current_plan,
 				first_login           : action.first_login,
 				is_email_confirmed    : action.is_email_confirmed,

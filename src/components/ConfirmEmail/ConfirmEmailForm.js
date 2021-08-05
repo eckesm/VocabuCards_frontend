@@ -1,4 +1,5 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import { TextField, Button } from '@material-ui/core';
@@ -6,7 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { confirmEmailViaAPI } from '../../helpers/API';
 import useFields from '../../hooks/useFields';
-import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
+import { clearAlerts, addAlert } from '../../actions/auth';
+// import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
 const useStyles = makeStyles(theme => ({
 	textInput : {
@@ -20,6 +22,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function ConfirmEmailForm({ token, setAlerts, setShowForm }) {
 	const classes = useStyles();
+	const dispatch = useDispatch();
 	const history = useHistory();
 
 	const [ formData, handleChange ] = useFields({
@@ -29,20 +32,21 @@ export default function ConfirmEmailForm({ token, setAlerts, setShowForm }) {
 	async function handleSubmit(evt) {
 		evt.preventDefault();
 		const res = await confirmEmailViaAPI(token, formData.password);
-		setAlerts([]);
+		// setAlerts([]);
+		dispatch(clearAlerts());
 
 		try {
 			if (res.status === 'success') {
 				setShowForm(false);
 			}
-			setAlerts([
-				{
+			dispatch(
+				addAlert({
 					type    : res.status,
 					title   : res.title,
 					text    : res.message,
-					closeMs : DEFAULT_ALERT_CLOSE_MS * 2
-				}
-			]);
+					closeMs : true
+				})
+			);
 		} catch (e) {
 			history.push('/error');
 		}

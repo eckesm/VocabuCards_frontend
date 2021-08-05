@@ -14,9 +14,15 @@ import useLocalStorageState from '../../hooks/useLocalStorageState';
 import Paragraph from './Paragraph';
 import VocabModal from '../VocabForms/VocabModal';
 import CustomButton from '../CustomButton';
-// import useFields from '../../hooks/useFields';
+// import AlertsContainer from '../Alerts/AlertsContainer';
 
 const useStyles = makeStyles(theme => ({
+	screen           : {
+		margin     : '0px',
+		height     : '100vh',
+		marginTop  : '-10px',
+		paddingTop : '15px'
+	},
 	root             : {
 		'& > *'      : {
 			width                          : '95%',
@@ -178,7 +184,7 @@ export default function RenderTextScreen() {
 	}
 
 	function addToClickedArray(word) {
-		if (clickedArray.indexOf(word) === -1){
+		if (clickedArray.indexOf(word) === -1) {
 			setClickedArray([ ...clickedArray, word ]);
 		}
 	}
@@ -272,98 +278,104 @@ export default function RenderTextScreen() {
 		[ text_input, language, variations, words_array ]
 	);
 
-	return (
-		<div className={classes.renderTextScreen}>
-			<h1>Study {language_object[language]} Text</h1>
-			<form onSubmit={handleSubmit} className={classes.root}>
-				{formData.foreignText !== '' && (
-					<Button
-						className={classes.clearButton}
-						variant="contained"
-						color="secondary"
-						size="small"
-						onClick={clearForeignText}
-						startIcon={<i className="fad fa-trash-alt" />}
-					>
-						Clear Input
-					</Button>
-				)}
-				<TextField
-					id="foreignText"
-					name="foreignText"
-					label="Type or paste foreign language text"
-					multiline
-					rows={10}
-					value={formData.foreignText}
-					variant="outlined"
-					onChange={handleChange}
-				/>
-				<div className={classes.buttonContainer}>
-					<CustomButton onClick={handleSubmit} customtype="width_resize">
-						Render Pasted/Entered Text
-					</CustomButton>
-					{enableRss && (
-						<CustomButton customtype="width_resize" onClick={handleGetArticle}>
-							Get Article: {rssSource}
-						</CustomButton>
-					)}
-				</div>
-			</form>
+	const backgroundImageUrl =
+		'https://images.unsplash.com/photo-1596779845727-d88eb78a1b08?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2091&q=80';
 
-			<div className={classes.renderTextOutput}>
-				{enableRss &&
-				rssObject !== '' &&
-				rssObject !== undefined && (
-					<div className={classes.rssTextOutput}>
-						{rssObject.title !== '' && <p className={classes.title}>{rssObject.title}</p>}
-						{rssObject.author !== '' && <p className={classes.author}>{rssObject.author}</p>}
-						{rssObject.link !== '' && (
-							<div className={classes.linkContainer}>
-								{rssObject.fullText === false && (
-									<p className={classes.linkDescription}>The full article is available at: </p>
-								)}
-								{rssObject.fullText === true && (
-									<p className={classes.linkDescription}>Link to article: </p>
-								)}
-								<a href={rssObject.link} target="_blank">
-									<p className={classes.link}>{rssObject.link}</p>
-								</a>
-							</div>
+	return (
+		// <div className={classes.screen} style={{ backgroundImage: `url(${backgroundImageUrl})` }}>
+		<div className={classes.screen}>
+			<div className={classes.renderTextScreen}>
+				<h1>Study {language_object[language]} Text</h1>
+				<form onSubmit={handleSubmit} className={classes.root}>
+					{formData.foreignText !== '' && (
+						<Button
+							className={classes.clearButton}
+							variant="contained"
+							color="secondary"
+							size="small"
+							onClick={clearForeignText}
+							startIcon={<i className="fad fa-trash-alt" />}
+						>
+							Clear Input
+						</Button>
+					)}
+					<TextField
+						id="foreignText"
+						name="foreignText"
+						label="Type or paste foreign language text"
+						multiline
+						rows={10}
+						value={formData.foreignText}
+						variant="outlined"
+						onChange={handleChange}
+					/>
+					<div className={classes.buttonContainer}>
+						<CustomButton onClick={handleSubmit} customtype="width_resize">
+							Render Pasted/Entered Text
+						</CustomButton>
+						{enableRss && (
+							<CustomButton customtype="width_resize" onClick={handleGetArticle}>
+								Get Article: {rssSource}
+							</CustomButton>
 						)}
 					</div>
-				)}
-				{renderedText &&
-				renderedText.length === 0 && (
-					<h4 className={classes.empty}>
-						<i>
-							...type or paste {language_object[language]} text into the input box then click RENDER to
-							process...
-						</i>
-					</h4>
-				)}
+				</form>
 
-				{renderedText &&
-					renderedText.length > 0 &&
-					renderedText.map((paragraphArray, i) => {
-						return (
-							<Paragraph
-								key={i}
-								paragraphArray={paragraphArray}
-								updateModalText={updateModalText}
-								clickedArray={clickedArray}
-								addToClickedArray={addToClickedArray}
-							/>
-						);
-					})}
+				<div className={classes.renderTextOutput}>
+					{enableRss &&
+					rssObject !== '' &&
+					rssObject !== undefined && (
+						<div className={classes.rssTextOutput}>
+							{rssObject.title !== '' && <p className={classes.title}>{rssObject.title}</p>}
+							{rssObject.author !== '' && <p className={classes.author}>{rssObject.author}</p>}
+							{rssObject.link !== '' && (
+								<div className={classes.linkContainer}>
+									{rssObject.fullText === false && (
+										<p className={classes.linkDescription}>The full article is available at: </p>
+									)}
+									{rssObject.fullText === true && (
+										<p className={classes.linkDescription}>Link to article: </p>
+									)}
+									<a href={rssObject.link} target="_blank">
+										<p className={classes.link}>{rssObject.link}</p>
+									</a>
+								</div>
+							)}
+						</div>
+					)}
+					{renderedText &&
+					renderedText.length === 0 && (
+						<h4 className={classes.empty}>
+							<i>
+								...type or paste {language_object[language]} text into the input box then click RENDER
+								to process...
+							</i>
+						</h4>
+					)}
+
+					{renderedText &&
+						renderedText.length > 0 &&
+						renderedText.map((paragraphArray, i) => {
+							return (
+								<Paragraph
+									key={i}
+									paragraphArray={paragraphArray}
+									updateModalText={updateModalText}
+									clickedArray={clickedArray}
+									addToClickedArray={addToClickedArray}
+								/>
+							);
+						})}
+				</div>
+
+				<VocabModal
+					open={open}
+					handleOpen={handleOpen}
+					handleClose={handleClose}
+					wordText={modalText}
+					setting="add_variation_or_root"
+				/>
 			</div>
-
-			<VocabModal
-				open={open}
-				handleOpen={handleOpen}
-				handleClose={handleClose}
-				wordText={modalText}
-				setting="add_variation_or_root"
-			/>
 		</div>
 	);
 }

@@ -81,6 +81,11 @@ export default function NavBar() {
 		history.push('/plans');
 	};
 
+	const goToGettingStarted = () => {
+		dispatch(clearAlerts());
+		history.push('/getting-started');
+	};
+
 	const [ modalOpen, setModalOpen ] = useState(false);
 	const handleModalOpen = () => {
 		setModalOpen(true);
@@ -176,6 +181,7 @@ export default function NavBar() {
 						goToLogout={goToLogout}
 						goToNewUser={goToNewUser}
 						goToPlans={goToPlans}
+						goToGettingStarted={goToGettingStarted}
 					/>
 					<Typography className={classes.title} variant="h5" noWrap>
 						{/* VocabuCards <i className="fad fa-kiwi-bird" /> */}
@@ -201,6 +207,10 @@ export default function NavBar() {
 					</div>
 					<div className={classes.grow} />
 					<div className={classes.sectionDesktop}>
+						<Button color="inherit" href="/#/getting-started" style={{ textTransform: 'none' }}>
+							Getting Started
+						</Button>
+
 						{auth && (
 							<Button color="inherit" href="/#/read" style={{ textTransform: 'none' }}>
 								Study Text
@@ -208,7 +218,7 @@ export default function NavBar() {
 						)}
 						{auth && (
 							<Button color="inherit" href="/#/words" style={{ textTransform: 'none' }}>
-								Vocab Cards
+								My VocabuCards
 							</Button>
 						)}
 						{auth && (

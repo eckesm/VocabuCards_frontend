@@ -30,7 +30,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function LoginForm({ setAlerts, forward = false }) {
+export default function LoginForm({ forward = false }) {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const history = useHistory();
@@ -46,21 +46,25 @@ export default function LoginForm({ setAlerts, forward = false }) {
 
 		const res = await dispatch(loginUserViaAPI(formData.emailAddress, formData.password));
 		dispatch(clearAlerts());
-		setAlerts([]);
+		// setAlerts([]);
 
 		try {
 			if (res.status === 'validation_errors') {
 				try {
-					const newAlerts = [];
+					// const newAlerts = [];
 					Object.keys(res.errors).forEach(err => {
 						res.errors[err].forEach(msg => {
-							newAlerts.push({
+							dispatch(addAlert({
 								type : 'error',
 								text : msg
-							});
+							}));
+							// newAlerts.push({
+							// 	type : 'error',
+							// 	text : msg
+							// });
 						});
 					});
-					setAlerts(newAlerts);
+					// setAlerts(newAlerts);
 				} catch (e) {
 					console.log(e);
 				}
@@ -72,8 +76,6 @@ export default function LoginForm({ setAlerts, forward = false }) {
 							type  : res.status,
 							title : res.title,
 							text  : res.message
-							// closeMs : DEFAULT_ALERT_CLOSE_MS
-							// closeMs : true
 						})
 					);
 					if (res.status === 'success') {

@@ -8,6 +8,12 @@ import WordCard from './WordCard';
 import SelectWord from '../SelectWord';
 
 const useStyles = makeStyles(theme => ({
+	screen         : {
+		margin     : '0px',
+		height     : '100vh',
+		marginTop  : '-10px',
+		paddingTop : '15px'
+	},
 	root           : {
 		fontFamily                     : 'roboto, sans-serif',
 		border                         : '1px solid rgb(200, 200, 200)',
@@ -58,37 +64,43 @@ export default function VocabWordsAll() {
 		history.push(`/words/${wordChoice}`);
 	}
 
+	const backgroundImageUrl =
+		'https://images.unsplash.com/photo-1596779845727-d88eb78a1b08?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2091&q=80';
+
 	return (
-		<div className={classes.root}>
-			<h1>Vocabulary Words</h1>
-			{loading && (
-				<h4>
-					<i>Loading...</i>
-				</h4>
-			)}
-			{!loading && (
-				<div>
-					<SelectWord
-						id="word"
-						name="word"
-						label="Go To Word"
-						// wordChoices={wordChoices}
-						returnSelection={returnSelection}
-						isRequired={false}
-					/>
-					<div className={words_array.length > 0 ? classes.container : classes.emptyContainer}>
-						{words_array.length > 0 &&
-							words_array.map(word => {
-								return <WordCard key={word['id']} word={word} />;
-							})}
-						{words_array.length === 0 && (
-							<h4>
-								<i>No vocab words yet!</i>
-							</h4>
-						)}
+		// <div className={classes.screen} style={{ backgroundImage: `url(${backgroundImageUrl})` }}>
+		<div className={classes.screen}>
+			<div className={classes.root}>
+				<h1>Vocabulary Words</h1>
+				{loading && (
+					<h4>
+						<i>Loading...</i>
+					</h4>
+				)}
+				{!loading && (
+					<div>
+						<SelectWord
+							id="word"
+							name="word"
+							label="Go To Word"
+							// wordChoices={wordChoices}
+							returnSelection={returnSelection}
+							isRequired={false}
+						/>
+						<div className={words_array.length > 0 ? classes.container : classes.emptyContainer}>
+							{words_array.length > 0 &&
+								words_array.map(word => {
+									return <WordCard key={word['id']} word={word} />;
+								})}
+							{words_array.length === 0 && (
+								<h4>
+									<i>No vocab words yet!</i>
+								</h4>
+							)}
+						</div>
 					</div>
-				</div>
-			)}
+				)}
+			</div>
 		</div>
 	);
 }

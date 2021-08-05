@@ -18,8 +18,9 @@ function App() {
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const access_token = localStorage.getItem('access_token') || null;
-	const { user, alerts, current_plan, stripe_period_end, subscription_status } = useSelector(store => store);
-	const [ displayAlerts, setDisplayAlerts ] = useState(alerts);
+	// const { user, alerts } = useSelector(store => store);
+	const { user } = useSelector(store => store);
+	// const [ displayAlerts, setDisplayAlerts ] = useState(alerts);
 	const [ loading, setLoading ] = useState(true);
 
 	async function attemptGetUserInfo() {
@@ -51,12 +52,12 @@ function App() {
 		}
 	}, []);
 
-	useEffect(
-		() => {
-			setDisplayAlerts(alerts);
-		},
-		[ alerts ]
-	);
+	// useEffect(
+	// 	() => {
+	// 		setDisplayAlerts(alerts);
+	// 	},
+	// 	[ alerts ]
+	// );
 
 	// useEffect(
 	// 	() => {
@@ -78,7 +79,7 @@ function App() {
 				<div>
 					<NavBar />
 					<div className="App-content">
-						<AlertsContainer alerts={displayAlerts} />
+						{/* <AlertsContainer alerts={displayAlerts} /> */}
 						<Routes />
 					</div>
 				</div>

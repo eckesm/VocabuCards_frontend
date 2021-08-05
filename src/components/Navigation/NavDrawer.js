@@ -35,7 +35,14 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function NavDrawer({ handleModalOpen, goToLogin, goToLogout, goToNewUser,goToPlans }) {
+export default function NavDrawer({
+	handleModalOpen,
+	goToLogin,
+	goToLogout,
+	goToNewUser,
+	goToPlans,
+	goToGettingStarted
+}) {
 	const classes = useStyles();
 	const history = useHistory();
 	const { user, language, language_object, current_plan } = useSelector(store => store);
@@ -112,6 +119,15 @@ export default function NavDrawer({ handleModalOpen, goToLogin, goToLogout, goTo
 					</ListItem>
 				)}
 
+				<ListItem button onClick={goToGettingStarted}>
+					<ListItemText>Getting Started</ListItemText>
+				</ListItem>
+				{auth && (
+					<ListItem button onClick={goToPlans}>
+						<ListItemText>Subscriptions</ListItemText>
+					</ListItem>
+				)}
+
 				<Divider />
 
 				{!auth && (
@@ -142,7 +158,18 @@ export default function NavDrawer({ handleModalOpen, goToLogin, goToLogout, goTo
 							history.push('/words');
 						}}
 					>
-						<ListItemText>Vocab Cards</ListItemText>
+						<ListItemText>My VocabuCards</ListItemText>
+					</ListItem>
+				)}
+				{auth && (
+					<ListItem>
+						<SelectWord
+							id="word"
+							name="word"
+							label="Go To Word"
+							returnSelection={returnSelection}
+							isRequired={false}
+						/>
 					</ListItem>
 				)}
 				{auth && (
