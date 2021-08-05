@@ -12,6 +12,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import { Divider, ListItemIcon, ListItemText } from '@material-ui/core';
 
 import SelectLanguage from './SelectLanguage';
+import SelectWord from '../SelectWord';
 
 const useStyles = makeStyles(theme => ({
 	list           : {
@@ -34,10 +35,11 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function NavDrawer({ handleModalOpen, goToLogin, goToLogout, goToNewUser }) {
+export default function NavDrawer({ handleModalOpen, goToLogin, goToLogout, goToNewUser,goToPlans }) {
 	const classes = useStyles();
 	const history = useHistory();
-	const { user, language, language_object } = useSelector(store => store);
+	const { user, language, language_object, current_plan } = useSelector(store => store);
+	const [ loading, setLoading ] = useState(true);
 	const languageName = language_object[language];
 	const [ state, setState ] = React.useState({
 		top    : false,
@@ -67,6 +69,10 @@ export default function NavDrawer({ handleModalOpen, goToLogin, goToLogout, goTo
 
 		setState({ ...state, [anchor]: open });
 	};
+
+	function returnSelection(wordChoice) {
+		history.push(`/words/${wordChoice}`);
+	}
 
 	const list = anchor => (
 		<div
@@ -98,6 +104,11 @@ export default function NavDrawer({ handleModalOpen, goToLogin, goToLogout, goTo
 				{auth && (
 					<ListItem>
 						<SelectLanguage />
+					</ListItem>
+				)}
+				{auth && (
+					<ListItem button onClick={goToPlans}>
+						<ListItemText>Subscriptions</ListItemText>
 					</ListItem>
 				)}
 
@@ -132,6 +143,17 @@ export default function NavDrawer({ handleModalOpen, goToLogin, goToLogout, goTo
 						}}
 					>
 						<ListItemText>Vocab Cards</ListItemText>
+					</ListItem>
+				)}
+				{auth && (
+					<ListItem>
+						<SelectWord
+							id="word"
+							name="word"
+							label="Go To Word"
+							returnSelection={returnSelection}
+							isRequired={false}
+						/>
 					</ListItem>
 				)}
 				{auth && (

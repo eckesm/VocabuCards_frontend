@@ -36,7 +36,7 @@ export default function Logout() {
 					type    : res.status,
 					title   : res.title,
 					text    : res.message,
-					closeMs : DEFAULT_ALERT_CLOSE_MS
+					// closeMs : DEFAULT_ALERT_CLOSE_MS
 				})
 			);
 		} catch (e) {

@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { LOGOUT_USER, ADD_ALERT, CLEAR_ALERTS, SET_ALERTS, REMOVE_ALERT } from './types';
+import { LOGOUT_USER, ADD_ALERT, CLEAR_ALERTS, SET_ALERTS, REMOVE_ALERT, GET_STRIPE_CUSTOMER_ID } from './types';
 import { customAxios } from '../helpers/tokens';
 
 import { getUserInfo } from './vocab';
@@ -20,7 +20,7 @@ export function registerUserViaAPI(name, email_address, password, password_check
 			if (res.data.status === 'success') {
 				localStorage.setItem('access_token', res.data.access_token);
 				localStorage.setItem('refresh_token', res.data.refresh_token);
-				// dispatch(getUserInfo());
+				dispatch(getUserInfo());
 				return res.data;
 			}
 			else {
@@ -41,8 +41,8 @@ export function loginUserViaAPI(email_address, password) {
 			if (res.data.status === 'success') {
 				localStorage.setItem('access_token', res.data.access_token);
 				localStorage.setItem('refresh_token', res.data.refresh_token);
-				localStorage.setItem('access_token_exp', res.data.access_token_exp);
-				localStorage.setItem('refresh_token_exp', res.data.refresh_token_exp);
+				// localStorage.setItem('access_token_exp', res.data.access_token_exp);
+				// localStorage.setItem('refresh_token_exp', res.data.refresh_token_exp);
 				dispatch(getUserInfo());
 				return res.data;
 			}
@@ -83,6 +83,28 @@ export function removeAlert(alertId) {
 	};
 }
 
+// GET_STRIPE_CUSTOMER_ID
+export function getStripeCustomerIdViaAPI() {
+	return async function() {
+		try {
+			const headers = {
+				Authorization : 'Bearer ' + getAccessToken()
+			};
+			const res = await customAxios.get(`${API_URL}/stripe-customer-id`, {
+				headers : headers
+			});
+			return async function(dispatch) {
+				dispatch({
+					type               : GET_STRIPE_CUSTOMER_ID,
+					stripe_customer_id : res.data.stripe_customer_id
+				});
+			};
+		} catch (e) {
+			console.log(e);
+		}
+	};
+}
+
 // LOGOUT_USER
 export function logoutUserViaAPI() {
 	return async function() {
@@ -109,8 +131,8 @@ export function logoutUserViaAPI() {
 export function logoutUser() {
 	localStorage.removeItem('access_token');
 	localStorage.removeItem('refresh_token');
-	localStorage.removeItem('access_token_exp');
-	localStorage.removeItem('refresh_token_exp');
+	// localStorage.removeItem('access_token_exp');
+	// localStorage.removeItem('refresh_token_exp');
 	localStorage.removeItem('rss_object');
 	return async function(dispatch) {
 		dispatch({

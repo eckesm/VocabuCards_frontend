@@ -24,7 +24,7 @@ export async function refreshAccessTokenViaAPI() {
 		});
 
 		localStorage.setItem('access_token', res.data.access_token);
-		localStorage.setItem('access_token_exp', res.data.access_token_exp);
+		// localStorage.setItem('access_token_exp', res.data.access_token_exp);
 
 		return res.data;
 	} catch (e) {
@@ -125,7 +125,7 @@ export async function resetPasswordViaAPI(token, password, password_check) {
 }
 
 export async function getDictionaryWordViaAPI(word) {
-	let adjustedWord = word;
+	let adjustedWord = word.toLowerCase();
 	let length = word.length;
 
 	if (word.startsWith('a ')) {
@@ -297,6 +297,39 @@ export async function deleteVariation(id) {
 
 	try {
 		const res = await customAxios.delete(`${API_URL}/variations/${id}`, { headers: headers });
+		return res.data;
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+export async function createStripeCheckoutSession(price_id, stripe_customer_id) {
+	const data = {
+		price_id,
+		stripe_customer_id
+	};
+	const headers = {
+		Authorization : 'Bearer ' + getAccessToken()
+	};
+
+	try {
+		const res = await customAxios.post(`${API_URL}/create-checkout-session`, data, { headers: headers });
+		return res.data;
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+export async function createStripeBillingPortalSession(stripe_customer_id) {
+	const data = {
+		stripe_customer_id
+	};
+	const headers = {
+		Authorization : 'Bearer ' + getAccessToken()
+	};
+
+	try {
+		const res = await customAxios.post(`${API_URL}/create-billing-portal-session`, data, { headers: headers });
 		return res.data;
 	} catch (e) {
 		console.log(e);

@@ -14,23 +14,31 @@ import {
 	CLEAR_ALERTS,
 	SET_ALERTS,
 	REMOVE_ALERT,
-	GET_USER_INFO
+	GET_USER_INFO,
+	GET_STRIPE_CUSTOMER_ID
 } from './actions/types';
 
 const INITIAL_STATE = {
-	alerts             : [],
-	first_login        : true,
-	is_email_confirmed : false,
-	language           : null,
-	languages          : [],
-	language_object    : {},
-	last_login         : null,
-	name               : '',
-	news_sources       : {},
-	text_input         : null,
-	user               : null,
-	variations         : {},
-	words_array        : null
+	alerts                : [],
+	current_plan          : null,
+	first_login           : null,
+	is_email_confirmed    : null,
+	language              : null,
+	languages             : [],
+	language_object       : {},
+	last_login            : null,
+	name                  : '',
+	news_sources          : {},
+	stripe_customer_id    : null,
+	stripe_payment_method : null,
+	stripe_period_start   : null,
+	stripe_period_end     : null,
+	subscription_status   : null,
+	text_input            : null,
+	trial_end             : null,
+	user                  : null,
+	variations            : {},
+	words_array           : null
 };
 
 function sortByRoot(words_array) {
@@ -75,17 +83,25 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 		case GET_USER_INFO:
 			return {
 				...state,
-				is_email_confirmed : action.is_email_confirmed,
-				language           : action.language,
-				languages          : action.languages,
-				language_object    : action.language_object,
-				last_login         : action.last_login,
-				name               : action.name,
-				news_sources       : action.news_sources,
-				text_input         : action.text_input,
-				user               : action.user,
-				variations         : createVariationsObject(action.words_array),
-				words_array        : action.words_array
+				current_plan          : action.current_plan,
+				first_login           : action.first_login,
+				is_email_confirmed    : action.is_email_confirmed,
+				language              : action.language,
+				languages             : action.languages,
+				language_object       : action.language_object,
+				last_login            : action.last_login,
+				name                  : action.name,
+				news_sources          : action.news_sources,
+				stripe_customer_id    : action.stripe_customer_id,
+				stripe_payment_method : action.stripe_payment_method,
+				stripe_period_start   : action.stripe_period_start,
+				stripe_period_end     : action.stripe_period_end,
+				subscription_status   : action.subscription_status,
+				text_input            : action.text_input,
+				trial_end             : action.trial_end,
+				user                  : action.user,
+				variations            : createVariationsObject(action.words_array),
+				words_array           : action.words_array
 			};
 
 		case ADD_ALERT:
@@ -120,6 +136,11 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 				...state,
 				words_array : action.words_array,
 				variations  : createVariationsObject(action.words_array)
+			};
+		case GET_STRIPE_CUSTOMER_ID:
+			return {
+				...state,
+				stripe_customer_id : action.stripe_customer_id
 			};
 
 		case SET_USER_LANGUAGE:

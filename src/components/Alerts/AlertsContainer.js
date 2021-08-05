@@ -5,6 +5,8 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import SingleAlert from './SingleAlert';
 
+import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
+
 const useStyles = makeStyles(theme => ({
 	alerts : {
 		// marginTop : '60px',
@@ -19,7 +21,7 @@ export default function AlertsContainer({ alerts }) {
 	return (
 		<div className={classes.alerts}>
 			{alerts.length > 0 &&
-				alerts.map(alert => {
+				alerts.map((alert, i) => {
 					const id = alert.id ? alert.id : uuid();
 					return (
 						<SingleAlert
@@ -28,7 +30,8 @@ export default function AlertsContainer({ alerts }) {
 							type={alert.type}
 							title={alert.title}
 							text={alert.text}
-							closeMs={alert.closeMs || null}
+							// closeMs={alert.closeMs || null}
+							closeMs={alert.closeMs === false ? null : DEFAULT_ALERT_CLOSE_MS * (i + 1)}
 						/>
 					);
 				})}

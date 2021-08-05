@@ -1,4 +1,7 @@
+// import React, { useState, useEffect } from 'react';
 import React, { useState } from 'react';
+
+import { useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -16,35 +19,59 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function SelectWord({ id, 
-	label, 
-	// updateExistingWord, 
-	wordChoices = [], 
-	// setShowNewWord 
-	returnSelection
+export default function SelectWord({
+	id,
+	label,
+	// updateExistingWord,
+	// wordChoices = [],
+	// setShowNewWord
+	returnSelection,
+	isRequired = false,
+	addNew = false
 }) {
 	const classes = useStyles();
 	const [ data, setData ] = useState('NEW');
+	const { words_array = [] } = useSelector(store => store);
+	const wordChoices = [];
+	try{
+		words_array.forEach(choice => {
+			wordChoices.push({ value: choice.id, name: choice.root });
+		});
+	}catch(e){
+		
+	}
 
-	
+	// useEffect(
+	// 	() => {
+	// 		words_array.forEach(choice => {
+	// 			wordChoices.push({ value: choice.id, name: choice.root });
+	// 		});
+	// 	},
+	// 	[]
+	// );
 
 	const handleChange = event => {
 		setData(event.target.value);
-		// updateExistingWord(event.target.value);
-		// if (event.target.value === 'NEW') {
-		// 	setShowNewWord(true);
-		// }
-		// else {
-		// 	setShowNewWord(false);
-		// }
-		returnSelection(event.target.value)
+		returnSelection(event.target.value);
 	};
 
 	return (
 		<div>
-			<FormControl required variant="outlined" className={classes.formControl}>
+			<FormControl variant="outlined" className={classes.formControl} required={isRequired ? true : false}>
 				<InputLabel id={id}>{label}</InputLabel>
-				<Select labelId={id} id={id} value={data} onChange={handleChange} label={label}>
+				<Select
+					labelId={id}
+					id={id}
+					value={data}
+					onChange={handleChange}
+					label={label}
+					disabled={wordChoices.length === 0 ? true : false}
+				>
+					{addNew && (
+						<MenuItem key="NONE" value="">
+							-- NEW WORD --
+						</MenuItem>
+					)}
 					{wordChoices.map(choice => {
 						return (
 							<MenuItem key={choice.value} value={choice.value}>

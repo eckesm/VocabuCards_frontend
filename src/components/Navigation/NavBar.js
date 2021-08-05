@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function NavBar() {
-	const { user, language, language_object } = useSelector(store => store);
+	const { user, language, language_object, current_plan } = useSelector(store => store);
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const languageName = language_object[language];
@@ -74,6 +74,11 @@ export default function NavBar() {
 	const goToLogout = () => {
 		dispatch(clearAlerts());
 		history.push('/logout');
+	};
+
+	const goToPlans = () => {
+		dispatch(clearAlerts());
+		history.push('/plans');
 	};
 
 	const [ modalOpen, setModalOpen ] = useState(false);
@@ -170,17 +175,24 @@ export default function NavBar() {
 						goToLogin={goToLogin}
 						goToLogout={goToLogout}
 						goToNewUser={goToNewUser}
+						goToPlans={goToPlans}
 					/>
 					<Typography className={classes.title} variant="h5" noWrap>
 						{/* VocabuCards <i className="fad fa-kiwi-bird" /> */}
 						VocabuCards
 					</Typography>
+					{/* {auth &&
+					current_plan === 'trial' && (
+						<Button color="inherit" onClick={goToPlans} style={{ textTransform: 'none' }}>
+							Trial
+						</Button>
+					)} */}
 					<div className={classes.sectionDesktop}>
 						{auth && (
 							<Typography
 								className={classes.title}
 								variant="h6"
-								style={{ marginLeft: '15px', fontStyle: 'italic' }}
+								style={{ marginLeft: '15px', paddingRight: '5px', fontStyle: 'italic' }}
 								noWrap
 							>
 								{languageName}

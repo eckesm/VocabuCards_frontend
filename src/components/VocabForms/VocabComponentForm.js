@@ -176,7 +176,7 @@ export default function VocabComponentForm({
 		if (wordText) {
 			if (formData.translation === '') {
 				try {
-					translateAPI(formData.variation);
+					translateAPI(formData.variation.toLowerCase());
 				} catch (e) {
 					console.log(e);
 				}
@@ -341,7 +341,7 @@ export default function VocabComponentForm({
 
 	async function translateAPI() {
 		if (formData.variation !== '') {
-			const results = await getTranslateWordViaAPI(formData.variation, language);
+			const results = await getTranslateWordViaAPI(formData.variation.toLowerCase(), language);
 			try {
 				if (results.status === 'success') {
 					setFormData({ ...formData, translation: results.data });
@@ -413,7 +413,7 @@ export default function VocabComponentForm({
 			...formData,
 			existingWord : wordChoice
 		});
-		if (wordChoice === 'NEW') {
+		if (wordChoice === '') {
 			setShowNewWord(true);
 		}
 		else {
@@ -563,8 +563,10 @@ export default function VocabComponentForm({
 
 				<div className={classes.sectionContainer}>
 					<p className={classes.sectionInstructions}>
-						If you have an example of how the word is used, enter the text into the <b>Example</b> field and
-						click the <b>Translate</b> button to better understand how the word is being used.
+						Enter or paste text containing{' '}
+						{formData.variation === '' ? 'the word ' : <b>{formData.variation}</b>} into the <b>Example</b>{' '}
+						field and click the <b>Translate</b> button to better understand how the word is being used in
+						context.
 					</p>
 					<TextField
 						id="examples"
@@ -599,8 +601,10 @@ export default function VocabComponentForm({
 						autoCapitalize="false"
 					/>
 					<p className={classes.sectionInstructions}>
-						Update the <b>Variation Translation</b> based off of the <b>Example Translation</b> if
-						necessary.
+						Update {formData.translation !== '' && <b>{formData.translation}</b>}
+						{formData.translation !== '' ? ' (the ' : ' the '}
+						<b>Variation Translation</b>
+						{formData.translation !== '' && ')'} based off of the {<b>Example Translation</b>} if necessary.
 					</p>
 				</div>
 
@@ -697,8 +701,10 @@ export default function VocabComponentForm({
 								id="existingWord"
 								name="existingWord"
 								label="Add to Existing Word"
-								wordChoices={wordChoices}
+								// wordChoices={wordChoices}
 								returnSelection={returnSelection}
+								isRequired={false}
+								addNew={true}
 							/>
 							{!showNewWord && (
 								<CustomButton customtype="small" onClick={showExistingWordTab}>

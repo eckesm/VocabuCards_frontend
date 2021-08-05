@@ -16,6 +16,7 @@ import {
 import { addAlert } from './auth';
 import { API_URL } from '../helpers/API';
 import { customAxios } from '../helpers/tokens';
+import { stripeCurrentAlert, stripeExpiringAlert, stripeTrialAlert, stripeNoPaymentAlert } from '../helpers/Stripe';
 import { DEFAULT_ALERT_CLOSE_MS } from '../settings';
 
 function getAccessToken() {
@@ -34,6 +35,7 @@ export function getUserInfo() {
 				const res = await customAxios.get(`${API_URL}/start`, { headers: headers });
 
 				let {
+					current_plan,
 					current_text,
 					first_login,
 					is_email_confirmed,
@@ -42,6 +44,12 @@ export function getUserInfo() {
 					last_source_code,
 					name,
 					news_sources,
+					stripe_customer_id,
+					stripe_payment_method,
+					stripe_period_start,
+					stripe_period_end,
+					subscription_status,
+					trial_end,
 					user,
 					words_array
 				} = res.data;
@@ -54,20 +62,28 @@ export function getUserInfo() {
 				});
 
 				dispatch({
-					type               : GET_USER_INFO,
+					type                  : GET_USER_INFO,
+					current_plan,
 					first_login,
 					is_email_confirmed,
-					language           : last_source_code,
-					languages          : languages,
-					language_object    : languageObject,
+					language              : last_source_code,
+					languages             : languages,
+					language_object       : languageObject,
 					last_login,
 					name,
-					news_sources,
-					text_input         : current_text,
+					news_sources          : news_sources || {},
+					stripe_customer_id,
+					stripe_payment_method,
+					stripe_period_start,
+					stripe_period_end,
+					subscription_status,
+					text_input            : current_text || null,
+					trial_end,
 					user,
-					words_array
+					words_array           : words_array || []
 				});
 
+				let closeMs = true;
 				if (first_login) {
 					// console.log('added first login alert');
 					dispatch(
@@ -75,10 +91,27 @@ export function getUserInfo() {
 							type    : 'success',
 							title   : `Welcome to VocabuCards, ${name}!`,
 							text    : 'You have successfully registered for an account.  Time to get studying...',
-							closeMs : DEFAULT_ALERT_CLOSE_MS
+							closeMs : false
 						})
 					);
+					closeMs = false;
 				}
+				// console.log(trial_end);
+				// console.log(Date.now() / 1000);
+				// console.log('TRIAL', trial_end > Date.now()/1000);
+				if (!stripe_payment_method) {
+					dispatch(addAlert(stripeNoPaymentAlert(current_plan, stripe_period_end, false)));
+				}
+				else if (trial_end > Date.now() / 1000) {
+					dispatch(addAlert(stripeTrialAlert(current_plan, stripe_period_end, closeMs)));
+				}
+				else if (subscription_status === 'expiring') {
+					dispatch(addAlert(stripeExpiringAlert(current_plan, stripe_period_end, false)));
+				}
+				else {
+					dispatch(addAlert(stripeCurrentAlert(current_plan, stripe_period_end, closeMs)));
+				}
+
 				if (!is_email_confirmed) {
 					// console.log('added confirm email alert');
 					dispatch(
@@ -86,7 +119,7 @@ export function getUserInfo() {
 							type    : 'info',
 							title   : 'Confirm Email Address',
 							text    : `Please confirm your email address... you should already have an email from us in your ${user} inbox.`,
-							closeMs : DEFAULT_ALERT_CLOSE_MS * 2
+							closeMs : closeMs
 						})
 					);
 				}

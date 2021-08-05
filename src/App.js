@@ -4,6 +4,7 @@ import { useHistory } from 'react-router';
 
 import { getUserInfo } from './actions/vocab';
 import { addAlert, logoutUser } from './actions/auth';
+import { stripeCurrentAlert, stripeSuccessAlert, stripeExpiringAlert } from './helpers/Stripe';
 
 import AlertsContainer from './components/Alerts/AlertsContainer';
 
@@ -17,7 +18,7 @@ function App() {
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const access_token = localStorage.getItem('access_token') || null;
-	const { user, alerts } = useSelector(store => store);
+	const { user, alerts, current_plan, stripe_period_end, subscription_status } = useSelector(store => store);
 	const [ displayAlerts, setDisplayAlerts ] = useState(alerts);
 	const [ loading, setLoading ] = useState(true);
 
@@ -56,6 +57,20 @@ function App() {
 		},
 		[ alerts ]
 	);
+
+	// useEffect(
+	// 	() => {
+	// 		if (stripe_period_end && current_plan) {
+	// 			if (subscription_status === 'expiring') {
+	// 				dispatch(addAlert(stripeExpiringAlert(current_plan, stripe_period_end,true)));
+	// 			}
+	// 			else {
+	// 				dispatch(addAlert(stripeCurrentAlert(current_plan, stripe_period_end,true)));
+	// 			}
+	// 		}
+	// 	},
+	// 	[ stripe_period_end, current_plan ]
+	// );
 
 	return (
 		<div className="App">

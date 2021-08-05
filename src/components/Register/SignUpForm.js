@@ -83,7 +83,8 @@ export default function SignUpForm({ setAlerts }) {
 						type    : res.status,
 						title   : res.title,
 						text    : res.message,
-						closeMs : DEFAULT_ALERT_CLOSE_MS
+						// closeMs : DEFAULT_ALERT_CLOSE_MS
+						closeMs : false
 					}
 				]);
 			}

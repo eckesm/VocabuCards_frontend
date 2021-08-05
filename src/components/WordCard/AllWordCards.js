@@ -39,10 +39,10 @@ export default function VocabWordsAll() {
 	const classes = useStyles();
 	const history = useHistory();
 	const { words_array = [] } = useSelector(store => store);
-	const wordChoices = [];
-	words_array.forEach(choice => {
-		wordChoices.push({ value: choice.id, name: choice.root });
-	});
+	// const wordChoices = [];
+	// words_array.forEach(choice => {
+	// 	wordChoices.push({ value: choice.id, name: choice.root });
+	// });
 	const [ loading, setLoading ] = useState(true);
 
 	useEffect(
@@ -72,8 +72,9 @@ export default function VocabWordsAll() {
 						id="word"
 						name="word"
 						label="Go To Word"
-						wordChoices={wordChoices}
+						// wordChoices={wordChoices}
 						returnSelection={returnSelection}
+						isRequired={false}
 					/>
 					<div className={words_array.length > 0 ? classes.container : classes.emptyContainer}>
 						{words_array.length > 0 &&

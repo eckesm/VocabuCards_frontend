@@ -1,16 +1,15 @@
-// import React, { useEffect } from 'react';
 import React from 'react';
-// import { useSelector, useDispatch } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import { TextField, Button, Link } from '@material-ui/core';
+// import { TextField, Button, Link } from '@material-ui/core';
+import { TextField, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { clearAlerts, addAlert, loginUserViaAPI } from '../../actions/auth';
 import useFields from '../../hooks/useFields';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
-import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
+// import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
 import CustomButton from '../CustomButton';
 
@@ -70,10 +69,11 @@ export default function LoginForm({ setAlerts, forward = false }) {
 				try {
 					dispatch(
 						addAlert({
-							type    : res.status,
-							title   : res.title,
-							text    : res.message,
-							closeMs : DEFAULT_ALERT_CLOSE_MS
+							type  : res.status,
+							title : res.title,
+							text  : res.message
+							// closeMs : DEFAULT_ALERT_CLOSE_MS
+							// closeMs : true
 						})
 					);
 					if (res.status === 'success') {

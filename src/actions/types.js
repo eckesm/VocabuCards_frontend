@@ -4,6 +4,7 @@ export const ADD_ALERT = 'ADD_ALERT';
 export const SET_ALERTS = 'SET_ALERTS';
 export const CLEAR_ALERTS = 'CLEAR_ALERTS';
 export const REMOVE_ALERT = 'REMOVE_ALERT';
+export const GET_STRIPE_CUSTOMER_ID = 'GET_STRIPE_CUSTOMER_ID';
 
 // vocabulary
 export const GET_USER_INFO = 'GET_USER_INFO';
