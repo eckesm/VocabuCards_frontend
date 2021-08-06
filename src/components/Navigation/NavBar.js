@@ -12,11 +12,11 @@ import { clearAlerts } from '../../actions/auth';
 
 import NavDrawer from './NavDrawer';
 import VocabModal from '../VocabForms/VocabModal';
-// import CustomButton from '../CustomButton';
 
 const useStyles = makeStyles(theme => ({
 	grow           : {
-		flexGrow : 1
+		flexGrow : 1,
+		paddingBottom:'65px'
 	},
 	menuButton     : {
 		marginRight : theme.spacing(2)
@@ -95,86 +95,13 @@ export default function NavBar() {
 	};
 
 	const classes = useStyles();
-	// const [ anchorEl, setAnchorEl ] = React.useState(null);
+
 	const [ mobileMoreAnchorEl, setMobileMoreAnchorEl ] = React.useState(null);
-
-	// const isMenuOpen = Boolean(anchorEl);
-	// const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-	// const handleMobileMenuClose = () => {
-	// 	setMobileMoreAnchorEl(null);
-	// };
-
-	// const handleMenuClose = () => {
-	// 	setAnchorEl(null);
-	// 	handleMobileMenuClose();
-	// };
-
-	// const handleMobileMenuOpen = event => {
-	// 	setMobileMoreAnchorEl(event.currentTarget);
-	// };
-
-	// const mobileMenuId = 'primary-search-account-menu-mobile';
-	// const renderMobileMenu = (
-	// 	<Menu
-	// 		anchorEl={mobileMoreAnchorEl}
-	// 		anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-	// 		id={mobileMenuId}
-	// 		keepMounted
-	// 		transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-	// 		open={isMobileMenuOpen}
-	// 		onClose={handleMobileMenuClose}
-	// 	>
-	// 		{auth && (
-	// 			<MenuItem>
-	// 				<Button color="inherit" href="/#/read">
-	// 					Study {languageName} Text
-	// 				</Button>
-	// 			</MenuItem>
-	// 		)}
-	// 		{auth && (
-	// 			<MenuItem>
-	// 				<Button color="inherit" href="/#/words">
-	// 					{languageName} Vocab Cards
-	// 				</Button>
-	// 			</MenuItem>
-	// 		)}
-	// 		{auth && (
-	// 			<MenuItem>
-	// 				<Button color="inherit" onClick={handleModalOpen}>
-	// 					Add Word
-	// 				</Button>
-	// 			</MenuItem>
-	// 		)}
-	// 		{auth && (
-	// 			<MenuItem>
-	// 				<Button color="inherit" onClick={goToLogout}>
-	// 					Logout
-	// 				</Button>
-	// 			</MenuItem>
-	// 		)}
-	// 		{!auth && (
-	// 			<MenuItem>
-	// 				<Button color="inherit" onClick={goToNewUser}>
-	// 					New User
-	// 				</Button>
-	// 			</MenuItem>
-	// 		)}
-	// 		{!auth && (
-	// 			<MenuItem>
-	// 				<Button color="inherit" onClick={goToLogin}>
-	// 					Login
-	// 				</Button>
-	// 			</MenuItem>
-	// 		)}
-	// 	</Menu>
-	// );
 
 	return (
 		<div className={classes.grow}>
 			<AppBar position="fixed">
 				<Toolbar>
-					{/* {auth && <NavDrawer />} */}
 					<NavDrawer
 						handleModalOpen={handleModalOpen}
 						goToLogin={goToLogin}
@@ -184,15 +111,8 @@ export default function NavBar() {
 						goToGettingStarted={goToGettingStarted}
 					/>
 					<Typography className={classes.title} variant="h5" noWrap>
-						{/* VocabuCards <i className="fad fa-kiwi-bird" /> */}
 						VocabuCards
 					</Typography>
-					{/* {auth &&
-					current_plan === 'trial' && (
-						<Button color="inherit" onClick={goToPlans} style={{ textTransform: 'none' }}>
-							Trial
-						</Button>
-					)} */}
 					<div className={classes.sectionDesktop}>
 						{auth && (
 							<Typography
@@ -226,11 +146,6 @@ export default function NavBar() {
 								Add Word
 							</Button>
 						)}
-						{/* {auth && (
-							<Button color="inherit" onClick={goToLogout} style={{ textTransform: 'none' }}>
-								Logout
-							</Button>
-						)} */}
 						{!auth && (
 							<Button color="inherit" onClick={goToNewUser} style={{ textTransform: 'none' }}>
 								New User
@@ -240,12 +155,6 @@ export default function NavBar() {
 							<Button color="inherit" onClick={goToLogin} style={{ textTransform: 'none' }}>
 								Login
 							</Button>
-
-							// 	<CustomButton
-							// 	onClick={goToLogin}
-							// 	>
-							// 	Login
-							// </CustomButton>
 						)}
 					</div>
 					<div className={classes.sectionMobile}>
@@ -259,22 +168,12 @@ export default function NavBar() {
 								{languageName}
 							</Typography>
 						)}
-						{/* <IconButton
-							aria-label="show more"
-							aria-controls={mobileMenuId}
-							aria-haspopup="true"
-							onClick={handleMobileMenuOpen}
-							color="inherit"
-						>
-							<MoreIcon />
-						</IconButton> */}
 					</div>
 				</Toolbar>
 				{modalOpen && (
 					<VocabModal open={modalOpen} handleClose={handleModalClose} setting="add_variation_or_root" />
 				)}
 			</AppBar>
-			{/* {renderMobileMenu} */}
 		</div>
 	);
 }

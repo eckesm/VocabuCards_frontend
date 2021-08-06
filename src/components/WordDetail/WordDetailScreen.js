@@ -11,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import { deleteWord } from '../../helpers/API';
 import { deleteWordInState } from '../../actions/vocab';
 
+import NavBar from '../Navigation/NavBar';
 import WordDetailAccordian from './WordDetailAccordian';
 import VocabModal from '../VocabForms/VocabModal';
 import DeleteDialog from '../VocabForms/DeleteDialog';
@@ -21,9 +22,24 @@ import UnauthorizedRouteNotice from '../Routes/UnauthorizedRouteNotice';
 const useStyles = makeStyles(theme => ({
 	screen                      : {
 		margin     : '0px',
-		height     : '100vh',
+		height     : 'max-content',
 		marginTop  : '-10px',
 		paddingTop : '15px'
+	},
+	container                   : {
+		margin                         : '0 auto',
+		[theme.breakpoints.down('xs')]: {
+			margin    : '5px',
+			marginTop : '-50px'
+		},
+		[theme.breakpoints.up('sm')]: {
+			margin    : '15px',
+			marginTop : '-35px'
+		},
+		[theme.breakpoints.up('lg')]: {
+			margin    : '25px',
+			marginTop : '-10px'
+		}
 	},
 	button                      : {
 		[theme.breakpoints.down('sm')]: {
@@ -121,7 +137,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function WordDetail() {
+export default function WordDetailScreen() {
 	const classes = useStyles();
 	const { rootId } = useParams();
 	const dispatch = useDispatch();
@@ -169,15 +185,12 @@ export default function WordDetail() {
 
 	const notes = word ? word.notes : null;
 
-	const backgroundImageUrl =
-		'https://images.unsplash.com/photo-1596779845727-d88eb78a1b08?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2091&q=80';
-
 	return (
-		// <div className={classes.screen} style={{ backgroundImage: `url(${backgroundImageUrl})` }}>
 		<div className={classes.screen}>
+			<NavBar />
 			{access &&
 			word && (
-				<div>
+				<div className={classes.container}>
 					<div className={classes.button}>
 						<CustomButton href={'/#/words'} startIcon={<i className="fas fa-arrow-circle-left" />}>
 							Go to {languageName} Vocab Cards

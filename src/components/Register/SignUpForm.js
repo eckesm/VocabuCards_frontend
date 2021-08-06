@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-// import ReactFaker from 'react-faker';
 
 import { TextField, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { registerUserViaAPI } from '../../actions/auth';
 import { clearAlerts, addAlert } from '../../actions/auth';
-// import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
 import SelectStartLanguage from './SelectStartLanguage';
 import CustomButton from '../CustomButton';
@@ -61,7 +59,6 @@ export default function SignUpForm() {
 	async function handleSubmit(evt) {
 		evt.preventDefault();
 		dispatch(clearAlerts());
-		// setAlerts([]);
 
 		const res = await dispatch(
 			registerUserViaAPI(
@@ -86,31 +83,17 @@ export default function SignUpForm() {
 						closeMs : false
 					}
 				));
-				// setAlerts([
-				// 	{
-				// 		type    : res.status,
-				// 		title   : res.title,
-				// 		text    : res.message,
-				// 		closeMs : false
-				// 	}
-				// ]);
 			}
 			if (res.status === 'error') {
 				try {
-					// const newAlerts = [];
 					Object.keys(res.errors).forEach(err => {
 						res.errors[err].forEach(msg => {
 							dispatch(addAlert({
 								type : 'error',
 								text : msg
 							}));
-							// newAlerts.push({
-							// 	type : 'error',
-							// 	text : msg
-							// });
 						});
 					});
-					// setAlerts(newAlerts);
 				} catch (e) {
 					console.log(e);
 				}
@@ -119,7 +102,6 @@ export default function SignUpForm() {
 			history.push('/error');
 		}
 	}
-
 
 
 	return (
@@ -167,10 +149,7 @@ export default function SignUpForm() {
 				/>
 				<SelectStartLanguage updateStartLanguage={updateStartLanguage} />
 				<CustomButton
-					// variant="contained"
 					type="submit"
-					// color="primary"
-					// className={classes.button}
 					style={{ marginTop: '20px', width: '125px' }}
 				>
 					Submit

@@ -1,48 +1,55 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 
+import NavBar from '../Navigation/NavBar';
 import Instructions from './Instructions';
 import AlertsContainer from '../Alerts/AlertsContainer';
 
+const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_MOBILE;
+const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_DESKTOP;
+
 const useStyles = makeStyles(theme => ({
 	screen    : {
-		margin     : '0px',
-		height     : '100vh',
-		marginTop  : '-10px',
-		paddingTop : '15px'
+		height                         : 'max-content',
+		paddingBottom                  : '25px',
+		backgroundRepeat               : 'no-repeat',
+		backgroundPosition             : 'center center',
+		[theme.breakpoints.down('xs')]: {
+			backgroundImage : `url(${MOBILE_BACKGROUND})`
+		},
+		[theme.breakpoints.up('sm')]: {
+			backgroundImage : `url(${DESKTOP_BACKGROUND})`
+		}
 	},
 	container : {
+		height                         : '100vh',
 		fontFamily                     : 'roboto, sans-serif',
 		border                         : '1px solid rgb(200, 200, 200)',
 		padding                        : '40px',
 		backgroundColor                : 'snow',
 		borderRadius                   : '3px',
-		boxShadow                      : '5px 5px 8px grey',
-		[theme.breakpoints.down('sm')]: {
-			margin : '10px'
+		overflowY                      : 'scroll',
+		[theme.breakpoints.down('xs')]: {
+			margin : '18px',
+			height : '75vh'
 		},
-		[theme.breakpoints.up('md')]: {
-			margin : '15px'
-		},
-		[theme.breakpoints.up('lg')]: {
-			margin : '25px'
+		[theme.breakpoints.up('sm')]: {
+			margin    : '40px',
+			height    : '65vh',
+			marginTop : '50px',
+			boxShadow : '5px 5px 10px black'
 		}
 	}
 }));
 
 export default function InstructionsScreen() {
 	const classes = useStyles();
-	const { alerts } = useSelector(store => store);
-
-	const backgroundImageUrl =
-		'https://images.unsplash.com/photo-1596779845727-d88eb78a1b08?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2091&q=80';
 
 	return (
-		// <div className={classes.screen} style={{ backgroundImage: `url(${backgroundImageUrl})` }}>
-		<div className={classes.screen} >
-			<AlertsContainer alerts={alerts} />
+		<div className={classes.screen}>
+			<NavBar />
+			<AlertsContainer />
 			<div className={classes.container}>
 				<h1>Getting Started</h1>
 				<Instructions />

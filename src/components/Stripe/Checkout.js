@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
-import { TextField, Button, Link } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-
 import { createStripeCheckoutSession } from '../../helpers/API';
-import { clearAlerts, addAlert, loginUserViaAPI } from '../../actions/auth';
-import useFields from '../../hooks/useFields';
-import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
 import CustomButton from '../CustomButton';
 import ProductChoices from './ProductChoices';
@@ -16,25 +10,7 @@ const STRIPE_WEEKLY_PLAN_PRICE_ID = process.env.REACT_APP_STRIPE_WEEKLY_PLAN_PRI
 const STRIPE_MONTHLY_PLAN_PRICE_ID = process.env.REACT_APP_STRIPE_MONTHLY_PLAN_PRICE_ID;
 const STRIPE_ANNUALLY_PLAN_PRICE_ID = process.env.REACT_APP_STRIPE_ANNUALLY_PLAN_PRICE_ID;
 
-const useStyles = makeStyles(theme => ({
-	textInput     : {
-		marginBottom : '10px',
-		width        : '250px'
-	},
-	button        : {
-		marginTop : '15px'
-	},
-	link          : {
-		marginTop    : '5px',
-		marginBottom : '5px'
-	},
-	linkContainer : {
-		marginTop : '25px'
-	}
-}));
-
-export default function Checkout({ setAlerts }) {
-	const classes = useStyles();
+export default function Checkout() {
 	const [ priceId, setPriceId ] = useState(null);
 	const [ planName, setPlanName ] = useState('Select a Plan...');
 

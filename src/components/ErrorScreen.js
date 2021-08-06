@@ -1,9 +1,6 @@
-// import React, { useState } from 'react';
 import React from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
-
-// import AlertsContainer from './Alerts/AlertsContainer';
 
 const useStyles = makeStyles(theme => ({
 	container : {
@@ -21,15 +18,9 @@ const useStyles = makeStyles(theme => ({
 
 export default function ErrorScreen() {
 	const classes = useStyles();
-	// const [ alerts, setAlerts ] = useState([]);
-
-	// function addAlert(alertObj) {
-	// 	setAlerts([ ...alerts, alertObj ]);
-	// }
 
 	return (
 		<div>
-			{/* <AlertsContainer alerts={alerts} /> */}
 			<div className={classes.container}>
 				<h1>Eek! An error has occurred! It may be necessary to refresh the page.</h1>
 			</div>

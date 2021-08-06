@@ -122,6 +122,15 @@ export default function NavDrawer({
 					</ListItem>
 				)}
 
+				<ListItem button onClick={goToGettingStarted}>
+					<ListItemText>Getting Started</ListItemText>
+				</ListItem>
+				{auth && (
+					<ListItem button onClick={goToPlans}>
+						<ListItemText>Subscriptions</ListItemText>
+					</ListItem>
+				)}
+
 				<Divider />
 
 				{!auth && (

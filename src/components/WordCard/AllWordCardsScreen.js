@@ -4,35 +4,39 @@ import { useHistory } from 'react-router';
 
 import { makeStyles } from '@material-ui/core/styles';
 
+import NavBar from '../Navigation/NavBar';
 import WordCard from './WordCard';
 import SelectWord from '../SelectWord';
 
 const useStyles = makeStyles(theme => ({
 	screen         : {
-		margin     : '0px',
-		height     : '100vh',
-		marginTop  : '-10px',
-		paddingTop : '15px'
+		height       : 'max-content',
+		paddingBottom : '25px'
 	},
-	root           : {
-		fontFamily                     : 'roboto, sans-serif',
+	container      : {
+		margin                         : '0 auto',
 		border                         : '1px solid rgb(200, 200, 200)',
+		borderRadius                   : '3px',
+		fontFamily                     : 'roboto, sans-serif',
 		padding                        : '15px',
 		paddingBottom                  : '25px',
 		backgroundColor                : 'snow',
-		borderRadius                   : '3px',
-		[theme.breakpoints.down('sm')]: {
-			margin : '5px'
+		[theme.breakpoints.down('xs')]: {
+			margin    : '5px',
+			marginTop : '-50px'
 		},
-		[theme.breakpoints.up('md')]: {
+		[theme.breakpoints.up('sm')]: {
 			margin    : '15px',
-			boxShadow : '5px 5px 8px grey'
+			marginTop : '-35px',
+			boxShadow : '5px 5px 10px grey'
 		},
 		[theme.breakpoints.up('lg')]: {
-			margin : '25px'
+			margin    : '25px',
+			marginTop : '-25px',
+			boxShadow : '5px 5px 10px grey'
 		}
 	},
-	container      : {
+	fullContainer  : {
 		display  : 'flex',
 		flexWrap : 'wrap'
 	},
@@ -41,7 +45,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function VocabWordsAll() {
+export default function AllWordCardsScreen() {
 	const classes = useStyles();
 	const history = useHistory();
 	const { words_array = [] } = useSelector(store => store);
@@ -60,10 +64,10 @@ export default function VocabWordsAll() {
 		history.push(`/words/${wordChoice}`);
 	}
 
-
 	return (
 		<div className={classes.screen}>
-			<div className={classes.root}>
+			<NavBar />
+			<div className={classes.container}>
 				<h1>Vocabulary Words</h1>
 				{loading && (
 					<h4>
@@ -76,10 +80,11 @@ export default function VocabWordsAll() {
 							id="word"
 							name="word"
 							label="Go To Word"
+							// wordChoices={wordChoices}
 							returnSelection={returnSelection}
 							isRequired={false}
 						/>
-						<div className={words_array.length > 0 ? classes.container : classes.emptyContainer}>
+						<div className={words_array.length > 0 ? classes.fullContainer : classes.emptyContainer}>
 							{words_array.length > 0 &&
 								words_array.map(word => {
 									return <WordCard key={word['id']} word={word} />;

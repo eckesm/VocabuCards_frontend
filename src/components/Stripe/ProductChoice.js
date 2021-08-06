@@ -10,7 +10,6 @@ const useStyles = makeStyles({
 	},
 	selected : {
 		minWidth        : 275,
-		// border   : '1px solid blue',
 		backgroundColor : 'lightBlue'
 	},
 	title    : {

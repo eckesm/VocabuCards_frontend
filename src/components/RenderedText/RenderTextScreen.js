@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import {v4 as uuid} from 'uuid'
 
 import { renderHtml } from '../../helpers/renderingText';
 import { TextField, Button } from '@material-ui/core';
@@ -11,17 +10,35 @@ import { updateSavedRenderedText } from '../../helpers/API';
 import { getArticleFromServer } from '../../helpers/newsSources';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
 
+import NavBar from '../Navigation/NavBar';
 import Paragraph from './Paragraph';
 import VocabModal from '../VocabForms/VocabModal';
 import CustomButton from '../CustomButton';
-// import AlertsContainer from '../Alerts/AlertsContainer';
 
 const useStyles = makeStyles(theme => ({
 	screen           : {
-		margin     : '0px',
-		height     : '100vh',
-		marginTop  : '-10px',
-		paddingTop : '15px'
+		height        : 'max-content',
+	},
+	container        : {
+		margin                         : '0 auto',
+		border                         : '1px solid rgb(200, 200, 200)',
+		borderRadius                   : '3px',
+		fontFamily                     : 'roboto, sans-serif',
+		backgroundColor                : 'snow',
+		[theme.breakpoints.down('xs')]: {
+			margin    : '5px',
+			marginTop : '-50px'
+		},
+		[theme.breakpoints.up('sm')]: {
+			margin       : '15px',
+			marginTop    : '-35px',
+			boxShadow    : '5px 5px 10px grey'
+		},
+		[theme.breakpoints.up('lg')]: {
+			margin       : '25px',
+			marginTop    : '-10px',
+			boxShadow    : '5px 5px 10px grey'
+		}
 	},
 	root             : {
 		'& > *'      : {
@@ -37,22 +54,6 @@ const useStyles = makeStyles(theme => ({
 			}
 		},
 		marginBottom : '30px'
-	},
-	renderTextScreen : {
-		border                         : '1px solid rgb(200, 200, 200)',
-		borderRadius                   : '3px',
-		fontFamily                     : 'roboto, sans-serif',
-		backgroundColor                : 'snow',
-		[theme.breakpoints.down('sm')]: {
-			margin : '5px'
-		},
-		[theme.breakpoints.up('md')]: {
-			margin    : '15px',
-			boxShadow : '5px 5px 8px grey'
-		},
-		[theme.breakpoints.up('lg')]: {
-			margin : '25px'
-		}
 	},
 	renderTextOutput : {
 		border                         : '1px solid rgb(200, 200, 200)',
@@ -158,10 +159,6 @@ export default function RenderTextScreen() {
 		foreignText : ''
 	});
 
-	// const [ formData, setFormData, resetFormData ] = useFields({
-	// 	foreignText : ''
-	// });
-
 	const [ rssObject, setRssObject ] = useLocalStorageState('rss_object', '');
 	const [ clickedArray, setClickedArray ] = useLocalStorageState('clicked_words_array', []);
 	const [ rssSource, setRssSource ] = useState(null);
@@ -217,7 +214,6 @@ export default function RenderTextScreen() {
 	function renderAndSaveText(text) {
 		updateSavedRenderedText(text);
 		dispatch(setTextInput(text));
-		// setRenderedText(null);
 		setClickedArray([]);
 
 		let prepareRenderedText = renderHtml(text, source_code, translate_code, variations);
@@ -278,13 +274,10 @@ export default function RenderTextScreen() {
 		[ text_input, language, variations, words_array ]
 	);
 
-	const backgroundImageUrl =
-		'https://images.unsplash.com/photo-1596779845727-d88eb78a1b08?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2091&q=80';
-
 	return (
-		// <div className={classes.screen} style={{ backgroundImage: `url(${backgroundImageUrl})` }}>
 		<div className={classes.screen}>
-			<div className={classes.renderTextScreen}>
+			<NavBar />
+			<div className={classes.container}>
 				<h1>Study {language_object[language]} Text</h1>
 				<form onSubmit={handleSubmit} className={classes.root}>
 					{formData.foreignText !== '' && (

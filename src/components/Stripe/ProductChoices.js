@@ -1,25 +1,10 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
-import { makeStyles } from '@material-ui/core/styles';
 
 import ProductChoice from './ProductChoice';
 
-// const useStyles = makeStyles(theme => ({
-// 	root : {
-// 		display       : 'flex',
-// 		flexDirection : 'column',
-// 		alignItems    : 'center',
-// 		'& > *'       : {
-// 			margin : theme.spacing(1)
-// 		}
-// 	}
-// }));
-
 export default function ProductChoices({ selectPlan = null, current_plan = null }) {
-	// const classes = useStyles();
-
-	// console.log(current_plan)
 
 	const plansArray = [
 		{ title: 'Weekly Plan', code: 'weekly', price: 1.99, message: '$1.99 charged weekly.' },

@@ -1,30 +1,43 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 
+import NavBar from '../Navigation/NavBar';
 import ConfirmEmailForm from './ConfirmEmailForm';
 import AlertsContainer from '../Alerts/AlertsContainer';
 import Home from '../Home/Home';
 
+const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_LOGIN_MOBILE;
+const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_LOGIN_DESKTOP;
+
 const useStyles = makeStyles(theme => ({
 	screen    : {
-		margin     : '0px',
-		height     : '100vh',
-		marginTop  : '-10px',
-		paddingTop : '15px'
+		height                         : '100vh',
+		backgroundRepeat               : 'no-repeat',
+		backgroundPosition             : 'center center',
+		[theme.breakpoints.down('xs')]: {
+			backgroundImage : `url(${MOBILE_BACKGROUND})`
+		},
+		[theme.breakpoints.up('sm')]: {
+			backgroundImage : `url(${DESKTOP_BACKGROUND})`
+		}
 	},
 	container : {
-		margin          : '0 auto',
-		marginTop       : '100px',
-		width           : '300px',
-		fontFamily      : 'roboto, sans-serif',
-		border          : '1px solid rgb(200, 200, 200)',
-		padding         : '40px',
-		backgroundColor : 'snow',
-		borderRadius    : '3px',
-		boxShadow       : '5px 5px 8px grey'
+		margin                         : '0 auto',
+		width                          : '300px',
+		fontFamily                     : 'roboto, sans-serif',
+		border                         : '1px solid rgb(200, 200, 200)',
+		padding                        : '40px',
+		backgroundColor                : 'snow',
+		borderRadius                   : '3px',
+		[theme.breakpoints.down('xs')]: {
+			marginTop : '75px'
+		},
+		[theme.breakpoints.up('sm')]: {
+			marginTop : '100px',
+			boxShadow : '5px 5px 10px black'
+		}
 	},
 	button    : {
 		marginTop : '15px'
@@ -33,14 +46,13 @@ const useStyles = makeStyles(theme => ({
 
 export default function ConfirmEmailScreen() {
 	const classes = useStyles();
-	const { alerts } = useSelector(store => store);
 	const { token } = useParams();
-	// const [ alerts, setAlerts ] = useState([]);
 	const [ showForm, setShowForm ] = useState(true);
 
 	return (
 		<div>
-			<AlertsContainer alerts={alerts} />
+			<NavBar />
+			<AlertsContainer />
 			<div className={classes.container}>
 				{showForm && <ConfirmEmailForm token={token} setShowForm={setShowForm} />}
 				{!showForm && (

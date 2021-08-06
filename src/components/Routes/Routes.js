@@ -3,15 +3,14 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import HomeScreen from '../Home/HomeScreen';
 import ProtectedRoute from './ProtectedRoute';
 import RestrictedRoute from './RestrictedRoute';
-// import ProtectedRouteScreen from './ProtectedRouteScreen';
 import RenderTextScreen from '../RenderedText/RenderTextScreen';
 import LoginScreen from '../Login/LoginScreen';
 import SignUpScreen from '../Register/SignUpScreen';
 import ConfirmEmailScreen from '../ConfirmEmail/ConfirmEmailScreen';
 import PasswordResetScreen from '../ChangePassword/PasswordResetScreen';
 import NewPasswordScreen from '../ChangePassword/NewPasswordScreen';
-import VocabWordsAll from '../WordCard/AllWordCards';
-import WordDetail from '../WordDetail/WordDetail';
+import AllWordCardsScreen from '../WordCard/AllWordCardsScreen';
+import WordDetailScreen from '../WordDetail/WordDetailScreen';
 import Logout from '../Login/Logout';
 import StripeScreen from '../Stripe/StripeScreen';
 import ErrorScreen from '../ErrorScreen';
@@ -64,9 +63,9 @@ export default function Routes() {
 
 			<RestrictedRoute component={RenderTextScreen} path="/read" exact />
 
-			<RestrictedRoute component={VocabWordsAll} path="/words" exact />
+			<RestrictedRoute component={AllWordCardsScreen} path="/words" exact />
 
-			<RestrictedRoute component={WordDetail} path="/words/:rootId" exact />
+			<RestrictedRoute component={WordDetailScreen} path="/words/:rootId" exact />
 
 			<Redirect to="/" />
 		</Switch>
