@@ -12,7 +12,8 @@ const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_DESKTOP;
 const useStyles = makeStyles(theme => ({
 	screen    : {
 		margin                         : '0px',
-		height                         : '100vh',
+		height                         : 'min-content',
+		minHeight                      : '100vh',
 		paddingBottom                  : '50px',
 		backgroundRepeat               : 'no-repeat',
 		backgroundPosition             : 'center center',
