@@ -50,7 +50,7 @@ export default function ConfirmEmailScreen() {
 	const [ showForm, setShowForm ] = useState(true);
 
 	return (
-		<div>
+		<div className={classes.screen}>
 			<NavBar />
 			<AlertsContainer />
 			<div className={classes.container}>

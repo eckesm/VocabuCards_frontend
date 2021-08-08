@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
@@ -8,7 +8,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { resetPasswordViaAPI } from '../../helpers/API';
 import useFields from '../../hooks/useFields';
 import { clearAlerts, addAlert } from '../../actions/auth';
-// import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
 import CustomButton from '../CustomButton';
 
@@ -31,11 +30,13 @@ export default function NewPasswordForm({ token, setShowForm }) {
 		password      : '',
 		passwordCheck : ''
 	});
+	const [ loading, setLoading ] = useState(false);
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
+		setLoading(true);
+
 		const res = await resetPasswordViaAPI(token, formData.password, formData.passwordCheck);
-		// setAlerts([]);
 		dispatch(clearAlerts());
 
 		try {
@@ -43,18 +44,18 @@ export default function NewPasswordForm({ token, setShowForm }) {
 				setShowForm(false);
 			}
 			dispatch(
-				addAlert(
-					{
-						type    : res.status,
-						title   : res.title,
-						text    : res.message,
-						closeMs : true
-					}
-				)
+				addAlert({
+					type    : res.status,
+					title   : res.title,
+					text    : res.message,
+					closeMs : true
+				})
 			);
 		} catch (e) {
 			history.push('/error');
 		}
+
+		setLoading(false);
 	}
 
 	return (
@@ -80,13 +81,11 @@ export default function NewPasswordForm({ token, setShowForm }) {
 					type="password"
 				/>
 				<CustomButton
-					// variant="contained"
 					type="submit"
-					// color="primary"
-					// className={classes.button}
 					style={{ marginTop: '20px', width: '250px' }}
+					disabled={loading ? true : false}
 				>
-					Change Password
+					{loading ? 'loading...' : 'Change Password'}
 				</CustomButton>
 			</form>
 		</div>

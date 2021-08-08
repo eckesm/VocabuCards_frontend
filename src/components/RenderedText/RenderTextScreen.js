@@ -17,7 +17,7 @@ import CustomButton from '../CustomButton';
 
 const useStyles = makeStyles(theme => ({
 	screen           : {
-		height        : 'max-content',
+		height : 'max-content'
 	},
 	container        : {
 		margin                         : '0 auto',
@@ -30,14 +30,14 @@ const useStyles = makeStyles(theme => ({
 			marginTop : '-50px'
 		},
 		[theme.breakpoints.up('sm')]: {
-			margin       : '15px',
-			marginTop    : '-35px',
-			boxShadow    : '5px 5px 10px grey'
+			margin    : '15px',
+			marginTop : '-35px',
+			boxShadow : '5px 5px 10px grey'
 		},
 		[theme.breakpoints.up('lg')]: {
-			margin       : '25px',
-			marginTop    : '-10px',
-			boxShadow    : '5px 5px 10px grey'
+			margin    : '25px',
+			marginTop : '-10px',
+			boxShadow : '5px 5px 10px grey'
 		}
 	},
 	root             : {
@@ -123,6 +123,11 @@ const useStyles = makeStyles(theme => ({
 		marginBottom : '5px'
 	},
 	author           : {
+		fontSize     : '1.5rem',
+		marginTop    : '0px',
+		marginBottom : '5px'
+	},
+	pubDate          : {
 		fontSize     : '1.5rem',
 		marginTop    : '0px',
 		marginBottom : '5px'
@@ -321,6 +326,9 @@ export default function RenderTextScreen() {
 						<div className={classes.rssTextOutput}>
 							{rssObject.title !== '' && <p className={classes.title}>{rssObject.title}</p>}
 							{rssObject.author !== '' && <p className={classes.author}>{rssObject.author}</p>}
+							{/* {rssObject.pubDate !== '' && ( */}
+								{/* // <p className={classes.pubDate}>{Date(rssObject.pubDate).format('dd-m-yy')}</p> */}
+							{/* )} */}
 							{rssObject.link !== '' && (
 								<div className={classes.linkContainer}>
 									{rssObject.fullText === false && (

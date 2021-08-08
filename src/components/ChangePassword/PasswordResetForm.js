@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
@@ -8,7 +8,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { sendPasswordResetViaAPI } from '../../helpers/API';
 import useFields from '../../hooks/useFields';
 import { clearAlerts, addAlert } from '../../actions/auth';
-// import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
 import CustomButton from '../CustomButton';
 
@@ -30,28 +29,32 @@ export default function PasswordResetForm({ setAlerts, setShowForm }) {
 	const [ formData, handleChange ] = useFields({
 		emailAddress : ''
 	});
+	const [ loading, setLoading ] = useState(false);
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
+		setLoading(true);
+
 		const res = await sendPasswordResetViaAPI(formData.emailAddress);
-		// setAlerts([]);
-		dispatch(clearAlerts())
+		dispatch(clearAlerts());
 
 		try {
 			if (res.status === 'success') {
 				setShowForm(false);
 			}
-			dispatch(addAlert(
-				{
+			dispatch(
+				addAlert({
 					type    : res.status,
 					title   : res.title,
 					text    : res.message,
 					closeMs : true
-				}
-			));
+				})
+			);
 		} catch (e) {
 			history.push('/error');
 		}
+
+		setLoading(false);
 	}
 
 	return (
@@ -67,14 +70,8 @@ export default function PasswordResetForm({ setAlerts, setShowForm }) {
 					value={formData.emailAddress}
 					autoCapitalize="false"
 				/>
-				<CustomButton
-					// variant="contained"
-					type="submit"
-					// color="primary"
-					// className={classes.button}
-					style={{ marginTop: '20px' }}
-				>
-					Send Password Reset Link
+				<CustomButton type="submit" style={{ marginTop: '20px' }} disabled={loading ? true : false}>
+					{loading ? 'loading...' : 'Send Password Reset Link'}
 				</CustomButton>
 			</form>
 		</div>

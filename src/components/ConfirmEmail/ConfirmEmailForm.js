@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
@@ -8,7 +8,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { confirmEmailViaAPI } from '../../helpers/API';
 import useFields from '../../hooks/useFields';
 import { clearAlerts, addAlert } from '../../actions/auth';
-// import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
 const useStyles = makeStyles(theme => ({
 	textInput : {
@@ -28,11 +27,13 @@ export default function ConfirmEmailForm({ token, setAlerts, setShowForm }) {
 	const [ formData, handleChange ] = useFields({
 		password : ''
 	});
+	const [ loading, setLoading ] = useState(false);
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
+		setLoading(true);
+
 		const res = await confirmEmailViaAPI(token, formData.password);
-		// setAlerts([]);
 		dispatch(clearAlerts());
 
 		try {
@@ -50,6 +51,8 @@ export default function ConfirmEmailForm({ token, setAlerts, setShowForm }) {
 		} catch (e) {
 			history.push('/error');
 		}
+
+		setLoading(false);
 	}
 
 	return (
@@ -67,8 +70,14 @@ export default function ConfirmEmailForm({ token, setAlerts, setShowForm }) {
 					type="password"
 					required
 				/>
-				<Button variant="contained" type="submit" color="primary" className={classes.button}>
-					Confirm Email Address
+				<Button
+					variant="contained"
+					type="submit"
+					color="primary"
+					className={classes.button}
+					disabled={loading ? true : false}
+				>
+					{loading ? 'loading...' : 'Confirm Email Address'}
 				</Button>
 			</form>
 		</div>

@@ -40,6 +40,7 @@ export default function SignUpForm() {
 		passwordCheck : '',
 		startLanguage : ''
 	});
+	const [ loading, setLoading ] = useState(false);
 
 	function handleChange(evt) {
 		const { name, value } = evt.target;
@@ -48,17 +49,18 @@ export default function SignUpForm() {
 			[name] : value
 		}));
 	}
-	
+
 	function updateStartLanguage(source_code) {
 		setFormData({
 			...formData,
 			startLanguage : source_code
 		});
 	}
-	
+
 	async function handleSubmit(evt) {
 		evt.preventDefault();
 		dispatch(clearAlerts());
+		setLoading(true);
 
 		const res = await dispatch(
 			registerUserViaAPI(
@@ -75,23 +77,25 @@ export default function SignUpForm() {
 				history.push('/getting-started');
 			}
 			if (res.status === 'warning') {
-				dispatch(addAlert(
-					{
+				dispatch(
+					addAlert({
 						type    : res.status,
 						title   : res.title,
 						text    : res.message,
 						closeMs : false
-					}
-				));
+					})
+				);
 			}
 			if (res.status === 'error') {
 				try {
 					Object.keys(res.errors).forEach(err => {
 						res.errors[err].forEach(msg => {
-							dispatch(addAlert({
-								type : 'error',
-								text : msg
-							}));
+							dispatch(
+								addAlert({
+									type : 'error',
+									text : msg
+								})
+							);
 						});
 					});
 				} catch (e) {
@@ -101,8 +105,9 @@ export default function SignUpForm() {
 		} catch (e) {
 			history.push('/error');
 		}
-	}
 
+		setLoading(false);
+	}
 
 	return (
 		<div>
@@ -151,8 +156,9 @@ export default function SignUpForm() {
 				<CustomButton
 					type="submit"
 					style={{ marginTop: '20px', width: '125px' }}
+					disabled={loading ? true : false}
 				>
-					Submit
+					{loading ? 'loading...' : 'Submit'}
 				</CustomButton>
 			</form>
 			<div className={classes.linkContainer}>

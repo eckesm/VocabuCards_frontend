@@ -1,15 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
-// import { TextField, Button, Link } from '@material-ui/core';
 import { TextField, Link } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import { clearAlerts, addAlert, loginUserViaAPI } from '../../actions/auth';
 import useFields from '../../hooks/useFields';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
-// import { DEFAULT_ALERT_CLOSE_MS } from '../../settings';
 
 import CustomButton from '../CustomButton';
 
@@ -40,31 +38,28 @@ export default function LoginForm({ forward = false }) {
 		password     : ''
 	};
 	const [ formData, handleChange ] = useFields(initialState);
+	const [ loading, setLoading ] = useState(false);
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
+		setLoading(true);
 
 		const res = await dispatch(loginUserViaAPI(formData.emailAddress, formData.password));
 		dispatch(clearAlerts());
-		// setAlerts([]);
 
 		try {
 			if (res.status === 'validation_errors') {
 				try {
-					// const newAlerts = [];
 					Object.keys(res.errors).forEach(err => {
 						res.errors[err].forEach(msg => {
-							dispatch(addAlert({
-								type : 'error',
-								text : msg
-							}));
-							// newAlerts.push({
-							// 	type : 'error',
-							// 	text : msg
-							// });
+							dispatch(
+								addAlert({
+									type : 'error',
+									text : msg
+								})
+							);
 						});
 					});
-					// setAlerts(newAlerts);
 				} catch (e) {
 					console.log(e);
 				}
@@ -97,6 +92,8 @@ export default function LoginForm({ forward = false }) {
 				})
 			);
 		}
+
+		setLoading(false);
 	}
 
 	return (
@@ -124,13 +121,11 @@ export default function LoginForm({ forward = false }) {
 					required
 				/>
 				<CustomButton
-					// variant="contained"
 					type="submit"
-					// color="primary"
-					// className={classes.button}
 					style={{ marginTop: '20px', width: '125px' }}
+					disabled={loading ? true : false}
 				>
-					Submit
+					{loading ? 'loading...' : 'Submit'}
 				</CustomButton>
 			</form>
 			<div className={classes.linkContainer}>
