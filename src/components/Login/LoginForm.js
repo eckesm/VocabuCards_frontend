@@ -76,7 +76,7 @@ export default function LoginForm({ forward = false }) {
 					if (res.status === 'success') {
 						setEmail(formData.emailAddress);
 						if (forward === false) {
-							history.push('/home');
+							history.push('/welcome');
 						}
 					}
 				} catch (e) {

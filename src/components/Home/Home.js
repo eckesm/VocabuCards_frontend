@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -25,14 +25,6 @@ export default function Home() {
 	const classes = useStyles();
 	const { user, language, language_object } = useSelector(store => store);
 	const languageName = language_object[language];
-	const [ loading, setLoading ] = useState(true);
-
-	useEffect(
-		() => {
-			setLoading(false);
-		},
-		[ user ]
-	);
 
 	return (
 		<div className={classes.container}>
@@ -57,15 +49,7 @@ export default function Home() {
 					</div>
 				</div>
 			)}
-			{loading && (
-				<div>
-					<h4>
-						<i>Loading...</i>
-					</h4>
-				</div>
-			)}
-			{!user &&
-			!loading && (
+			{!user && (
 				<div>
 					<CustomButton href="/#/login">Login</CustomButton>
 					<CustomButton href="/#/signup" customtype="default">

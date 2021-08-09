@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -43,8 +44,19 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function HomeScreen() {
+export default function HomeScreen({ status = null }) {
 	const classes = useStyles();
+	const { user, name } = useSelector(store => store);
+	const [ loading, setLoading ] = useState(true);
+
+	useEffect(
+		() => {
+			if (user && user.length > 0) {
+				setLoading(false);
+			}
+		},
+		[ user ]
+	);
 
 	return (
 		<div className={classes.screen}>
@@ -52,7 +64,8 @@ export default function HomeScreen() {
 			<AlertsContainer />
 			<div className={classes.container}>
 				<h1>Welcome to VocabuCards!</h1>
-				<Home />
+				{!loading && status === 'welcome' && <Home />}
+				{!status && <Home />}
 			</div>
 		</div>
 	);
