@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -64,6 +65,7 @@ const useStyles = makeStyles(theme => ({
 export default function StripeScreen({ status = null, message = null }) {
 	const classes = useStyles();
 	const dispatch = useDispatch();
+	const history = useHistory();
 	const {
 		stripe_customer_id,
 		current_plan,
@@ -104,6 +106,7 @@ export default function StripeScreen({ status = null, message = null }) {
 				dispatch(addAlert(stripeCurrentAlert(current_plan, stripe_period_end, false)));
 			}
 		}
+		history.push('/plans')
 	}, []);
 
 	return (

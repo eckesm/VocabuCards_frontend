@@ -33,6 +33,9 @@ export default function Home({ status = null }) {
 		() => {
 			if (user && user.length > 0) {
 				setLoading(false);
+				if (status === 'welcome') {
+					history.push('/');
+				}
 			}
 		},
 		[ user ]
