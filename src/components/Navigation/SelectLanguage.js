@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react';
-// import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
-import { Redirect } from 'react-router-dom';
 
-import {
-	updateUserLastLanguageViaAPI,
-	getUserLanguageWordsViaAPI,
-	setUserLanguage
-	// getAllLanguageOptionsViaAPI
-} from '../../actions/vocab';
+import { updateUserLastLanguageViaAPI, getUserLanguageWordsViaAPI } from '../../actions/vocab';
+import { clearAlerts, addAlert } from '../../actions/auth';
 
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -27,7 +21,6 @@ const useStyles = makeStyles(theme => ({
 	},
 	select      : {
 		width : '200px'
-		// width : '100%'
 	}
 }));
 
@@ -46,7 +39,23 @@ export default function SelectLanguage() {
 		setLanguage(newLanguage);
 		await dispatch(updateUserLastLanguageViaAPI(newLanguage));
 		dispatch(getUserLanguageWordsViaAPI(newLanguage));
-		history.push('/words');
+		dispatch(clearAlerts());
+
+		let newLanguageFull;
+		for (let lang of languages) {
+			if (lang[0] === newLanguage) {
+				newLanguageFull = lang[1];
+			}
+		}
+
+		dispatch(
+			addAlert({
+				type  : 'success',
+				title : `Language Changed to ${newLanguageFull}`,
+				text  : `You have successfully switched your language to ${newLanguageFull}.  Your ${newLanguageFull} VocabuCards are now available.`
+			})
+		);
+		history.push('/home');
 	}
 
 	useEffect(
