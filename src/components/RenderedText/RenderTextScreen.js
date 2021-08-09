@@ -163,6 +163,7 @@ export default function RenderTextScreen() {
 	const [ formData, setFormData ] = useState({
 		foreignText : ''
 	});
+	const [ fetchingArticle, setFetchingArticle ] = useState(false);
 
 	const [ rssObject, setRssObject ] = useLocalStorageState('rss_object', '');
 	const [ clickedArray, setClickedArray ] = useLocalStorageState('clicked_words_array', []);
@@ -192,6 +193,7 @@ export default function RenderTextScreen() {
 	}
 
 	async function handleGetArticle() {
+		setFetchingArticle(true);
 		const res = await getArticleFromServer(language);
 
 		try {
@@ -208,6 +210,8 @@ export default function RenderTextScreen() {
 			console.log('Error getting news article!');
 			console.log(e);
 		}
+
+		setFetchingArticle(false);
 	}
 
 	function handleSubmit(evt) {
@@ -312,8 +316,12 @@ export default function RenderTextScreen() {
 							Render Pasted/Entered Text
 						</CustomButton>
 						{enableRss && (
-							<CustomButton customtype="width_resize" onClick={handleGetArticle}>
-								Get Article: {rssSource}
+							<CustomButton
+								customtype="width_resize"
+								onClick={handleGetArticle}
+								disabled={fetchingArticle ? true : false}
+							>
+								{fetchingArticle ? 'fetching article...' : `Get Article: ${rssSource}`}
 							</CustomButton>
 						)}
 					</div>
@@ -327,7 +335,7 @@ export default function RenderTextScreen() {
 							{rssObject.title !== '' && <p className={classes.title}>{rssObject.title}</p>}
 							{rssObject.author !== '' && <p className={classes.author}>{rssObject.author}</p>}
 							{/* {rssObject.pubDate !== '' && ( */}
-								{/* // <p className={classes.pubDate}>{Date(rssObject.pubDate).format('dd-m-yy')}</p> */}
+							{/* // <p className={classes.pubDate}>{Date(rssObject.pubDate).format('dd-m-yy')}</p> */}
 							{/* )} */}
 							{rssObject.link !== '' && (
 								<div className={classes.linkContainer}>

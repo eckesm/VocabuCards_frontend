@@ -101,29 +101,19 @@ export default function Word({ wordObject, updateModalText, sentenceText, clicke
 	}
 
 	if (wordObject.type === 'period') {
-		<span className={classes.period}>{wordObject.text}</span>;
+		return <span className={classes.period}>{wordObject.text}</span>;
 	}
 
 	if (wordObject.type === 'saved') {
-		// console.log(wordObject);
-		// if (clickedArray.indexOf(wordObject.text) !== -1) {
-		// 	return (
-		// 		<Tooltip disableFocusListener disableTouchListener title={wordObject.variation.translation}>
-		// 			<span onClick={handleSavedClick} className={classes.savedClicked}>
-		// 				{wordObject.text}
-		// 			</span>
-		// 		</Tooltip>
-		// 	);
-		// }
-	// 	else {
-			return (
-				<Tooltip disableFocusListener disableTouchListener title={wordObject.variation.translation}>
-					<span onClick={handleSavedClick} className={classes.saved}>
-						{wordObject.text}
-					</span>
-				</Tooltip>
-			);
-		}
+
+		return (
+			<Tooltip disableFocusListener disableTouchListener title={wordObject.variation.translation}>
+				<span onClick={handleSavedClick} className={classes.saved}>
+					{wordObject.text}
+				</span>
+			</Tooltip>
+		);
+	}
 	// }
 
 	if (clickedArray.indexOf(wordObject.text) !== -1) {

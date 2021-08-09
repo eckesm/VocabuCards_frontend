@@ -40,7 +40,9 @@ const IGNORED = [
 	'_',
 	'|',
 	'–',
-	':'
+	':',
+	'„',
+	'“'
 ];
 
 function splitString(unsplitString) {
