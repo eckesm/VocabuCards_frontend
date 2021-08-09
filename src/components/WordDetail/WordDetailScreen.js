@@ -17,7 +17,7 @@ import VocabModal from '../VocabForms/VocabModal';
 import DeleteDialog from '../VocabForms/DeleteDialog';
 import CustomButton from '../CustomButton';
 
-import UnauthorizedRouteNotice from '../Routes/UnauthorizedRouteNotice';
+import UnauthorizedRouteScreen from '../Routes/UnauthorizedRouteScreen';
 
 const useStyles = makeStyles(theme => ({
 	screen                      : {
@@ -186,89 +186,91 @@ export default function WordDetailScreen() {
 	const notes = word ? word.notes : null;
 
 	return (
-		<div className={classes.screen}>
-			<NavBar />
+		<div>
 			{access &&
 			word && (
-				<div className={classes.container}>
-					<div className={classes.button}>
-						<CustomButton href={'/#/words'} startIcon={<i className="fas fa-arrow-circle-left" />}>
-							Go to {languageName} Vocab Cards
-						</CustomButton>
-					</div>
-					<Card className={classes.wordDetail}>
-						<CardContent className={classes.wordDetailCardContent}>
-							<div className={classes.WordDetailHeading}>
-								<div className={classes.wordDetailTopHeading}>
-									<div className={classes.wordDetailTitle}>
-										<p className={classes.title}>
-											<b>{word.root.toLowerCase()}</b>
-										</p>
-										{word.translation && (
-											<p className={classes.translation}>
-												<i>{word.translation.toLowerCase()}</i>
+				<div className={classes.screen}>
+					<NavBar />
+					<div className={classes.container}>
+						<div className={classes.button}>
+							<CustomButton href={'/#/words'} startIcon={<i className="fas fa-arrow-circle-left" />}>
+								Go to {languageName} Vocab Cards
+							</CustomButton>
+						</div>
+						<Card className={classes.wordDetail}>
+							<CardContent className={classes.wordDetailCardContent}>
+								<div className={classes.WordDetailHeading}>
+									<div className={classes.wordDetailTopHeading}>
+										<div className={classes.wordDetailTitle}>
+											<p className={classes.title}>
+												<b>{word.root.toLowerCase()}</b>
 											</p>
-										)}
-									</div>
-
-									<div className={classes.wordDetailButtonGroup}>
-										<div className={classes.buttonGroup}>
-											<div>
-												<Button color="primary" onClick={handleNewModalOpen}>
-													Add Variation
-												</Button>
-											</div>
-											<Button
-												color="primary"
-												onClick={handleEditModalOpen}
-												startIcon={<i className="fad fa-pencil" />}
-											>
-												Edit
-											</Button>
-											<DeleteDialog
-												root={word.root}
-												variations={word.components}
-												handleDelete={handleDelete}
-											/>
+											{word.translation && (
+												<p className={classes.translation}>
+													<i>{word.translation.toLowerCase()}</i>
+												</p>
+											)}
 										</div>
-										{editModalOpen && (
-											<VocabModal
-												open={editModalOpen}
-												handleClose={handleEditModalClose}
-												word={word}
-												setWord={setWord}
-												setting="edit_root"
-											/>
-										)}
-										{newModalOpen && (
-											<VocabModal
-												open={newModalOpen}
-												handleClose={handleNewModalClose}
-												rootId={word.id}
-												rootWord={word.root}
-												setting="add_variation_of_root"
-											/>
-										)}
-									</div>
-								</div>
-								{notes &&
-								notes !== '' && (
-									<div className={classes.wordDetailWordInfoContainer}>
-										{notes && (
-											<p className={classes.wordDetailWordInfo}>
-												<b>Notes:</b> {notes}
-											</p>
-										)}
-									</div>
-								)}
-							</div>
 
-							<WordDetailAccordian wordId={word.id} />
-						</CardContent>
-					</Card>
+										<div className={classes.wordDetailButtonGroup}>
+											<div className={classes.buttonGroup}>
+												<div>
+													<Button color="primary" onClick={handleNewModalOpen}>
+														Add Variation
+													</Button>
+												</div>
+												<Button
+													color="primary"
+													onClick={handleEditModalOpen}
+													startIcon={<i className="fad fa-pencil" />}
+												>
+													Edit
+												</Button>
+												<DeleteDialog
+													root={word.root}
+													variations={word.components}
+													handleDelete={handleDelete}
+												/>
+											</div>
+											{editModalOpen && (
+												<VocabModal
+													open={editModalOpen}
+													handleClose={handleEditModalClose}
+													word={word}
+													setWord={setWord}
+													setting="edit_root"
+												/>
+											)}
+											{newModalOpen && (
+												<VocabModal
+													open={newModalOpen}
+													handleClose={handleNewModalClose}
+													rootId={word.id}
+													rootWord={word.root}
+													setting="add_variation_of_root"
+												/>
+											)}
+										</div>
+									</div>
+									{notes &&
+									notes !== '' && (
+										<div className={classes.wordDetailWordInfoContainer}>
+											{notes && (
+												<p className={classes.wordDetailWordInfo}>
+													<b>Notes:</b> {notes}
+												</p>
+											)}
+										</div>
+									)}
+								</div>
+
+								<WordDetailAccordian wordId={word.id} />
+							</CardContent>
+						</Card>
+					</div>
 				</div>
 			)}
-			{!access && <UnauthorizedRouteNotice />}
+			{!access && <UnauthorizedRouteScreen />}
 		</div>
 	);
 }

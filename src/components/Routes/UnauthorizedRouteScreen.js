@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 
 import { makeStyles } from '@material-ui/core/styles';
 
+import { addAlert } from '../../actions/auth';
+
 import NavBar from '../Navigation/NavBar';
 import AlertsContainer from '../Alerts/AlertsContainer';
-import StripeScreen from '../Stripe/StripeScreen';
+import Home from '../Home/Home';
 
 const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_MOBILE;
 const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_DESKTOP;
@@ -42,15 +45,32 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function RestrictedRouteScreen() {
+export default function UnauthorizedRouteScreen({ notice = null }) {
 	const classes = useStyles();
+	const dispatch = useDispatch();
+
+	const noticeMessage = notice ? notice : 'You do not have permission to access this resource.';
+
+	useEffect(() => {
+		dispatch(
+			addAlert({
+				type    : 'error',
+				title   : 'Unauthorized!',
+				text    : noticeMessage,
+				closeMs : true
+			})
+		);
+	}, []);
 
 	return (
 		<div className={classes.screen}>
 			<NavBar />
 			<AlertsContainer />
 			<div className={classes.container}>
-				<StripeScreen status="expired" />;
+				<h4>
+					<i>{noticeMessage}</i>
+				</h4>
+				<Home />
 			</div>
 		</div>
 	);

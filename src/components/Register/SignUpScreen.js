@@ -20,6 +20,7 @@ const useStyles = makeStyles(theme => ({
 		paddingBottom                  : '50px',
 		backgroundRepeat               : 'no-repeat',
 		backgroundPosition             : 'center center',
+		backgroundSize                 : 'cover',
 		[theme.breakpoints.down('xs')]: {
 			backgroundImage : `url(${MOBILE_BACKGROUND})`
 		},
