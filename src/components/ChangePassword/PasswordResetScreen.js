@@ -36,6 +36,10 @@ const useStyles = makeStyles(theme => ({
 		[theme.breakpoints.up('sm')]: {
 			marginTop : '100px',
 			boxShadow : '5px 5px 10px black'
+		},
+		[theme.breakpoints.up('xl')]: {
+			marginTop : '150px',
+			boxShadow : '5px 5px 10px black'
 		}
 	}
 }));

@@ -19,26 +19,50 @@ import CustomButton from '../CustomButton';
 
 import UnauthorizedRouteScreen from '../Routes/UnauthorizedRouteScreen';
 
+const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_MOBILE;
+const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_DESKTOP;
+
 const useStyles = makeStyles(theme => ({
 	screen                      : {
-		margin     : '0px',
-		height     : 'max-content',
-		marginTop  : '-10px',
-		paddingTop : '15px'
+		margin                         : '0px',
+		height                         : 'max-content',
+		minHeight                      : '100vh',
+		marginTop                      : '-10px',
+		paddingTop                     : '15px',
+		paddingBottom                  : '25px',
+		backgroundPosition             : 'center center',
+		backgroundSize                 : 'cover',
+		[theme.breakpoints.down('xs')]: {
+			backgroundImage : `url(${MOBILE_BACKGROUND})`
+		},
+		[theme.breakpoints.up('sm')]: {
+			backgroundImage : `url(${DESKTOP_BACKGROUND})`
+		}
 	},
 	container                   : {
 		margin                         : '0 auto',
 		[theme.breakpoints.down('xs')]: {
-			margin    : '5px',
+			margin    : '18px',
 			marginTop : '-50px'
 		},
 		[theme.breakpoints.up('sm')]: {
-			margin    : '15px',
+			margin    : '40px',
 			marginTop : '-35px'
 		},
+		[theme.breakpoints.up('md')]: {
+			margin       : '80px',
+			marginTop    : '-10px',
+			marginBottom : '40px'
+		},
 		[theme.breakpoints.up('lg')]: {
-			margin    : '25px',
-			marginTop : '-10px'
+			margin       : '160px',
+			marginTop    : '0px',
+			marginBottom : '80px'
+		},
+		[theme.breakpoints.up('xl')]: {
+			margin       : '500px',
+			marginTop    : '0px',
+			marginBottom : '80px'
 		}
 	},
 	button                      : {
@@ -52,10 +76,13 @@ const useStyles = makeStyles(theme => ({
 		marginTop                      : '5px'
 	},
 	wordDetail                  : {
-		marginTop  : '10px',
-		fontFamily : 'roboto, sans-serif',
-		padding    : '0px',
-		paddingTop : '10px'
+		marginTop                    : '10px',
+		fontFamily                   : 'roboto, sans-serif',
+		padding                      : '0px',
+		paddingTop                   : '10px',
+		[theme.breakpoints.up('sm')]: {
+			boxShadow : '5px 5px 10px black'
+		}
 	},
 	WordDetailHeading           : {
 		borderRadius                   : '3px',

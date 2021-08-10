@@ -15,8 +15,8 @@ import VocabModal from '../VocabForms/VocabModal';
 
 const useStyles = makeStyles(theme => ({
 	grow           : {
-		flexGrow : 1,
-		paddingBottom:'65px'
+		flexGrow      : 1,
+		paddingBottom : '65px'
 	},
 	menuButton     : {
 		marginRight : theme.spacing(2)
@@ -61,6 +61,11 @@ export default function NavBar() {
 		[ user ]
 	);
 
+	const goToHome = () => {
+		dispatch(clearAlerts());
+		history.push('/');
+	};
+
 	const goToNewUser = () => {
 		dispatch(clearAlerts());
 		history.push('/signup');
@@ -104,6 +109,7 @@ export default function NavBar() {
 				<Toolbar>
 					<NavDrawer
 						handleModalOpen={handleModalOpen}
+						goToHome={goToHome}
 						goToLogin={goToLogin}
 						goToLogout={goToLogout}
 						goToNewUser={goToNewUser}

@@ -8,10 +8,23 @@ import NavBar from '../Navigation/NavBar';
 import WordCard from './WordCard';
 import SelectWord from '../SelectWord';
 
+const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_MOBILE;
+const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_DESKTOP;
+
 const useStyles = makeStyles(theme => ({
 	screen         : {
-		height       : 'max-content',
-		paddingBottom : '25px'
+		height                         : 'max-content',
+		minHeight                      : '100vh',
+		paddingBottom                  : '25px',
+		backgroundRepeat               : 'no-repeat',
+		backgroundPosition             : 'center center',
+		backgroundSize                 : 'cover',
+		[theme.breakpoints.down('xs')]: {
+			backgroundImage : `url(${MOBILE_BACKGROUND})`
+		},
+		[theme.breakpoints.up('sm')]: {
+			backgroundImage : `url(${DESKTOP_BACKGROUND})`
+		}
 	},
 	container      : {
 		margin                         : '0 auto',
@@ -22,23 +35,37 @@ const useStyles = makeStyles(theme => ({
 		paddingBottom                  : '25px',
 		backgroundColor                : 'snow',
 		[theme.breakpoints.down('xs')]: {
-			margin    : '5px',
+			margin    : '18px',
 			marginTop : '-50px'
 		},
 		[theme.breakpoints.up('sm')]: {
-			margin    : '15px',
+			margin    : '40px',
 			marginTop : '-35px',
-			boxShadow : '5px 5px 10px grey'
+			boxShadow : '5px 5px 10px black'
+		},
+		[theme.breakpoints.up('md')]: {
+			margin       : '80px',
+			marginTop    : '-10px',
+			marginBottom : '40px',
+			boxShadow    : '5px 5px 10px black'
 		},
 		[theme.breakpoints.up('lg')]: {
-			margin    : '25px',
-			marginTop : '-25px',
-			boxShadow : '5px 5px 10px grey'
+			margin       : '160px',
+			marginTop    : '0px',
+			marginBottom : '80px',
+			boxShadow    : '5px 5px 10px black'
+		},
+		[theme.breakpoints.up('xl')]: {
+			margin       : '500px',
+			marginTop    : '0px',
+			marginBottom : '80px',
+			boxShadow    : '5px 5px 10px black'
 		}
 	},
 	fullContainer  : {
 		display  : 'flex',
-		flexWrap : 'wrap'
+		flexWrap : 'wrap',
+		justifyContent:'space-around'
 	},
 	emptyContainer : {
 		flexWrap : 'wrap'

@@ -15,9 +15,23 @@ import Paragraph from './Paragraph';
 import VocabModal from '../VocabForms/VocabModal';
 import CustomButton from '../CustomButton';
 
+const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_MOBILE;
+const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_DESKTOP;
+
 const useStyles = makeStyles(theme => ({
 	screen           : {
-		height : 'max-content'
+		height                         : 'min-content',
+		minHeight                      : '100vh',
+		paddingBottom                  : '25px',
+		backgroundRepeat               : 'no-repeat',
+		backgroundPosition             : 'center center',
+		backgroundSize                 : 'cover',
+		[theme.breakpoints.down('xs')]: {
+			backgroundImage : `url(${MOBILE_BACKGROUND})`
+		},
+		[theme.breakpoints.up('sm')]: {
+			backgroundImage : `url(${DESKTOP_BACKGROUND})`
+		}
 	},
 	container        : {
 		margin                         : '0 auto',
@@ -26,18 +40,31 @@ const useStyles = makeStyles(theme => ({
 		fontFamily                     : 'roboto, sans-serif',
 		backgroundColor                : 'snow',
 		[theme.breakpoints.down('xs')]: {
-			margin    : '5px',
+			margin    : '18px',
 			marginTop : '-50px'
 		},
 		[theme.breakpoints.up('sm')]: {
-			margin    : '15px',
+			margin    : '40px',
 			marginTop : '-35px',
 			boxShadow : '5px 5px 10px grey'
 		},
+		[theme.breakpoints.up('md')]: {
+			margin       : '80px',
+			marginTop    : '-10px',
+			marginBottom : '40px',
+			boxShadow    : '5px 5px 10px grey'
+		},
 		[theme.breakpoints.up('lg')]: {
-			margin    : '25px',
-			marginTop : '-10px',
-			boxShadow : '5px 5px 10px grey'
+			margin       : '160px',
+			marginTop    : '0px',
+			marginBottom : '80px',
+			boxShadow    : '5px 5px 10px grey'
+		},
+		[theme.breakpoints.up('xl')]: {
+			margin       : '500px',
+			marginTop    : '0px',
+			marginBottom : '80px',
+			boxShadow    : '5px 5px 10px grey'
 		}
 	},
 	root             : {
@@ -321,7 +348,7 @@ export default function RenderTextScreen() {
 								onClick={handleGetArticle}
 								disabled={fetchingArticle ? true : false}
 							>
-								{fetchingArticle ? 'fetching article...' : `Get Article: ${rssSource}`}
+								{fetchingArticle ? <i>fetching article</i> : `Get Article: ${rssSource}`}
 							</CustomButton>
 						)}
 					</div>

@@ -158,7 +158,7 @@ export default function SignUpForm() {
 					style={{ marginTop: '20px', width: '125px' }}
 					disabled={loading ? true : false}
 				>
-					{loading ? 'loading...' : 'Submit'}
+					{loading ? <i>loading</i> : 'Submit'}
 				</CustomButton>
 			</form>
 			<div className={classes.linkContainer}>

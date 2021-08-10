@@ -11,7 +11,8 @@ const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_DESKTOP;
 
 const useStyles = makeStyles(theme => ({
 	screen    : {
-		margin                         : '0px',
+		// margin                         : '0px',
+		position                       : 'relative',
 		height                         : 'min-content',
 		minHeight                      : '100vh',
 		paddingBottom                  : '50px',
@@ -37,7 +38,11 @@ const useStyles = makeStyles(theme => ({
 			marginTop : '75px'
 		},
 		[theme.breakpoints.up('sm')]: {
-			marginTop : '100px',
+			marginTop : '75px',
+			boxShadow : '5px 5px 10px black'
+		},
+		[theme.breakpoints.up('xl')]: {
+			marginTop : '150px',
 			boxShadow : '5px 5px 10px black'
 		}
 	}

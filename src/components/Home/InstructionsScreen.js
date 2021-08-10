@@ -12,6 +12,7 @@ const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_DESKTOP;
 const useStyles = makeStyles(theme => ({
 	screen    : {
 		height                         : 'max-content',
+		minHeight                      : '100vh',
 		paddingBottom                  : '25px',
 		backgroundRepeat               : 'no-repeat',
 		backgroundPosition             : 'center center',
@@ -24,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 		}
 	},
 	container : {
-		height                         : '100vh',
+		height                         : '75vh',
 		fontFamily                     : 'roboto, sans-serif',
 		border                         : '1px solid rgb(200, 200, 200)',
 		padding                        : '40px',
@@ -32,13 +33,29 @@ const useStyles = makeStyles(theme => ({
 		borderRadius                   : '3px',
 		overflowY                      : 'scroll',
 		[theme.breakpoints.down('xs')]: {
-			margin : '18px',
-			height : '75vh'
+			margin : '18px'
 		},
 		[theme.breakpoints.up('sm')]: {
 			margin    : '40px',
-			height    : '65vh',
 			marginTop : '50px',
+			boxShadow : '5px 5px 10px black'
+		},
+		[theme.breakpoints.up('md')]: {
+			height    : '65vh',
+			margin    : '80px',
+			marginTop : '100px',
+			boxShadow : '5px 5px 10px black'
+		},
+		[theme.breakpoints.up('lg')]: {
+			margin : '160px',
+			marginTop : '120px',
+			boxShadow : '5px 5px 10px black'
+		
+		},
+		[theme.breakpoints.up('xl')]: {
+			margin : '500px',
+			marginTop : '120px',
+			marginBottom : '120px',
 			boxShadow : '5px 5px 10px black'
 		}
 	}

@@ -11,7 +11,7 @@ import PasswordResetScreen from '../ChangePassword/PasswordResetScreen';
 import NewPasswordScreen from '../ChangePassword/NewPasswordScreen';
 import AllWordCardsScreen from '../WordCard/AllWordCardsScreen';
 import WordDetailScreen from '../WordDetail/WordDetailScreen';
-import Logout from '../Login/Logout';
+import LogoutScreen from '../Login/LogoutScreen';
 import StripeScreen from '../Stripe/StripeScreen';
 import ErrorScreen from '../ErrorScreen';
 import InstructionsScreen from '../Home/InstructionsScreen';
@@ -58,7 +58,7 @@ export default function Routes() {
 			<ProtectedRoute component={StripeScreen} status="updated" path="/plans/updated" exact />
 
 			<Route exact path="/logout">
-				<Logout />
+				<LogoutScreen />
 			</Route>
 
 			<Route exact path="/error">

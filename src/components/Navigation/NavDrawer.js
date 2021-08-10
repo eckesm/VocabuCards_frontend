@@ -37,6 +37,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function NavDrawer({
 	handleModalOpen,
+	goToHome,
 	goToLogin,
 	goToLogout,
 	goToNewUser,
@@ -94,12 +95,7 @@ export default function NavDrawer({
 				<ListItem>
 					<ListItemText primary={user} style={{ fontStyle: 'italic' }} />
 				</ListItem>
-				<ListItem
-					button
-					onClick={() => {
-						history.push('/home');
-					}}
-				>
+				<ListItem button onClick={goToHome}>
 					<ListItemIcon>
 						<i className="fas fa-home" />
 					</ListItemIcon>

@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
 		overflow                       : 'auto',
 		textAlign                      : 'left',
 		transitionDuration             : '500ms',
-		[theme.breakpoints.down('sm')]: {
+		[theme.breakpoints.down('xs')]: {
 			width        : '100%',
 			height       : '200px',
 			margin       : '5px',
@@ -22,11 +22,10 @@ const useStyles = makeStyles(theme => ({
 			marginTop    : '10px',
 			marginBottom : '20px',
 			'&:hover'   : {
-			// 	transform : 'rotate(1deg)',
 				boxShadow : '0px 0px 10px blue'
 			}
 		},
-		[theme.breakpoints.up('md')]: {
+		[theme.breakpoints.up('sm')]: {
 			width       : '250px',
 			height      : '200px',
 			margin      : '8px',
@@ -34,7 +33,6 @@ const useStyles = makeStyles(theme => ({
 			marginRight : '8px',
 			boxShadow   : '5px 5px 8px grey',
 			'&:hover'   : {
-				// transform : 'rotate(1deg)',
 				boxShadow : '0px 0px 10px blue'
 			}
 		},

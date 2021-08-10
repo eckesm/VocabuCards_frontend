@@ -48,7 +48,11 @@ const useStyles = makeStyles(theme => ({
 			marginTop : '100px'
 		},
 		[theme.breakpoints.up('sm')]: {
-			marginTop : '100px',
+			// marginTop : '100px',
+			position  : 'absolute',
+			left      : '50%',
+			right     : '50%',
+			transform : 'translate(-50%,50%)',
 			boxShadow : '5px 5px 10px black'
 		}
 	},
@@ -106,7 +110,7 @@ export default function StripeScreen({ status = null, message = null }) {
 				dispatch(addAlert(stripeCurrentAlert(current_plan, stripe_period_end, false)));
 			}
 		}
-		history.push('/plans')
+		history.push('/plans');
 	}, []);
 
 	return (
