@@ -1,5 +1,4 @@
-// import React, { useState, useEffect } from 'react';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 
@@ -30,25 +29,23 @@ export default function SelectWord({
 	addNew = false
 }) {
 	const classes = useStyles();
-	const [ data, setData ] = useState('NEW');
+	const [ data, setData ] = useState('');
 	const { words_array = [] } = useSelector(store => store);
 	const wordChoices = [];
-	try{
+	try {
 		words_array.forEach(choice => {
 			wordChoices.push({ value: choice.id, name: choice.root });
 		});
-	}catch(e){
-		
-	}
+	} catch (e) {}
 
-	// useEffect(
-	// 	() => {
-	// 		words_array.forEach(choice => {
-	// 			wordChoices.push({ value: choice.id, name: choice.root });
-	// 		});
-	// 	},
-	// 	[]
-	// );
+	useEffect(() => {
+		// words_array.forEach(choice => {
+		// 	wordChoices.push({ value: choice.id, name: choice.root });
+		// });
+		if (addNew) {
+			setData('new_word');
+		}
+	}, []);
 
 	const handleChange = event => {
 		setData(event.target.value);
@@ -68,7 +65,7 @@ export default function SelectWord({
 					disabled={wordChoices.length === 0 ? true : false}
 				>
 					{addNew && (
-						<MenuItem key="NONE" value="">
+						<MenuItem key="NONE" value="new_word">
 							-- NEW WORD --
 						</MenuItem>
 					)}

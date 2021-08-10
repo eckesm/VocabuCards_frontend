@@ -400,6 +400,17 @@ export default function VocabComponentForm({
 		});
 	}
 
+	function clearDictionaryInputs() {
+		handleEnteringInfo();
+		setFormData({
+			...formData,
+			dictionary   : '',
+			definition   : '',
+			partOfSpeech : '',
+			synonyms     : ''
+		});
+	}
+
 	function showExistingWordTab() {
 		window.open(`/#/words/${formData.existingWord}`, '_blank');
 	}
@@ -616,6 +627,7 @@ export default function VocabComponentForm({
 							color={useDictionary ? 'default' : 'primary'}
 							onClick={handleDictionary}
 							disabled={searchDictionaryAble ? false : true}
+							size="small"
 						>
 							Search Dictionary
 						</Button>
@@ -625,8 +637,19 @@ export default function VocabComponentForm({
 							color={useDictionary ? 'primary' : 'default'}
 							onClick={handleEnteringInfo}
 							disabled={useDictionary ? false : true}
+							size="small"
 						>
 							{useDictionary ? 'Enter Info' : 'Entering Info'}
+						</Button>
+						<Button
+							className={classes.button}
+							variant="contained"
+							color="secondary"
+							size="small"
+							onClick={clearDictionaryInputs}
+							// startIcon={<i className="fad fa-trash-alt" />}
+						>
+							Clear
 						</Button>
 					</div>
 
