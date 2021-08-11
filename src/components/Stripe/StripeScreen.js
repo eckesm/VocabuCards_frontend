@@ -20,20 +20,19 @@ import {
 	stripeExpiredAlert
 } from '../../helpers/Stripe';
 
-const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_STRIPE_MOBILE;
-const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_STRIPE_DESKTOP;
+import { SCREEN_STRIPE_MOBILE, SCREEN_STRIPE_DESKTOP } from '../../settings';
+
 
 const useStyles = makeStyles(theme => ({
 	screen    : {
 		height                         : '100vh',
 		backgroundRepeat               : 'no-repeat',
-		// backgroundPosition             : 'center center',
 		backgroundSize                 : 'cover',
 		[theme.breakpoints.down('xs')]: {
-			backgroundImage : `url(${MOBILE_BACKGROUND})`
+			backgroundImage : `url(${SCREEN_STRIPE_MOBILE})`
 		},
 		[theme.breakpoints.up('sm')]: {
-			backgroundImage : `url(${DESKTOP_BACKGROUND})`
+			backgroundImage : `url(${SCREEN_STRIPE_DESKTOP})`
 		}
 	},
 	container : {

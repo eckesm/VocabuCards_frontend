@@ -6,8 +6,7 @@ import NavBar from '../Navigation/NavBar';
 import Instructions from './Instructions';
 import AlertsContainer from '../Alerts/AlertsContainer';
 
-const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_MOBILE;
-const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_DESKTOP;
+import { SCREEN_WELCOME_MOBILE, SCREEN_WELCOME_DESKTOP } from '../../settings';
 
 const useStyles = makeStyles(theme => ({
 	screen    : {
@@ -17,10 +16,10 @@ const useStyles = makeStyles(theme => ({
 		backgroundRepeat               : 'no-repeat',
 		backgroundSize                 : 'cover',
 		[theme.breakpoints.down('xs')]: {
-			backgroundImage : `url(${MOBILE_BACKGROUND})`
+			backgroundImage : `url(${SCREEN_WELCOME_MOBILE})`
 		},
 		[theme.breakpoints.up('sm')]: {
-			backgroundImage : `url(${DESKTOP_BACKGROUND})`
+			backgroundImage : `url(${SCREEN_WELCOME_DESKTOP})`
 		}
 	},
 	container : {

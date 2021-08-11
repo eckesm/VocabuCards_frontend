@@ -15,25 +15,21 @@ import Paragraph from './Paragraph';
 import VocabModal from '../VocabForms/VocabModal';
 import CustomButton from '../CustomButton';
 
-const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_MOBILE;
-const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_DESKTOP;
+import { SCREEN_WELCOME_MOBILE, SCREEN_WELCOME_DESKTOP } from '../../settings';
 
 const useStyles = makeStyles(theme => ({
 	screen           : {
 		height                         : 'min-content',
 		minHeight                      : '100vh',
 		paddingBottom                  : '25px',
-		// backgroundRepeat               : 'no-repeat',
 		backgroundRepeat               : 'repeat-y',
-		// backgroundSize                 : 'cover',
 		backgroundSize                 : '100%',
-		// backgroundPosition             : 'center center',
 		[theme.breakpoints.down('xs')]: {
-			backgroundImage : `url(${MOBILE_BACKGROUND})`
+			backgroundImage : `url(${SCREEN_WELCOME_MOBILE})`
 			// backgroundColor : 'linen'
 		},
 		[theme.breakpoints.up('sm')]: {
-			backgroundImage : `url(${DESKTOP_BACKGROUND})`
+			backgroundImage : `url(${SCREEN_WELCOME_DESKTOP})`
 		}
 	},
 	container        : {

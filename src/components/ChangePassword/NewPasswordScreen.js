@@ -8,8 +8,7 @@ import NewPasswordForm from './NewPasswordForm';
 import AlertsContainer from '../Alerts/AlertsContainer';
 import LoginForm from '../Login/LoginForm';
 
-const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_LOGIN_MOBILE;
-const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_LOGIN_DESKTOP;
+import { SCREEN_LOGIN_MOBILE, SCREEN_LOGIN_DESKTOP } from '../../settings';
 
 const useStyles = makeStyles(theme => ({
 	screen    : {
@@ -17,10 +16,10 @@ const useStyles = makeStyles(theme => ({
 		backgroundRepeat               : 'no-repeat',
 		backgroundSize                 : 'cover',
 		[theme.breakpoints.down('xs')]: {
-			backgroundImage : `url(${MOBILE_BACKGROUND})`
+			backgroundImage : `url(${SCREEN_LOGIN_MOBILE})`
 		},
 		[theme.breakpoints.up('sm')]: {
-			backgroundImage : `url(${DESKTOP_BACKGROUND})`
+			backgroundImage : `url(${SCREEN_LOGIN_DESKTOP})`
 		}
 	},
 	container : {

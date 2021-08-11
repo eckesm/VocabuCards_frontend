@@ -9,10 +9,7 @@ import Home from './Home';
 import Welcome from './Welcome';
 import ScreenShots from './ScreenShots';
 
-const HOME_MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_MOBILE;
-const HOME_DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_DESKTOP;
-const WELCOME_MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_MOBILE;
-const WELCOME_DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_DESKTOP;
+import { SCREEN_HOME_MOBILE, SCREEN_HOME_DESKTOP, SCREEN_WELCOME_MOBILE, SCREEN_WELCOME_DESKTOP } from '../../settings';
 
 const useStyles = makeStyles(theme => ({
 	homeScreen    : {
@@ -23,10 +20,10 @@ const useStyles = makeStyles(theme => ({
 		backgroundRepeat               : 'repeat-y',
 		backgroundSize                 : '100%',
 		[theme.breakpoints.down('sm')]: {
-			backgroundImage : `url(${HOME_MOBILE_BACKGROUND})`
+			backgroundImage : `url(${SCREEN_HOME_MOBILE})`
 		},
 		[theme.breakpoints.up('md')]: {
-			backgroundImage : `url(${HOME_DESKTOP_BACKGROUND})`
+			backgroundImage : `url(${SCREEN_HOME_DESKTOP})`
 		}
 	},
 	welcomeScreen : {
@@ -37,10 +34,10 @@ const useStyles = makeStyles(theme => ({
 		backgroundRepeat               : 'no-repeat',
 		backgroundSize                 : 'cover',
 		[theme.breakpoints.down('xs')]: {
-			backgroundImage : `url(${WELCOME_MOBILE_BACKGROUND})`
+			backgroundImage : `url(${SCREEN_WELCOME_MOBILE})`
 		},
 		[theme.breakpoints.up('sm')]: {
-			backgroundImage : `url(${WELCOME_DESKTOP_BACKGROUND})`
+			backgroundImage : `url(${SCREEN_WELCOME_DESKTOP})`
 		}
 	},
 	container     : {
