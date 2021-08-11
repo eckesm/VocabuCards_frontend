@@ -6,8 +6,8 @@ import NavBar from '../Navigation/NavBar';
 import AlertsContainer from '../Alerts/AlertsContainer';
 import StripeScreen from '../Stripe/StripeScreen';
 
-const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_MOBILE;
-const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_DESKTOP;
+const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_MOBILE;
+const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_DESKTOP;
 
 const useStyles = makeStyles(theme => ({
 	screen    : {

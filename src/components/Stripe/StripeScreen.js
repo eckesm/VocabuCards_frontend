@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 	screen    : {
 		height                         : '100vh',
 		backgroundRepeat               : 'no-repeat',
-		backgroundPosition             : 'center center',
+		// backgroundPosition             : 'center center',
 		backgroundSize                 : 'cover',
 		[theme.breakpoints.down('xs')]: {
 			backgroundImage : `url(${MOBILE_BACKGROUND})`
@@ -48,11 +48,7 @@ const useStyles = makeStyles(theme => ({
 			marginTop : '100px'
 		},
 		[theme.breakpoints.up('sm')]: {
-			// marginTop : '100px',
-			position  : 'absolute',
-			left      : '50%',
-			right     : '50%',
-			transform : 'translate(-50%,50%)',
+			marginTop : '75px',
 			boxShadow : '5px 5px 10px black'
 		}
 	},

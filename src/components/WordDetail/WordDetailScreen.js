@@ -19,8 +19,8 @@ import CustomButton from '../CustomButton';
 
 import UnauthorizedRouteScreen from '../Routes/UnauthorizedRouteScreen';
 
-const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_MOBILE;
-const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_DESKTOP;
+const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_MOBILE;
+const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_DESKTOP;
 
 const useStyles = makeStyles(theme => ({
 	screen                      : {
@@ -30,8 +30,10 @@ const useStyles = makeStyles(theme => ({
 		marginTop                      : '-10px',
 		paddingTop                     : '15px',
 		paddingBottom                  : '25px',
-		backgroundPosition             : 'center center',
-		backgroundSize                 : 'cover',
+		backgroundRepeat               : 'repeat-y',
+		// backgroundSize                 : 'cover',
+		backgroundSize                 : '100%',
+		// backgroundPosition             : 'center center',
 		[theme.breakpoints.down('xs')]: {
 			backgroundImage : `url(${MOBILE_BACKGROUND})`
 		},

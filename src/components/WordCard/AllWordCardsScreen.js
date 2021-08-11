@@ -8,22 +8,25 @@ import NavBar from '../Navigation/NavBar';
 import WordCard from './WordCard';
 import SelectWord from '../SelectWord';
 
-const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_MOBILE;
-const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_DESKTOP;
+const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_MOBILE;
+const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_DESKTOP;
 
 const useStyles = makeStyles(theme => ({
 	screen         : {
 		height                         : 'max-content',
 		minHeight                      : '100vh',
 		paddingBottom                  : '25px',
-		backgroundRepeat               : 'no-repeat',
-		backgroundPosition             : 'center center',
-		backgroundSize                 : 'cover',
+		// backgroundRepeat               : 'no-repeat',
+		backgroundRepeat : 'repeat-y',
+		// backgroundSize                 : 'cover',
+		backgroundSize   : '100%',
+		// backgroundPosition             : 'center center',
 		[theme.breakpoints.down('xs')]: {
-			backgroundImage : `url(${MOBILE_BACKGROUND})`
+			backgroundImage : `url(${MOBILE_BACKGROUND})`,
+			// backgroundColor : 'linen'
 		},
 		[theme.breakpoints.up('sm')]: {
-			backgroundImage : `url(${DESKTOP_BACKGROUND})`
+			backgroundImage  : `url(${DESKTOP_BACKGROUND})`,
 		}
 	},
 	container      : {
@@ -63,9 +66,9 @@ const useStyles = makeStyles(theme => ({
 		}
 	},
 	fullContainer  : {
-		display  : 'flex',
-		flexWrap : 'wrap',
-		justifyContent:'space-around'
+		display        : 'flex',
+		flexWrap       : 'wrap',
+		justifyContent : 'space-around'
 	},
 	emptyContainer : {
 		flexWrap : 'wrap'

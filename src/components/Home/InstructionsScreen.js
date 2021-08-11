@@ -6,8 +6,8 @@ import NavBar from '../Navigation/NavBar';
 import Instructions from './Instructions';
 import AlertsContainer from '../Alerts/AlertsContainer';
 
-const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_MOBILE;
-const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_DESKTOP;
+const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_MOBILE;
+const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_DESKTOP;
 
 const useStyles = makeStyles(theme => ({
 	screen    : {
@@ -15,7 +15,6 @@ const useStyles = makeStyles(theme => ({
 		minHeight                      : '100vh',
 		paddingBottom                  : '25px',
 		backgroundRepeat               : 'no-repeat',
-		backgroundPosition             : 'center center',
 		backgroundSize                 : 'cover',
 		[theme.breakpoints.down('xs')]: {
 			backgroundImage : `url(${MOBILE_BACKGROUND})`
@@ -37,18 +36,18 @@ const useStyles = makeStyles(theme => ({
 		},
 		[theme.breakpoints.up('sm')]: {
 			margin    : '40px',
-			marginTop : '50px',
+			marginTop : '40px',
 			boxShadow : '5px 5px 10px black'
 		},
 		[theme.breakpoints.up('md')]: {
 			height    : '65vh',
 			margin    : '80px',
-			marginTop : '100px',
+			marginTop : '50px',
 			boxShadow : '5px 5px 10px black'
 		},
 		[theme.breakpoints.up('lg')]: {
 			margin : '160px',
-			marginTop : '120px',
+			marginTop : '60px',
 			boxShadow : '5px 5px 10px black'
 		
 		},

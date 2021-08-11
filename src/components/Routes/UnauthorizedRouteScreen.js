@@ -9,8 +9,8 @@ import NavBar from '../Navigation/NavBar';
 import AlertsContainer from '../Alerts/AlertsContainer';
 import Home from '../Home/Home';
 
-const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_MOBILE;
-const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_HOME_DESKTOP;
+const MOBILE_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_MOBILE;
+const DESKTOP_BACKGROUND = process.env.REACT_APP_SCREEN_WELCOME_DESKTOP;
 
 const useStyles = makeStyles(theme => ({
 	screen    : {
@@ -18,7 +18,7 @@ const useStyles = makeStyles(theme => ({
 		minHeight                      : '100vh',
 		paddingBottom                  : '50px',
 		backgroundRepeat               : 'no-repeat',
-		backgroundPosition             : 'center center',
+		// backgroundPosition             : 'center center',
 		backgroundSize                 : 'cover',
 		[theme.breakpoints.down('xs')]: {
 			backgroundImage : `url(${MOBILE_BACKGROUND})`

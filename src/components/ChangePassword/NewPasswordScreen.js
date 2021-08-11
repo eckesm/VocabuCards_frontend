@@ -15,7 +15,6 @@ const useStyles = makeStyles(theme => ({
 	screen    : {
 		height                         : '100vh',
 		backgroundRepeat               : 'no-repeat',
-		backgroundPosition             : 'center center',
 		backgroundSize                 : 'cover',
 		[theme.breakpoints.down('xs')]: {
 			backgroundImage : `url(${MOBILE_BACKGROUND})`
