@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
 
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -22,43 +21,11 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function Home({ status = null }) {
+export default function Home() {
 	const classes = useStyles();
-	const history = useHistory();
 	const { user, language, language_object } = useSelector(store => store);
 	const languageName = language_object[language];
-	const [ loading, setLoading ] = useState(true);
 
-	useEffect(
-		() => {
-			if (user && user.length > 0) {
-				setLoading(false);
-				if (status === 'welcome') {
-					history.push('/');
-				}
-			}
-		},
-		[ user ]
-	);
-
-	setTimeout(() => {
-		if (loading && status === 'welcome' && user === null) {
-			history.push('/');
-		}
-	}, 1000);
-
-	if (status === 'welcome' && loading) {
-		return (
-			<div className={classes.container}>
-				<div>
-					<h4>
-						<i>...loading...</i>
-					</h4>
-				</div>
-			</div>
-		);
-	}
-	else {
 		return (
 			<div className={classes.container}>
 				{user && (
@@ -93,4 +60,4 @@ export default function Home({ status = null }) {
 			</div>
 		);
 	}
-}
+// }

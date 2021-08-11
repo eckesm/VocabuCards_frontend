@@ -66,14 +66,14 @@ export default function HomeScreen({ status = null }) {
 	const classes = useStyles();
 	const { user } = useSelector(store => store);
 
-	if (user) {
+	if (status === 'welcome') {
 		return (
 			<div className={classes.welcomeScreen}>
 				<NavBar />
 				<AlertsContainer />
 				<div className={classes.container}>
 					<h1>Welcome to VocabuCards!</h1>
-					<Welcome status={status} />
+					<Welcome />
 				</div>
 			</div>
 		);
@@ -85,7 +85,7 @@ export default function HomeScreen({ status = null }) {
 				<AlertsContainer />
 				<div className={classes.container}>
 					<h1>Welcome to VocabuCards!</h1>
-					<Home status={status} />
+					<Home />
 				</div>
 				<ScreenShots />
 			</div>
