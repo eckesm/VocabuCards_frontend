@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
@@ -27,10 +27,15 @@ export default function Welcome() {
 	const history = useHistory();
 	const { user, language, language_object } = useSelector(store => store);
 	const languageName = language_object[language];
+	const [ checkLogin, setCheckLogin ] = useState(false);
 
 	setTimeout(() => {
-		history.push('/');
-	}, 5000);
+		setCheckLogin(true);
+	}, 2500);
+
+	function goToHomeScreen() {
+			history.push('/');
+	}
 
 	return (
 		<div className={classes.container}>
@@ -40,6 +45,7 @@ export default function Welcome() {
 						<h4>
 							<i>...loading...</i>
 						</h4>
+						{checkLogin && <CustomButton onClick={goToHomeScreen}>Return to Login</CustomButton>}
 					</div>
 				</div>
 			)}

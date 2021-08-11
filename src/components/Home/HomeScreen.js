@@ -66,7 +66,7 @@ export default function HomeScreen({ status = null }) {
 	const classes = useStyles();
 	const { user } = useSelector(store => store);
 
-	if (status === 'welcome') {
+	if (user || status === 'welcome') {
 		return (
 			<div className={classes.welcomeScreen}>
 				<NavBar />
