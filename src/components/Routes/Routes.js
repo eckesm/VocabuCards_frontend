@@ -3,6 +3,7 @@ import { Route, Switch, Redirect } from 'react-router-dom';
 import HomeScreen from '../Home/HomeScreen';
 import ProtectedRoute from './ProtectedRoute';
 import RestrictedRoute from './RestrictedRoute';
+import RestrictedRouteScreen from './RestrictedRouteScreen';
 import RenderTextScreen from '../RenderedText/RenderTextScreen';
 import LoginScreen from '../Login/LoginScreen';
 import SignUpScreen from '../Register/SignUpScreen';
@@ -56,6 +57,8 @@ export default function Routes() {
 			<ProtectedRoute component={StripeScreen} status="success" path="/plans/success" exact />
 
 			<ProtectedRoute component={StripeScreen} status="updated" path="/plans/updated" exact />
+
+			<ProtectedRoute component={RestrictedRouteScreen} path="/restricted" exact />
 
 			<Route exact path="/logout">
 				<LogoutScreen />

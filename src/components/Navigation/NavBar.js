@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function NavBar() {
-	const { user, language, language_object, current_plan } = useSelector(store => store);
+	const { user, language, language_object, current_plan, subscription_status } = useSelector(store => store);
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const languageName = language_object[language];
@@ -93,7 +93,12 @@ export default function NavBar() {
 
 	const [ modalOpen, setModalOpen ] = useState(false);
 	const handleModalOpen = () => {
-		setModalOpen(true);
+		if (subscription_status === 'expired') {
+			history.push('/restricted');
+		}
+		else {
+			setModalOpen(true);
+		}
 	};
 	const handleModalClose = () => {
 		setModalOpen(false);

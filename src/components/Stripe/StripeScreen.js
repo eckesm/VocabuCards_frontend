@@ -22,7 +22,6 @@ import {
 
 import { SCREEN_STRIPE_MOBILE, SCREEN_STRIPE_DESKTOP } from '../../settings';
 
-
 const useStyles = makeStyles(theme => ({
 	screen    : {
 		height                         : '100vh',
@@ -85,26 +84,33 @@ export default function StripeScreen({ status = null, message = null }) {
 	}
 
 	useEffect(() => {
-		if (status === 'success') {
-			dispatch(clearAlerts());
-			dispatch(addAlert(stripeSuccessAlert(current_plan, stripe_period_end, false)));
-		}
-		if (status === 'expired') {
-			dispatch(clearAlerts());
+		dispatch(clearAlerts());
+
+		if (subscription_status === 'expired') {
 			dispatch(addAlert(stripeExpiredAlert(current_plan, stripe_period_end, false)));
 		}
-		if (status === 'updated') {
-			dispatch(clearAlerts());
-			if (!stripe_payment_method) {
-				dispatch(addAlert(stripeNoPaymentAlert(current_plan, stripe_period_end, false)));
+		else {
+			if (status === 'success') {
+				// dispatch(clearAlerts());
+				dispatch(addAlert(stripeSuccessAlert(current_plan, stripe_period_end, false)));
 			}
-			else if (subscription_status === 'expiring') {
-				dispatch(addAlert(stripeExpiringAlert(current_plan, stripe_period_end, false)));
-			}
-			else {
-				dispatch(addAlert(stripeCurrentAlert(current_plan, stripe_period_end, false)));
+			// if (status === 'expired') {
+			// 	dispatch(addAlert(stripeExpiredAlert(current_plan, stripe_period_end, false)));
+			// }
+			if (status === 'updated') {
+				// dispatch(clearAlerts());
+				if (!stripe_payment_method) {
+					dispatch(addAlert(stripeNoPaymentAlert(current_plan, stripe_period_end, false)));
+				}
+				else if (subscription_status === 'expiring') {
+					dispatch(addAlert(stripeExpiringAlert(current_plan, stripe_period_end, false)));
+				}
+				else {
+					dispatch(addAlert(stripeCurrentAlert(current_plan, stripe_period_end, false)));
+				}
 			}
 		}
+
 		history.push('/plans');
 	}, []);
 

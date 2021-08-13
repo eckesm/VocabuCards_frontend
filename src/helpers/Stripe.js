@@ -32,7 +32,17 @@ export function stripeExpiredAlert(current_plan, stripe_period_end, closeMs = fa
 	const dateVal = new Date(stripe_period_end * 1000).toLocaleDateString('en-US');
 	return {
 		type    : 'error',
-		title   : `${current_plan.toUpperCase()} Expired`,
+		title   : `${current_plan.toUpperCase()} Plan Expired`,
+		text    : `You do not have an active account.  Please click the "Manage Billing" button on the "Subscriptions" page to update your billing settings and reactivate your account.`,
+		closeMs : closeMs
+	};
+}
+
+export function restrictedExpiredAlert(current_plan, stripe_period_end, closeMs = false) {
+	const dateVal = new Date(stripe_period_end * 1000).toLocaleDateString('en-US');
+	return {
+		type    : 'error',
+		title   : `${current_plan.toUpperCase()} Plan Expired`,
 		text    : 'You must have an active account to access this page.',
 		closeMs : closeMs
 	};
