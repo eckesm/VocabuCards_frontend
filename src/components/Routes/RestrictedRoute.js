@@ -21,7 +21,7 @@ export default function RestrictedRoute({ component: Component, path, ...rest })
 			<Route
 				{...rest}
 				render={props =>
-					subscription_status === 'expired' ? <RestrictedRouteScreen /> : <Component {...props} {...rest} />}
+					subscription_status === 'past_due' ? <RestrictedRouteScreen /> : <Component {...props} {...rest} />}
 			/>
 		);
 	}

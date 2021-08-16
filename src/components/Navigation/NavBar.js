@@ -93,7 +93,7 @@ export default function NavBar() {
 
 	const [ modalOpen, setModalOpen ] = useState(false);
 	const handleModalOpen = () => {
-		if (subscription_status === 'expired') {
+		if (subscription_status === 'past_due') {
 			history.push('/restricted');
 		}
 		else {
@@ -141,18 +141,26 @@ export default function NavBar() {
 						<Button color="inherit" href="/#/getting-started" style={{ textTransform: 'none' }}>
 							Getting Started
 						</Button>
-
-						{auth && (
+						{auth &&
+						subscription_status === 'past_due' && (
+							<Button color="inherit" href="/#/plans" style={{ textTransform: 'none' }}>
+								Subscriptions
+							</Button>
+						)}
+						{auth &&
+						subscription_status !== 'past_due' && (
 							<Button color="inherit" href="/#/read" style={{ textTransform: 'none' }}>
 								Study Text
 							</Button>
 						)}
-						{auth && (
+						{auth &&
+						subscription_status !== 'past_due' && (
 							<Button color="inherit" href="/#/words" style={{ textTransform: 'none' }}>
 								My VocabuCards
 							</Button>
 						)}
-						{auth && (
+						{auth &&
+						subscription_status !== 'past_due' && (
 							<Button color="inherit" onClick={handleModalOpen} style={{ textTransform: 'none' }}>
 								Add Word
 							</Button>

@@ -17,7 +17,8 @@ import {
 	stripeSuccessAlert,
 	stripeExpiringAlert,
 	stripeNoPaymentAlert,
-	stripeExpiredAlert
+	stripePastDueAlert,
+	stripeTrialAlert
 } from '../../helpers/Stripe';
 
 import { SCREEN_STRIPE_MOBILE, SCREEN_STRIPE_DESKTOP } from '../../settings';
@@ -69,7 +70,8 @@ export default function StripeScreen({ status = null, message = null }) {
 		current_plan,
 		subscription_status,
 		stripe_period_end,
-		stripe_payment_method
+		stripe_payment_method,
+		stripe_cancel_at_period_end
 	} = useSelector(store => store);
 
 	async function handleBillingPortal(evt) {
@@ -86,24 +88,22 @@ export default function StripeScreen({ status = null, message = null }) {
 	useEffect(() => {
 		dispatch(clearAlerts());
 
-		if (subscription_status === 'expired') {
-			dispatch(addAlert(stripeExpiredAlert(current_plan, stripe_period_end, false)));
+		if (subscription_status === 'past_due') {
+			dispatch(addAlert(stripePastDueAlert(current_plan, stripe_period_end, false)));
+		}
+		if (subscription_status === 'trialing') {
+			dispatch(addAlert(stripeTrialAlert(current_plan, stripe_period_end, false)));
 		}
 		else {
 			if (status === 'success') {
-				// dispatch(clearAlerts());
 				dispatch(addAlert(stripeSuccessAlert(current_plan, stripe_period_end, false)));
 			}
-			// if (status === 'expired') {
-			// 	dispatch(addAlert(stripeExpiredAlert(current_plan, stripe_period_end, false)));
-			// }
 			if (status === 'updated') {
-				// dispatch(clearAlerts());
-				if (!stripe_payment_method) {
-					dispatch(addAlert(stripeNoPaymentAlert(current_plan, stripe_period_end, false)));
-				}
-				else if (subscription_status === 'expiring') {
+				if (stripe_cancel_at_period_end === true) {
 					dispatch(addAlert(stripeExpiringAlert(current_plan, stripe_period_end, false)));
+				}
+				else if (!stripe_payment_method) {
+					dispatch(addAlert(stripeNoPaymentAlert(current_plan, stripe_period_end, false)));
 				}
 				else {
 					dispatch(addAlert(stripeCurrentAlert(current_plan, stripe_period_end, false)));

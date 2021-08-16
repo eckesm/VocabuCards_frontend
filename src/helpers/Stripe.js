@@ -13,7 +13,7 @@ export function stripeExpiringAlert(current_plan, stripe_period_end, closeMs = f
 	return {
 		type    : 'warning',
 		title   : 'Plan Expiring',
-		text    : `The ${current_plan.toUpperCase()} plan is currently active, but your subscription is expiring on ${dateVal}.`,
+		text    : `The ${current_plan.toUpperCase()} plan is currently active, but your subscription is expiring on ${dateVal}.  Go to the "Subscriptions" page to add a payment method and to make changes to your Stripe plan.`,
 		closeMs : closeMs
 	};
 }
@@ -28,15 +28,15 @@ export function stripeCurrentAlert(current_plan, stripe_period_end, closeMs = fa
 	};
 }
 
-export function stripeExpiredAlert(current_plan, stripe_period_end, closeMs = false) {
-	const dateVal = new Date(stripe_period_end * 1000).toLocaleDateString('en-US');
-	return {
-		type    : 'error',
-		title   : `${current_plan.toUpperCase()} Plan Expired`,
-		text    : `You do not have an active account.  Please click the "Manage Billing" button on the "Subscriptions" page to update your billing settings and reactivate your account.`,
-		closeMs : closeMs
-	};
-}
+// export function stripeExpiredAlert(current_plan, stripe_period_end, closeMs = false) {
+// 	const dateVal = new Date(stripe_period_end * 1000).toLocaleDateString('en-US');
+// 	return {
+// 		type    : 'error',
+// 		title   : `${current_plan.toUpperCase()} Plan Expired`,
+// 		text    : `You do not have an active account.  Please click the "Manage Billing" button on the "Subscriptions" page to update your billing settings and reactivate your account.`,
+// 		closeMs : closeMs
+// 	};
+// }
 
 export function restrictedExpiredAlert(current_plan, stripe_period_end, closeMs = false) {
 	const dateVal = new Date(stripe_period_end * 1000).toLocaleDateString('en-US');
@@ -53,7 +53,8 @@ export function stripeTrialAlert(current_plan, stripe_period_end, closeMs = fals
 	return {
 		type    : 'info',
 		title   : 'Free Trial',
-		text    : `You are using a free trial that will convert to a paid ${current_plan.toUpperCase()} plan on ${dateVal}.`,
+		// text    : `You are using a free trial that will convert to a paid ${current_plan.toUpperCase()} plan on ${dateVal}.`,
+		text    : `You are using a free trial that will end on ${dateVal}.  Go to the "Subscriptions" page to add a payment method and to make changes to your Stripe plan.`,
 		closeMs : closeMs
 	};
 }
@@ -63,7 +64,17 @@ export function stripeNoPaymentAlert(current_plan, stripe_period_end, closeMs = 
 	return {
 		type    : 'warning',
 		title   : 'No Payment Method',
-		text    : `There is no payment method associated with your subscription.  If you do not add a payment method, access to your account will expire on ${dateVal}.  Go to the Subscriptions page to add a payment method and to make changes to your plan.`,
+		text    : `There is no payment method associated with your Stripe subscription.  If you do not add a payment method, access to your account will expire on ${dateVal}.  Go to the "Subscriptions" page to add a payment method and to make changes to your Stripe plan.`,
+		closeMs : closeMs
+	};
+}
+
+export function stripePastDueAlert(current_plan, stripe_period_end, closeMs = false) {
+	const dateVal = new Date(stripe_period_end * 1000).toLocaleDateString('en-US');
+	return {
+		type    : 'error',
+		title   : 'Account Past Due',
+		text    : `Your ${current_plan.toUpperCase()} plan is past due.  Go to the "Subscriptions" page to add a payment method and to make changes to your Stripe plan.`,
 		closeMs : closeMs
 	};
 }

@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 export default function SelectLanguage() {
 	const classes = useStyles();
 
-	const { languages } = useSelector(store => store);
+	const { languages, subscription_status } = useSelector(store => store);
 	const currentLanguage = useSelector(store => store.language);
 	const [ sortedLanguages, setSortedLanguages ] = useState([]);
 	const [ language, setLanguage ] = useState('');
@@ -73,27 +73,33 @@ export default function SelectLanguage() {
 
 	return (
 		<div>
-			<FormControl variant="outlined" className={classes.formControl}>
-				<InputLabel id="language-label">Change Language</InputLabel>
-				<Select
-					className={classes.select}
-					labelId="language-label"
-					id="language"
-					value={language}
-					onChange={handleChange}
-					label="Change Language"
-				>
-					{sortedLanguages.map(option => {
-						if (option[0] !== 'en') {
-							return (
-								<MenuItem key={option[0]} value={option[0]}>
-									{option[1]}
-								</MenuItem>
-							);
-						}
-					})}
-				</Select>
-			</FormControl>
+			{subscription_status === 'active' || subscription_status == 'trialing' && (
+				<FormControl variant="outlined" className={classes.formControl}>
+					<InputLabel id="language-label">Change Language</InputLabel>
+					<Select
+						className={classes.select}
+						labelId="language-label"
+						id="language"
+						value={language}
+						onChange={handleChange}
+						label="Change Language"
+					>
+						{sortedLanguages.map(option => {
+							if (option[0] !== 'en') {
+								return (
+									<MenuItem key={option[0]} value={option[0]}>
+										{option[1]}
+									</MenuItem>
+								);
+							}
+						})}
+					</Select>
+				</FormControl>
+			)
+			//  : (
+				// <p>Cannot change languages when account is not active.</p>
+			// )
+			}
 		</div>
 	);
 }

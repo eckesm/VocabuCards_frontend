@@ -1,4 +1,3 @@
-// import axios from 'axios';
 import {
 	GET_USER_LANGUAGE_WORDS,
 	SET_USER_LANGUAGE,
@@ -16,8 +15,13 @@ import {
 import { addAlert } from './auth';
 import { API_URL } from '../helpers/API';
 import { customAxios } from '../helpers/tokens';
-import { stripeCurrentAlert, stripeExpiringAlert, stripeTrialAlert, stripeNoPaymentAlert } from '../helpers/Stripe';
-// import { DEFAULT_ALERT_CLOSE_MS } from '../settings';
+import {
+	stripeCurrentAlert,
+	stripeExpiringAlert,
+	stripeTrialAlert,
+	stripeNoPaymentAlert,
+	stripePastDueAlert
+} from '../helpers/Stripe';
 
 function getAccessToken() {
 	return localStorage.getItem('access_token') || null;
@@ -45,12 +49,15 @@ export function getUserInfo() {
 					last_source_code,
 					name,
 					news_sources,
+					stripe_cancel_at_period_end,
+					stripe_canceled_at,
 					stripe_customer_id,
 					stripe_payment_method,
-					stripe_period_start,
 					stripe_period_end,
+					stripe_period_start,
 					subscription_status,
 					trial_end,
+					trial_start,
 					user,
 					words_array
 				} = res.data;
@@ -63,26 +70,29 @@ export function getUserInfo() {
 				});
 
 				dispatch({
-					type                  : GET_USER_INFO,
+					type                        : GET_USER_INFO,
 					account_override,
 					current_plan,
 					first_login,
 					is_email_confirmed,
-					language              : last_source_code,
-					languages             : languages,
-					language_object       : languageObject,
+					language                    : last_source_code,
+					languages                   : languages,
+					language_object             : languageObject,
 					last_login,
 					name,
-					news_sources          : news_sources || {},
+					news_sources                : news_sources || {},
+					stripe_cancel_at_period_end,
+					stripe_canceled_at,
 					stripe_customer_id,
 					stripe_payment_method,
-					stripe_period_start,
 					stripe_period_end,
+					stripe_period_start,
 					subscription_status,
-					text_input            : current_text || null,
+					text_input                  : current_text || null,
 					trial_end,
+					trial_start,
 					user,
-					words_array           : words_array || []
+					words_array                 : words_array || []
 				});
 
 				let closeMs = true;
@@ -99,14 +109,17 @@ export function getUserInfo() {
 				}
 
 				if (account_override !== 'full_access') {
-					if (!stripe_payment_method) {
-						dispatch(addAlert(stripeNoPaymentAlert(current_plan, stripe_period_end, false)));
+					if (subscription_status === 'past_due') {
+						dispatch(addAlert(stripePastDueAlert(current_plan, stripe_period_end, false)));
 					}
-					else if (trial_end > Date.now() / 1000) {
+					else if (subscription_status === 'trialing') {
 						dispatch(addAlert(stripeTrialAlert(current_plan, stripe_period_end, closeMs)));
 					}
-					else if (subscription_status === 'expiring') {
+					else if (stripe_cancel_at_period_end === true) {
 						dispatch(addAlert(stripeExpiringAlert(current_plan, stripe_period_end, false)));
+					}
+					else if (!stripe_payment_method) {
+						dispatch(addAlert(stripeNoPaymentAlert(current_plan, stripe_period_end, false)));
 					}
 					else {
 						dispatch(addAlert(stripeCurrentAlert(current_plan, stripe_period_end, closeMs)));
