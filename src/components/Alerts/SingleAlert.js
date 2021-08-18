@@ -38,8 +38,8 @@ export default function SingleAlert({ id, type = 'info', title, text, closeMs = 
 	}, []);
 
 	return (
-		<div className={classes.root}>
-			<Collapse in={open}>
+		<Collapse in={open}>
+			<div className={classes.root}>
 				<Alert
 					variant="filled"
 					severity={type}
@@ -59,7 +59,7 @@ export default function SingleAlert({ id, type = 'info', title, text, closeMs = 
 					{title && <AlertTitle>{title}</AlertTitle>}
 					{text}
 				</Alert>
-			</Collapse>
-		</div>
+			</div>
+		</Collapse>
 	);
 }

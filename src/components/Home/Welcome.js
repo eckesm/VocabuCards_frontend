@@ -31,10 +31,10 @@ export default function Welcome() {
 
 	setTimeout(() => {
 		setCheckLogin(true);
-	}, 2500);
+	}, 5000);
 
 	function goToHomeScreen() {
-			history.push('/');
+		history.push('/');
 	}
 
 	return (
@@ -43,7 +43,7 @@ export default function Welcome() {
 				<div className={classes.container}>
 					<div>
 						<h4>
-							<i>...loading...</i>
+							<i>...logging in and loading your subscription...</i>
 						</h4>
 						{checkLogin && <CustomButton onClick={goToHomeScreen}>Return to Login</CustomButton>}
 					</div>

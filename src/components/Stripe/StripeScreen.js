@@ -16,7 +16,7 @@ import {
 	stripeCurrentAlert,
 	stripeSuccessAlert,
 	stripeExpiringAlert,
-	stripeNoPaymentAlert,
+	// stripeNoPaymentAlert,
 	stripePastDueAlert,
 	stripeTrialAlert
 } from '../../helpers/Stripe';
@@ -91,7 +91,7 @@ export default function StripeScreen({ status = null, message = null }) {
 		if (subscription_status === 'past_due') {
 			dispatch(addAlert(stripePastDueAlert(current_plan, stripe_period_end, false)));
 		}
-		if (subscription_status === 'trialing') {
+		if (subscription_status === 'trialing' && stripe_cancel_at_period_end === true) {
 			dispatch(addAlert(stripeTrialAlert(current_plan, stripe_period_end, false)));
 		}
 		else {
@@ -102,10 +102,10 @@ export default function StripeScreen({ status = null, message = null }) {
 				if (stripe_cancel_at_period_end === true) {
 					dispatch(addAlert(stripeExpiringAlert(current_plan, stripe_period_end, false)));
 				}
-				else if (!stripe_payment_method) {
-					dispatch(addAlert(stripeNoPaymentAlert(current_plan, stripe_period_end, false)));
-				}
 				else {
+					// else if (!stripe_payment_method) {
+					// 	dispatch(addAlert(stripeNoPaymentAlert(current_plan, stripe_period_end, false)));
+					// }
 					dispatch(addAlert(stripeCurrentAlert(current_plan, stripe_period_end, false)));
 				}
 			}

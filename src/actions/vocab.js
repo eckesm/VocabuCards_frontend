@@ -19,7 +19,7 @@ import {
 	stripeCurrentAlert,
 	stripeExpiringAlert,
 	stripeTrialAlert,
-	stripeNoPaymentAlert,
+	// stripeNoPaymentAlert,
 	stripePastDueAlert
 } from '../helpers/Stripe';
 
@@ -112,15 +112,15 @@ export function getUserInfo() {
 					if (subscription_status === 'past_due') {
 						dispatch(addAlert(stripePastDueAlert(current_plan, stripe_period_end, false)));
 					}
-					else if (subscription_status === 'trialing') {
+					else if (subscription_status === 'trialing' && stripe_cancel_at_period_end === true) {
 						dispatch(addAlert(stripeTrialAlert(current_plan, stripe_period_end, closeMs)));
 					}
 					else if (stripe_cancel_at_period_end === true) {
 						dispatch(addAlert(stripeExpiringAlert(current_plan, stripe_period_end, false)));
 					}
-					else if (!stripe_payment_method) {
-						dispatch(addAlert(stripeNoPaymentAlert(current_plan, stripe_period_end, false)));
-					}
+					// else if (!stripe_payment_method) {
+					// 	dispatch(addAlert(stripeNoPaymentAlert(current_plan, stripe_period_end, false)));
+					// }
 					else {
 						dispatch(addAlert(stripeCurrentAlert(current_plan, stripe_period_end, closeMs)));
 					}
@@ -129,7 +129,7 @@ export function getUserInfo() {
 				if (!is_email_confirmed) {
 					dispatch(
 						addAlert({
-							type    : 'info',
+							type    : 'warning',
 							title   : 'Confirm Email Address',
 							text    : `Please confirm your email address... you should already have an email from us in your ${user} inbox.`,
 							closeMs : closeMs

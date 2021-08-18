@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
+import { makeStyles } from '@material-ui/core/styles';
+
 import { logoutUser, logoutUserViaAPI } from '../../actions/auth';
 import { addAlert } from '../../actions/auth';
-import { makeStyles } from '@material-ui/core/styles';
 
 import { SCREEN_LOGIN_MOBILE, SCREEN_LOGIN_DESKTOP } from '../../settings';
 
@@ -79,8 +80,11 @@ export default function Logout() {
 	}, []);
 
 	return (
-		<div className={classes.container}>
-			<h1>You are being logged out.</h1>
+
+		<div className={classes.screen}>
+			<div className={classes.container}>
+				<h1>You are being logged out.</h1>
+			</div>
 		</div>
 	);
 }
