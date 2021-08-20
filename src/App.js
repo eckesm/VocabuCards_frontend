@@ -8,7 +8,6 @@ import { addAlert, logoutUser } from './actions/auth';
 import './App.css';
 import '@fontsource/roboto';
 
-import NavBar from './components/Navigation/NavBar';
 import Routes from './components/Routes/Routes';
 
 function App() {

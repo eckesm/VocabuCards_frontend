@@ -18,7 +18,8 @@ import {
 	stripeExpiringAlert,
 	// stripeNoPaymentAlert,
 	stripePastDueAlert,
-	stripeTrialAlert
+	stripeTrialAlert,
+	stripeExpiredAlert
 } from '../../helpers/Stripe';
 
 import { SCREEN_STRIPE_MOBILE, SCREEN_STRIPE_DESKTOP } from '../../settings';
@@ -70,7 +71,7 @@ export default function StripeScreen({ status = null, message = null }) {
 		current_plan,
 		subscription_status,
 		stripe_period_end,
-		stripe_payment_method,
+		// stripe_payment_method,
 		stripe_cancel_at_period_end
 	} = useSelector(store => store);
 
@@ -91,14 +92,17 @@ export default function StripeScreen({ status = null, message = null }) {
 		if (subscription_status === 'past_due') {
 			dispatch(addAlert(stripePastDueAlert(current_plan, stripe_period_end, false)));
 		}
-		if (subscription_status === 'trialing' && stripe_cancel_at_period_end === true) {
+		else if (subscription_status === 'canceled') {
+			dispatch(addAlert(stripeExpiredAlert(current_plan, stripe_period_end, false)));
+		}
+		else if (subscription_status === 'trialing' && stripe_cancel_at_period_end === true) {
 			dispatch(addAlert(stripeTrialAlert(current_plan, stripe_period_end, false)));
 		}
 		else {
 			if (status === 'success') {
 				dispatch(addAlert(stripeSuccessAlert(current_plan, stripe_period_end, false)));
 			}
-			if (status === 'updated') {
+			else if (status === 'updated') {
 				if (stripe_cancel_at_period_end === true) {
 					dispatch(addAlert(stripeExpiringAlert(current_plan, stripe_period_end, false)));
 				}
@@ -118,7 +122,7 @@ export default function StripeScreen({ status = null, message = null }) {
 		<div className={classes.screen}>
 			<NavBar />
 			<AlertsContainer />
-			{current_plan ? (
+			{subscription_status !== 'canceled' ? (
 				<div className={classes.container}>
 					{message && (
 						<h4>

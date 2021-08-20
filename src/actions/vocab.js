@@ -20,7 +20,9 @@ import {
 	stripeExpiringAlert,
 	stripeTrialAlert,
 	// stripeNoPaymentAlert,
-	stripePastDueAlert
+	stripePastDueAlert,
+	stripeExpiredAlert,
+	stripeRenewingSoonAlert
 } from '../helpers/Stripe';
 
 function getAccessToken() {
@@ -112,17 +114,28 @@ export function getUserInfo() {
 					if (subscription_status === 'past_due') {
 						dispatch(addAlert(stripePastDueAlert(current_plan, stripe_period_end, false)));
 					}
+					else if (subscription_status === 'canceled') {
+						dispatch(addAlert(stripeExpiredAlert(current_plan, stripe_period_end, false)));
+					}
 					else if (subscription_status === 'trialing' && stripe_cancel_at_period_end === true) {
 						dispatch(addAlert(stripeTrialAlert(current_plan, stripe_period_end, closeMs)));
 					}
 					else if (stripe_cancel_at_period_end === true) {
 						dispatch(addAlert(stripeExpiringAlert(current_plan, stripe_period_end, false)));
 					}
-					// else if (!stripe_payment_method) {
-					// 	dispatch(addAlert(stripeNoPaymentAlert(current_plan, stripe_period_end, false)));
-					// }
 					else {
-						dispatch(addAlert(stripeCurrentAlert(current_plan, stripe_period_end, closeMs)));
+						const stripeEndDate = stripe_period_end * 1000;
+						const nowDate = Date.now();
+						const daysToRenewal = (stripeEndDate - nowDate) / 86400000;
+						if (daysToRenewal < 2 && current_plan === 'weekly') {
+							dispatch(addAlert(stripeRenewingSoonAlert(current_plan, stripe_period_end, false)));
+						}
+						else if (daysToRenewal < 4 && current_plan === 'monthly') {
+							dispatch(addAlert(stripeRenewingSoonAlert(current_plan, stripe_period_end, false)));
+						}
+						else if (daysToRenewal < 10 && current_plan === 'annually') {
+							dispatch(addAlert(stripeRenewingSoonAlert(current_plan, stripe_period_end, false)));
+						}
 					}
 				}
 

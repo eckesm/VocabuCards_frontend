@@ -43,8 +43,9 @@ const useStyles = makeStyles(theme => ({
 export default function Instructions() {
 	const classes = useStyles();
 	// const history = useHistory();
-	const { user, language, language_object, subscription_status } = useSelector(store => store);
-	const languageName = language_object[language];
+	// const { user, language, language_object, subscription_status } = useSelector(store => store);
+	const { user, subscription_status } = useSelector(store => store);
+	// const languageName = language_object[language];
 
 	const [ modalOpen, setModalOpen ] = useState(false);
 	const handleModalOpen = () => {
