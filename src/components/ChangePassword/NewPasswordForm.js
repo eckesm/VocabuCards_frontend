@@ -85,7 +85,7 @@ export default function NewPasswordForm({ token, setShowForm }) {
 					style={{ marginTop: '20px', width: '250px' }}
 					disabled={loading ? true : false}
 				>
-					{loading ? 'loading...' : 'Change Password'}
+					{loading ? 'Loading' : 'Change Password'}
 				</CustomButton>
 			</form>
 		</div>

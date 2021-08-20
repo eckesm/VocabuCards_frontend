@@ -31,7 +31,8 @@ const useStyles = makeStyles(theme => ({
 		borderRadius                   : '3px',
 		overflowY                      : 'scroll',
 		[theme.breakpoints.down('xs')]: {
-			margin : '18px'
+			margin : '10px',
+			marginTop : '15px',
 		},
 		[theme.breakpoints.up('sm')]: {
 			margin    : '40px',

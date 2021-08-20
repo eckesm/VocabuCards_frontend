@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 		[theme.breakpoints.up('md')]: {
 			boxShadow : '5px 5px 8px grey',
 			margin    : '15px'
-		},
+		}
 		// marginTop                      : '10px',
 		// marginBottom                   : '10px'
 	}

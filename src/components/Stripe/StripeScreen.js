@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
@@ -74,16 +74,21 @@ export default function StripeScreen({ status = null, message = null }) {
 		// stripe_payment_method,
 		stripe_cancel_at_period_end
 	} = useSelector(store => store);
+	const [ loading, setLoading ] = useState(false);
 
 	async function handleBillingPortal(evt) {
 		evt.preventDefault();
+		setLoading(true);
 		const res = await createStripeBillingPortalSession(stripe_customer_id);
 		try {
 			const url = res.url;
 			window.location.href = url;
+			// setLoading(false);
 		} catch (e) {
 			console.log(e);
+			setLoading(false);
 		}
+
 	}
 
 	useEffect(() => {
@@ -131,7 +136,9 @@ export default function StripeScreen({ status = null, message = null }) {
 					)}
 					<ProductChoices current_plan={current_plan} />
 					<form className={classes.button} onSubmit={handleBillingPortal}>
-						<CustomButton type="submit">Manage Billing</CustomButton>
+						<CustomButton type="submit" disabled={loading ? true : false}>
+							{loading ? <i>Loading Stripe</i> : 'Manage Billing'}
+						</CustomButton>
 					</form>
 				</div>
 			) : (

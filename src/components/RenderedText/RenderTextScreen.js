@@ -39,8 +39,8 @@ const useStyles = makeStyles(theme => ({
 		fontFamily                     : 'roboto, sans-serif',
 		backgroundColor                : 'snow',
 		[theme.breakpoints.down('xs')]: {
-			margin    : '18px',
-			marginTop : '-50px'
+			margin    : '10px',
+			marginTop : '-45px'
 		},
 		[theme.breakpoints.up('sm')]: {
 			margin    : '40px',

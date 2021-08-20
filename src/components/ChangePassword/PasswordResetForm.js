@@ -71,7 +71,7 @@ export default function PasswordResetForm({ setAlerts, setShowForm }) {
 					autoCapitalize="false"
 				/>
 				<CustomButton type="submit" style={{ marginTop: '20px' }} disabled={loading ? true : false}>
-					{loading ? 'loading...' : 'Send Password Reset Link'}
+					{loading ? 'Loading' : 'Send Password Reset Link'}
 				</CustomButton>
 			</form>
 		</div>

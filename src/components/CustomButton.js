@@ -9,6 +9,7 @@ const useStyles = makeStyles(theme => ({
 	root            : {
 		background         : 'rgb(16,110,148)',
 		background         : 'linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 90%)',
+		// background         : 'linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 100%)',
 		borderRadius       : 3,
 		border             : 0,
 		color              : 'white',
@@ -21,7 +22,7 @@ const useStyles = makeStyles(theme => ({
 		padding            : '8px 20px',
 		boxShadow          : '0 3px 5px 2px rgba(16,110,148,.3)',
 		textTransform      : 'none',
-		opacity            : '.85',
+		// opacity            : '.85',
 		transitionDuration : '500ms',
 		transitionProperty : 'opacity',
 		'&:hover'          : {
@@ -31,6 +32,7 @@ const useStyles = makeStyles(theme => ({
 	fixed_width_125 : {
 		background         : 'rgb(16,110,148)',
 		background         : 'linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 90%)',
+		// background         : 'linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 100%)',
 		borderRadius       : 3,
 		border             : 0,
 		color              : 'white',
@@ -44,7 +46,7 @@ const useStyles = makeStyles(theme => ({
 		padding            : '5px 8px',
 		boxShadow          : '0 3px 5px 2px rgba(16,110,148,.3)',
 		textTransform      : 'none',
-		opacity            : '.85',
+		// opacity            : '.85',
 		transitionDuration : '500ms',
 		transitionProperty : 'opacity',
 		'&:hover'          : {
@@ -54,6 +56,7 @@ const useStyles = makeStyles(theme => ({
 	small           : {
 		background         : 'rgb(16,110,148)',
 		background         : 'linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 90%)',
+		// background         : 'linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 100%)',
 		borderRadius       : 3,
 		border             : 0,
 		color              : 'white',
@@ -68,7 +71,7 @@ const useStyles = makeStyles(theme => ({
 		padding            : '5px 10px',
 		boxShadow          : '0 3px 5px 2px rgba(16,110,148,.3)',
 		textTransform      : 'none',
-		opacity            : '.85',
+		// opacity            : '.85',
 		transitionDuration : '500ms',
 		transitionProperty : 'opacity',
 		'&:hover'          : {
@@ -78,6 +81,7 @@ const useStyles = makeStyles(theme => ({
 	width_resize    : {
 		background                     : 'rgb(16,110,148)',
 		background                     : 'linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 90%)',
+		// background                     : 'linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 100%)',
 		borderRadius                   : 3,
 		border                         : 0,
 		color                          : 'white',
@@ -89,7 +93,7 @@ const useStyles = makeStyles(theme => ({
 		padding                        : '8px 20px',
 		boxShadow                      : '0 3px 5px 2px rgba(16,110,148,.3)',
 		textTransform                  : 'none',
-		opacity                        : '.85',
+		// opacity                        : '.85',
 		transitionDuration             : '500ms',
 		transitionProperty             : 'opacity',
 		'&:hover'                      : {
@@ -116,7 +120,7 @@ const useStyles = makeStyles(theme => ({
 		padding            : '0 20px',
 		boxShadow          : '0 3px 5px 2px lightgrey',
 		textTransform      : 'none',
-		opacity            : '.9',
+		// opacity            : '.9',
 		transitionDuration : '500ms',
 		transitionProperty : 'background',
 		'&:hover'          : {

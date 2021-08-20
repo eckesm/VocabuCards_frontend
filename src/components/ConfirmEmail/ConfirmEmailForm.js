@@ -77,7 +77,7 @@ export default function ConfirmEmailForm({ token, setAlerts, setShowForm }) {
 					className={classes.button}
 					disabled={loading ? true : false}
 				>
-					{loading ? 'loading...' : 'Confirm Email Address'}
+					{loading ? 'Loading' : 'Confirm Email Address'}
 				</Button>
 			</form>
 		</div>
