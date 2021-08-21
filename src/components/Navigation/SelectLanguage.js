@@ -73,7 +73,7 @@ export default function SelectLanguage() {
 
 	return (
 		<div>
-			{subscription_status === 'active' || subscription_status == 'trialing' && (
+			{(subscription_status === 'active' || subscription_status === 'trialing') && (
 				<FormControl variant="outlined" className={classes.formControl}>
 					<InputLabel id="language-label">Change Language</InputLabel>
 					<Select
@@ -97,7 +97,7 @@ export default function SelectLanguage() {
 				</FormControl>
 			)
 			//  : (
-				// <p>Cannot change languages when account is not active.</p>
+			// <p>Cannot change languages when account is not active.</p>
 			// )
 			}
 		</div>

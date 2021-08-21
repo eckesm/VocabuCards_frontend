@@ -1,0 +1,157 @@
+.root {
+	background: rgb(16, 110, 148);
+	background: linear-gradient(90deg, rgba(16, 110, 148, 1) 25%, rgba(82, 82, 214, 1) 90%);
+	/* background         :linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 100%); */
+	border-radius: 3;
+	border: 0;
+	color: white;
+	font-family: roboto, sans-serif;
+	font-weight: bold;
+	font-size: 1.15rem;
+	height: min-content;
+	width: max-content;
+	margin: 5px;
+	padding: 8px 20px;
+	box-shadow: 0 3px 5px 2px rgba(16, 110, 148, .3);
+	text-transform: none;
+	opacity: .85;
+	transition-duration: 500ms;
+	transition-property: opacity;
+}
+.root:hover {
+	opacity: 1;
+}
+.fixed_width_125 {
+	background: rgb(16, 110, 148);
+	background: linear-gradient(90deg, rgba(16, 110, 148, 1) 25%, rgba(82, 82, 214, 1) 90%);
+	/* background         :linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 100%); */
+	border-radius: 3;
+	border: 0;
+	color: white;
+	font-family: roboto, sans-serif;
+	font-weight: bold;
+	font-size: .85rem;
+	/* height             :min-content; */
+	width: 125px;
+	margin-top: 3px;
+	margin-bottom: 3px;
+	padding: 5px 8px;
+	box-shadow: 0 3px 5px 2px rgba(16, 110, 148, .3);
+	text-transform: none;
+	opacity: .85;
+	transition-duration: 500ms;
+	transition-property: opacity;
+}
+.fixed_width_125:hover {
+	opacity: 1;
+}
+.small {
+	background: rgb(16, 110, 148);
+	background: linear-gradient(90deg, rgba(16, 110, 148, 1) 25%, rgba(82, 82, 214, 1) 90%);
+	/* background         :linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 100%); */
+	border-radius: 3;
+	border: 0;
+	color: white;
+	font-family: roboto, sans-serif;
+	font-weight: bold;
+	font-size: .85rem;
+	height: min-content;
+	width: max-content;
+	margin: 5px;
+	margin-top: auto;
+	margin-bottom: auto;
+	padding: 5px 10px;
+	box-shadow: 0 3px 5px 2px rgba(16, 110, 148, .3);
+	text-transform: none;
+	opacity: .85;
+	transition-duration: 500ms;
+	transition-property: opacity;
+}
+.small:hover {
+	opacity: 1;
+}
+.width_resize {
+	background: rgb(16, 110, 148);
+	background: linear-gradient(90deg, rgba(16, 110, 148, 1) 25%, rgba(82, 82, 214, 1) 90%);
+	/* background                     :linear-gradient(90deg, rgba(16,110,148,1) 25%, rgba(82,82,214,1) 100%); */
+	border-radius: 3;
+	border: 0;
+	color: white;
+	font-family: roboto, sans-serif;
+	font-weight: bold;
+	font-size: 1.15rem;
+	height: min-content;
+	margin: 5px;
+	padding: 8px 20px;
+	box-shadow: 0 3px 5px 2px rgba(16, 110, 148, .3);
+	text-transform: none;
+	opacity: .85;
+	transition-duration: 500ms;
+	transition-property: opacity;
+}
+/* @media (max-width: 500px) {
+	.width_resize {
+		background: rgb(16, 110, 148);
+		background: linear-gradient(90deg, rgba(16, 110, 148, 1) 25%, rgba(82, 82, 214, 1) 90%);
+		border-radius: 3;
+		border: 0;
+		color: white;
+		font-family: roboto, sans-serif;
+		font-weight: bold;
+		font-size: 1.15rem;
+		height: min-content;
+		margin: 5px;
+		padding: 8px 20px;
+		box-shadow: 0 3px 5px 2px rgba(16, 110, 148, .3);
+		text-transform: none;
+		opacity: .85;
+		transition-duration: 500ms;
+		transition-property: opacity;
+		width: '100%';
+	}
+}
+@media (min-width: 500px) {
+	.width_resize {
+		background: rgb(16, 110, 148);
+		background: linear-gradient(90deg, rgba(16, 110, 148, 1) 25%, rgba(82, 82, 214, 1) 90%);
+		border-radius: 3;
+		border: 0;
+		color: white;
+		font-family: roboto, sans-serif;
+		font-weight: bold;
+		font-size: 1.15rem;
+		height: min-content;
+		margin: 5px;
+		padding: 8px 20px;
+		box-shadow: 0 3px 5px 2px rgba(16, 110, 148, .3);
+		text-transform: none;
+		opacity: .85;
+		transition-duration: 500ms;
+		transition-property: opacity;
+		width: '300px';
+	}
+} */
+.width_resize:hover {
+	opacity: 1;
+}
+.default {
+	background: darkgrey;
+	border-radius: 3;
+	border: 0;
+	color: white;
+	font-family: roboto, sans-serif;
+	font-weight: bold;
+	font-size: 1.15rem;
+	height: 50;
+	width: max-content;
+	margin: 5px;
+	padding: 0 20px;
+	box-shadow: 0 3px 5px 2px lightgrey;
+	text-transform: none;
+	opacity: .9;
+	transition-duration: 500ms;
+	transition-property: background;
+}
+.default:hover {
+	background: grey;
+}

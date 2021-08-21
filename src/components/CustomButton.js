@@ -5,6 +5,8 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 
+import './CustomButton.css'
+
 const useStyles = makeStyles(theme => ({
 	root            : {
 		background         : 'rgb(16,110,148)',
@@ -22,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 		padding            : '8px 20px',
 		boxShadow          : '0 3px 5px 2px rgba(16,110,148,.3)',
 		textTransform      : 'none',
-		// opacity            : '.85',
+		opacity            : '.85',
 		transitionDuration : '500ms',
 		transitionProperty : 'opacity',
 		'&:hover'          : {
@@ -46,7 +48,7 @@ const useStyles = makeStyles(theme => ({
 		padding            : '5px 8px',
 		boxShadow          : '0 3px 5px 2px rgba(16,110,148,.3)',
 		textTransform      : 'none',
-		// opacity            : '.85',
+		opacity            : '.85',
 		transitionDuration : '500ms',
 		transitionProperty : 'opacity',
 		'&:hover'          : {
@@ -71,7 +73,7 @@ const useStyles = makeStyles(theme => ({
 		padding            : '5px 10px',
 		boxShadow          : '0 3px 5px 2px rgba(16,110,148,.3)',
 		textTransform      : 'none',
-		// opacity            : '.85',
+		opacity            : '.85',
 		transitionDuration : '500ms',
 		transitionProperty : 'opacity',
 		'&:hover'          : {
@@ -93,7 +95,7 @@ const useStyles = makeStyles(theme => ({
 		padding                        : '8px 20px',
 		boxShadow                      : '0 3px 5px 2px rgba(16,110,148,.3)',
 		textTransform                  : 'none',
-		// opacity                        : '.85',
+		opacity                        : '.85',
 		transitionDuration             : '500ms',
 		transitionProperty             : 'opacity',
 		'&:hover'                      : {
@@ -120,15 +122,28 @@ const useStyles = makeStyles(theme => ({
 		padding            : '0 20px',
 		boxShadow          : '0 3px 5px 2px lightgrey',
 		textTransform      : 'none',
-		// opacity            : '.9',
+		opacity            : '.9',
 		transitionDuration : '500ms',
 		transitionProperty : 'background',
 		'&:hover'          : {
 			background : 'grey'
 		}
 	}
+	// container       : {
+	// 	background   : 'white',
+	// 	borderRadius : 3,
+	// 	width        : 'min-content',
+	// 	height       : 'max-content',
+	// 	margin       : '5px',
+	// 	padding      : '0px'
+	// }
 }));
 export default function CustomButton(props) {
 	const classes = useStyles();
-	return <Button className={classes[props.customtype || 'root']} {...props} />;
+	return (
+		// <div className={classes.container}>
+		<Button className={classes[props.customtype || 'root']} {...props} />
+		// <Button className={props.customtype || 'root'} {...props} />
+		// </div>
+	);
 }
