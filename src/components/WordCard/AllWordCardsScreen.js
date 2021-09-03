@@ -94,7 +94,7 @@ export default function AllWordCardsScreen() {
 	return (
 		<div className={classes.screen}>
 			<NavBar />
-			<GoogleAdHorizontal />
+			{/* <GoogleAdHorizontal /> */}
 			<div className={classes.container}>
 				<h1>Vocabulary Words</h1>
 				{loading && (
