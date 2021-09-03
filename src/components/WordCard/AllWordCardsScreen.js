@@ -7,23 +7,23 @@ import { makeStyles } from '@material-ui/core/styles';
 import NavBar from '../Navigation/NavBar';
 import WordCard from './WordCard';
 import SelectWord from '../SelectWord';
+import GoogleAdHorizontal from '../Ads/GoogleAdHorizontal';
 
 import { SCREEN_WELCOME_MOBILE, SCREEN_WELCOME_DESKTOP } from '../../settings';
-
 
 const useStyles = makeStyles(theme => ({
 	screen         : {
 		height                         : 'max-content',
 		minHeight                      : '100vh',
 		paddingBottom                  : '25px',
-		backgroundRepeat : 'repeat-y',
-		backgroundSize   : '100%',
+		backgroundRepeat               : 'repeat-y',
+		backgroundSize                 : '100%',
 		[theme.breakpoints.down('xs')]: {
-			backgroundImage : `url(${SCREEN_WELCOME_MOBILE})`,
+			backgroundImage : `url(${SCREEN_WELCOME_MOBILE})`
 			// backgroundColor : 'linen'
 		},
 		[theme.breakpoints.up('sm')]: {
-			backgroundImage  : `url(${SCREEN_WELCOME_DESKTOP})`,
+			backgroundImage : `url(${SCREEN_WELCOME_DESKTOP})`
 		}
 	},
 	container      : {
@@ -94,6 +94,7 @@ export default function AllWordCardsScreen() {
 	return (
 		<div className={classes.screen}>
 			<NavBar />
+			<GoogleAdHorizontal />
 			<div className={classes.container}>
 				<h1>Vocabulary Words</h1>
 				{loading && (
