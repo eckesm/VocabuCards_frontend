@@ -15,7 +15,6 @@ import { getAccessToken } from './API';
 // 	}
 // };
 
-
 // export async function getRSSFeed(source_code) {
 // 	const parser = new Parser();
 // 	const url = RSSNewsSources[source_code]['url'];
@@ -38,7 +37,20 @@ export async function getArticleFromServer(source_code) {
 		const headers = {
 			Authorization : 'Bearer ' + getAccessToken()
 		};
-		const res = await customAxios.get(`${API_URL}/get-news-article/${source_code}`, { headers: headers });
+		const res = await customAxios.get(`${API_URL}/articles/new/${source_code}`, { headers: headers });
+
+		return res.data;
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+export async function getSavedArticleFromServer(source_code) {
+	try {
+		const headers = {
+			Authorization : 'Bearer ' + getAccessToken()
+		};
+		const res = await customAxios.get(`${API_URL}/articles/saved/random/${source_code}`, { headers: headers });
 
 		return res.data;
 	} catch (e) {

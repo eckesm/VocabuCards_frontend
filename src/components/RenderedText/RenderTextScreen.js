@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { setTextInput } from '../../actions/vocab';
 import { updateSavedRenderedText } from '../../helpers/API';
-import { getArticleFromServer } from '../../helpers/newsSources';
+import { getArticleFromServer, getSavedArticleFromServer } from '../../helpers/newsSources';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
 
 import NavBar from '../Navigation/NavBar';
@@ -18,7 +18,7 @@ import CustomButton from '../CustomButton';
 import { SCREEN_WELCOME_MOBILE, SCREEN_WELCOME_DESKTOP } from '../../settings';
 
 const useStyles = makeStyles(theme => ({
-	screen           : {
+	screen                     : {
 		height                         : 'min-content',
 		minHeight                      : '100vh',
 		paddingBottom                  : '25px',
@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
 			backgroundImage : `url(${SCREEN_WELCOME_DESKTOP})`
 		}
 	},
-	container        : {
+	container                  : {
 		margin                         : '0 auto',
 		border                         : '1px solid rgb(200, 200, 200)',
 		borderRadius                   : '3px',
@@ -66,7 +66,7 @@ const useStyles = makeStyles(theme => ({
 			boxShadow    : '5px 5px 10px black'
 		}
 	},
-	root             : {
+	root                       : {
 		'& > *'      : {
 			width                          : '95%',
 			[theme.breakpoints.down('sm')]: {
@@ -81,7 +81,7 @@ const useStyles = makeStyles(theme => ({
 		},
 		marginBottom : '30px'
 	},
-	renderTextOutput : {
+	renderTextOutput           : {
 		border                         : '1px solid rgb(200, 200, 200)',
 		borderRadius                   : '3px',
 		fontFamily                     : 'roboto, sans-serif',
@@ -102,22 +102,49 @@ const useStyles = makeStyles(theme => ({
 			marginTop : '0px'
 		}
 	},
-	empty            : {
+	empty                      : {
 		textAlign : 'center'
 	},
-	buttonContainer  : {
+	buttonContainer            : {
 		marginBottom                   : '0px',
+		// justifyContent                 : 'space-around',
+		justifyContent                 : 'center',
 		[theme.breakpoints.down('sm')]: {
 			marginTop : '0px'
 		},
 		[theme.breakpoints.up('md')]: {
+			display   : 'flex',
 			marginTop : '-10px'
 		},
 		[theme.breakpoints.up('lg')]: {
 			marginTop : '-15px'
 		}
 	},
-	clearButton      : {
+	getArticlesButtonContainer : {
+		// marginTop     : '10px',
+		marginBottom                   : '10px',
+		paddingTop                     : '10px',
+		paddingBottom                  : '10px',
+		[theme.breakpoints.down('sm')]: {
+			marginLeft : '0px',
+			width      : '100%',
+			marginTop  : '20px'
+		},
+		[theme.breakpoints.up('md')]: {
+			border       : '1px solid rgb(200, 200, 200)',
+			borderRadius : '3px',
+			marginLeft   : '25px',
+			width        : '300px'
+		}
+	},
+	buttonHeading              : {
+		fontWeight   : 'bold',
+		textDecoration    : 'underline',
+		fontSize     : '1.2rem',
+		marginTop    : '0px',
+		marginBottom : '5px'
+	},
+	clearButton                : {
 		width                          : 'max-content',
 		marginTop                      : '-55px',
 		position                       : 'relative',
@@ -137,37 +164,37 @@ const useStyles = makeStyles(theme => ({
 		}
 	},
 
-	rssTextOutput    : {
+	rssTextOutput              : {
 		borderBottom  : '1px solid rgb(200, 200, 200)',
 		paddingBottom : '15px',
 		marginBottom  : '15px'
 	},
-	title            : {
+	title                      : {
 		fontSize     : '2rem',
 		fontWeight   : 'bold',
 		marginTop    : '5px',
 		marginBottom : '5px'
 	},
-	author           : {
+	author                     : {
 		fontSize     : '1.5rem',
 		marginTop    : '0px',
 		marginBottom : '5px'
 	},
-	pubDate          : {
+	pubDate                    : {
 		fontSize     : '1.5rem',
 		marginTop    : '0px',
 		marginBottom : '5px'
 	},
-	linkContainer    : {
+	linkContainer              : {
 		marginTop    : '20px',
 		marginBottom : '10px'
 	},
-	linkDescription  : {
+	linkDescription            : {
 		fontSize   : '1.0rem',
 		margin     : '0px',
 		fontWeight : 'bold'
 	},
-	link             : {
+	link                       : {
 		fontSize : '1.0rem',
 		margin   : '0px',
 		wordWrap : 'break-word'
@@ -190,6 +217,7 @@ export default function RenderTextScreen() {
 		foreignText : ''
 	});
 	const [ fetchingArticle, setFetchingArticle ] = useState(false);
+	const [ fetchingSavedArticle, setFetchingSavedArticle ] = useState(false);
 
 	const [ rssObject, setRssObject ] = useLocalStorageState('rss_object', '');
 	const [ clickedArray, setClickedArray ] = useLocalStorageState('clicked_words_array', []);
@@ -240,6 +268,28 @@ export default function RenderTextScreen() {
 		setFetchingArticle(false);
 	}
 
+	async function handleGetSavedArticle() {
+		setFetchingSavedArticle(true);
+		const res = await getSavedArticleFromServer(language);
+		console.log(res);
+		try {
+			if (res.text) {
+				setRssObject(res);
+				setFormData({
+					...formData,
+					foreignText : res.text
+				});
+
+				renderAndSaveText(res.text);
+			}
+		} catch (e) {
+			console.log('Error getting news article!');
+			console.log(e);
+		}
+
+		setFetchingSavedArticle(false);
+	}
+
 	function handleSubmit(evt) {
 		evt.preventDefault();
 		setRssObject('');
@@ -287,6 +337,7 @@ export default function RenderTextScreen() {
 				if (news_sources) {
 					if (news_sources.hasOwnProperty(language)) {
 						setRssSource(news_sources[language]['source']);
+						// setRssSource(news_sources[language]['publication']);
 						setEnableRss(true);
 					}
 				}
@@ -338,17 +389,42 @@ export default function RenderTextScreen() {
 						onChange={handleChange}
 					/>
 					<div className={classes.buttonContainer}>
-						<CustomButton onClick={handleSubmit} customtype="width_resize">
-							Render Pasted/Entered Text
-						</CustomButton>
-						{enableRss && (
-							<CustomButton
-								customtype="width_resize"
-								onClick={handleGetArticle}
-								disabled={fetchingArticle ? true : false}
-							>
-								{fetchingArticle ? <i>fetching article</i> : `Get Article: ${rssSource}`}
+						<div>
+							<CustomButton onClick={handleSubmit} customtype="width_resize">
+								Render Entered Text
 							</CustomButton>
+						</div>
+						{enableRss && (
+							<div className={classes.getArticlesButtonContainer}>
+								<p className={classes.buttonHeading}>Get Article from {rssSource}</p>
+								<CustomButton
+									// customtype="width_resize"
+									onClick={handleGetArticle}
+									disabled={fetchingArticle ? true : false}
+									customtype="small_text"
+								>
+									{fetchingArticle ? (
+										<i>fetching new article</i>
+									) : (
+										// `Get New Article: ${rssSource}`
+										'Recent Article (slower)'
+									)}
+								</CustomButton>
+
+								<CustomButton
+									// customtype="width_resize"
+									onClick={handleGetSavedArticle}
+									disabled={fetchingSavedArticle ? true : false}
+									customtype="small_text"
+								>
+									{fetchingSavedArticle ? (
+										<i>fetching saved article</i>
+									) : (
+										// `Get Saved Article: ${rssSource}`
+										`Saved Article (faster)`
+									)}
+								</CustomButton>
+							</div>
 						)}
 					</div>
 				</form>
@@ -360,19 +436,16 @@ export default function RenderTextScreen() {
 						<div className={classes.rssTextOutput}>
 							{rssObject.title !== '' && <p className={classes.title}>{rssObject.title}</p>}
 							{rssObject.author !== '' && <p className={classes.author}>{rssObject.author}</p>}
-							{/* {rssObject.pubDate !== '' && ( */}
-							{/* // <p className={classes.pubDate}>{Date(rssObject.pubDate).format('dd-m-yy')}</p> */}
-							{/* )} */}
-							{rssObject.link !== '' && (
+							{rssObject.url !== '' && (
 								<div className={classes.linkContainer}>
-									{rssObject.fullText === false && (
+									{rssObject.full_text === false && (
 										<p className={classes.linkDescription}>The full article is available at: </p>
 									)}
 									{rssObject.fullText === true && (
 										<p className={classes.linkDescription}>Link to article: </p>
 									)}
-									<a href={rssObject.link} target="_blank">
-										<p className={classes.link}>{rssObject.link}</p>
+									<a href={rssObject.url} target="_blank">
+										<p className={classes.link}>{rssObject.url}</p>
 									</a>
 								</div>
 							)}
