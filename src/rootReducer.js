@@ -31,7 +31,7 @@ const INITIAL_STATE = {
 	name                        : '',
 	news_sources                : {},
 	stripe_cancel_at_period_end : null,
-	stripe_canceled_at         : null,
+	stripe_canceled_at          : null,
 	stripe_customer_id          : null,
 	stripe_payment_method       : null,
 	stripe_period_end           : null,
@@ -98,7 +98,7 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 				name                        : action.name,
 				news_sources                : action.news_sources,
 				stripe_cancel_at_period_end : action.stripe_cancel_at_period_end,
-				stripe_canceled_at         : action.stripe_canceled_at,
+				stripe_canceled_at          : action.stripe_canceled_at,
 				stripe_customer_id          : action.stripe_customer_id,
 				stripe_payment_method       : action.stripe_payment_method,
 				stripe_period_end           : action.stripe_period_end,
@@ -137,7 +137,13 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 			};
 
 		case LOGOUT_USER:
-			return INITIAL_STATE;
+			return {
+				...INITIAL_STATE,
+				language        : state.language,
+				languages       : state.languages,
+				language_object : state.language_object,
+				news_sources    : state.news_sources
+			};
 
 		case GET_USER_LANGUAGE_WORDS:
 			return {
@@ -161,7 +167,8 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 			return {
 				...state,
 				languages       : action.languages,
-				language_object : action.language_object
+				language_object : action.language_object,
+				news_sources    : action.news_sources
 			};
 
 		case ADD_WORD:

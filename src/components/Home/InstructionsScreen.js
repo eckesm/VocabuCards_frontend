@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import NavBar from '../Navigation/NavBar';
 import Instructions from './Instructions';
 import AlertsContainer from '../Alerts/AlertsContainer';
+import ScreenShots from './ScreenShots'
 
 import { SCREEN_WELCOME_MOBILE, SCREEN_WELCOME_DESKTOP } from '../../settings';
 
@@ -71,6 +72,7 @@ export default function InstructionsScreen() {
 				<h1>Getting Started</h1>
 				<Instructions />
 			</div>
+			<ScreenShots />
 		</div>
 	);
 }

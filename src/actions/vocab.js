@@ -200,6 +200,7 @@ export function updateUserLastLanguageViaAPI(source_code) {
 
 // SET_USER_LANGUAGE
 export function setUserLanguage(source_code) {
+	localStorage.setItem('saved_language', source_code);
 	return {
 		type     : SET_USER_LANGUAGE,
 		language : source_code
@@ -224,28 +225,30 @@ function setTextInputInState(textInput) {
 export function getAllLanguageOptionsViaAPI() {
 	return async function(dispatch) {
 		try {
-			const headers = {
-				Authorization : 'Bearer ' + getAccessToken()
-			};
-			const res = await customAxios.get(`${API_URL}/languages`, { headers: headers });
-			const languages = res.data;
-			return dispatch(setLanguageOptions(languages));
+			// const headers = {
+			// 	Authorization : 'Bearer ' + getAccessToken()
+			// };
+			// const res = await customAxios.get(`${API_URL}/languages`, { headers: headers });
+			const res = await customAxios.get(`${API_URL}/languages`);
+			const languagesNews = res.data;
+			return dispatch(setLanguageOptions(languagesNews));
 		} catch (e) {
 			console.log(e);
 		}
 	};
 }
 
-function setLanguageOptions(languages) {
+function setLanguageOptions(languagesNews) {
 	const languageObject = {};
-	languages.forEach(option => {
+	languagesNews.languages.forEach(option => {
 		languageObject[option[0]] = option[1];
 	});
 
 	return {
 		type            : GET_ALL_LANGUAGE_OPTIONS,
-		languages,
-		language_object : languageObject
+		languages       : languagesNews.languages,
+		language_object : languageObject,
+		news_sources    : languagesNews.news_sources
 	};
 }
 

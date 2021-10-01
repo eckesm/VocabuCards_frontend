@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import { updateUserLastLanguageViaAPI, getUserLanguageWordsViaAPI } from '../../actions/vocab';
+import { updateUserLastLanguageViaAPI, getUserLanguageWordsViaAPI, setUserLanguage } from '../../actions/vocab';
 import { clearAlerts, addAlert } from '../../actions/auth';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -27,8 +27,9 @@ const useStyles = makeStyles(theme => ({
 export default function SelectLanguage() {
 	const classes = useStyles();
 
-	const { languages, subscription_status } = useSelector(store => store);
+	const { languages, user } = useSelector(store => store);
 	const currentLanguage = useSelector(store => store.language);
+	console.log(currentLanguage);
 	const [ sortedLanguages, setSortedLanguages ] = useState([]);
 	const [ language, setLanguage ] = useState('');
 	const dispatch = useDispatch();
@@ -37,8 +38,13 @@ export default function SelectLanguage() {
 	async function handleChange(event) {
 		const newLanguage = event.target.value;
 		setLanguage(newLanguage);
-		await dispatch(updateUserLastLanguageViaAPI(newLanguage));
-		dispatch(getUserLanguageWordsViaAPI(newLanguage));
+		if (user) {
+			await dispatch(updateUserLastLanguageViaAPI(newLanguage));
+			dispatch(getUserLanguageWordsViaAPI(newLanguage));
+		}
+		else {
+			dispatch(setUserLanguage(newLanguage));
+		}
 		dispatch(clearAlerts());
 
 		let newLanguageFull;
@@ -48,13 +54,24 @@ export default function SelectLanguage() {
 			}
 		}
 
-		dispatch(
-			addAlert({
-				type  : 'success',
-				title : `Language Changed to ${newLanguageFull}`,
-				text  : `You have successfully switched your language to ${newLanguageFull}.  Your ${newLanguageFull} VocabuCards are now available.`
-			})
-		);
+		if (user) {
+			dispatch(
+				addAlert({
+					type  : 'success',
+					title : `Language Changed to ${newLanguageFull}`,
+					text  : `You have successfully switched your language to ${newLanguageFull}.  Your ${newLanguageFull} VocabuCards are now available.`
+				})
+			);
+		}
+		else {
+			dispatch(
+				addAlert({
+					type  : 'success',
+					title : `Language Changed to ${newLanguageFull}`,
+					text  : `You have successfully switched your language to ${newLanguageFull}.`
+				})
+			);
+		}
 		history.push('/home');
 	}
 
@@ -73,33 +90,33 @@ export default function SelectLanguage() {
 
 	return (
 		<div>
-			{(subscription_status === 'active' || subscription_status === 'trialing') && (
-				<FormControl variant="outlined" className={classes.formControl}>
-					<InputLabel id="language-label">Change Language</InputLabel>
-					<Select
-						className={classes.select}
-						labelId="language-label"
-						id="language"
-						value={language}
-						onChange={handleChange}
-						label="Change Language"
-					>
-						{sortedLanguages.map(option => {
-							if (option[0] !== 'en') {
-								return (
-									<MenuItem key={option[0]} value={option[0]}>
-										{option[1]}
-									</MenuItem>
-								);
-							}
-						})}
-					</Select>
-				</FormControl>
-			)
-			//  : (
-			// <p>Cannot change languages when account is not active.</p>
-			// )
-			}
+			{/* {(subscription_status === 'active' || subscription_status === 'trialing') && ( */}
+			<FormControl variant="outlined" className={classes.formControl}>
+				<InputLabel id="language-label">Change Language</InputLabel>
+				<Select
+					className={classes.select}
+					labelId="language-label"
+					id="language"
+					value={language}
+					onChange={handleChange}
+					label="Change Language"
+				>
+					{sortedLanguages.map(option => {
+						if (option[0] !== 'en') {
+							return (
+								<MenuItem key={option[0]} value={option[0]}>
+									{option[1]}
+								</MenuItem>
+							);
+						}
+					})}
+				</Select>
+			</FormControl>
+			{/* ) */}
+			{/* //  : ( */}
+			{/* // <p>Cannot change languages when account is not active.</p> */}
+			{/* // ) */}
+			{/* // } */}
 		</div>
 	);
 }

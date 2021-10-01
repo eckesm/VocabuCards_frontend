@@ -26,6 +26,7 @@ export default function Routes() {
 
 			<Route exact path="/welcome">
 				<HomeScreen status="welcome" />
+				{/* <HomeScreen /> */}
 			</Route>
 
 			<Route exact path="/login">

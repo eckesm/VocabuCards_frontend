@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import { getUserInfo } from './actions/vocab';
+import { getUserInfo, getAllLanguageOptionsViaAPI, setUserLanguage } from './actions/vocab';
 import { addAlert, logoutUser } from './actions/auth';
 
 import './App.css';
@@ -14,7 +14,7 @@ function App() {
 	const history = useHistory();
 	const dispatch = useDispatch();
 	const access_token = localStorage.getItem('access_token') || null;
-	const { user } = useSelector(store => store);
+	const { user, language } = useSelector(store => store);
 	const [ loading, setLoading ] = useState(true);
 
 	async function attemptGetUserInfo() {
@@ -42,10 +42,14 @@ function App() {
 			attemptGetUserInfo();
 		}
 		else {
+			if (language === null) {
+				dispatch(getAllLanguageOptionsViaAPI());
+				const savedLanguage = localStorage.getItem('saved_language') || 'sv';
+				dispatch(setUserLanguage(savedLanguage));
+			}
 			setLoading(false);
 		}
 	}, []);
-
 
 	return (
 		<div className="App">
