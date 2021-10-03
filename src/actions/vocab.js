@@ -9,7 +9,8 @@ import {
 	EDIT_COMPONENT,
 	DELETE_COMPONENT,
 	SET_TEXT_INPUT,
-	GET_USER_INFO
+	GET_USER_INFO,
+	SET_CURRENT_ARTICLE
 } from './types';
 
 import { addAlert } from './auth';
@@ -42,6 +43,7 @@ export function getUserInfo() {
 
 				let {
 					account_override,
+					current_article,
 					current_plan,
 					current_text,
 					first_login,
@@ -90,6 +92,7 @@ export function getUserInfo() {
 					stripe_period_end,
 					stripe_period_start,
 					subscription_status,
+					current_article,
 					text_input                  : current_text || null,
 					trial_end,
 					trial_start,
@@ -188,10 +191,11 @@ export function updateUserLastLanguageViaAPI(source_code) {
 				Authorization : 'Bearer ' + getAccessToken()
 			};
 			const res = await customAxios.get(`${API_URL}/last/${source_code}`, { headers: headers });
+
 			let last_source_code = res.data;
-			dispatch(setTextInputInState(''));
+			dispatch(setUserLanguage(last_source_code));
 			localStorage.removeItem('rss_object');
-			return dispatch(setUserLanguage(last_source_code));
+			return dispatch(setTextInput(''));
 		} catch (e) {
 			console.log(e);
 		}
@@ -209,15 +213,27 @@ export function setUserLanguage(source_code) {
 
 // SET_TEXT_INPUT
 export function setTextInput(textInput) {
-	return function(dispatch) {
-		dispatch(setTextInputInState(textInput));
-	};
-}
-
-function setTextInputInState(textInput) {
+	// return function(dispatch) {
+	// dispatch(setTextInputInState(textInput));
 	return {
 		type      : SET_TEXT_INPUT,
 		textInput
+	};
+	// };
+}
+
+// function setTextInputInState(textInput) {
+// 	return {
+// 		type      : SET_TEXT_INPUT,
+// 		textInput
+// 	};
+// }
+
+// SET_CURRENT_ARTICLE
+export function setCurrentArticle(articleId) {
+	return {
+		type      : SET_CURRENT_ARTICLE,
+		articleId
 	};
 }
 

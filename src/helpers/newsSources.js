@@ -32,12 +32,13 @@ import { getAccessToken } from './API';
 // 	};
 // }
 
-export async function getArticleFromServer(source_code) {
+export async function getNewArticle(source_code) {
 	try {
-		const headers = {
-			Authorization : 'Bearer ' + getAccessToken()
-		};
-		const res = await customAxios.get(`${API_URL}/articles/new/${source_code}`, { headers: headers });
+		// const headers = {
+		// 	Authorization : 'Bearer ' + getAccessToken()
+		// };
+		// const res = await customAxios.get(`${API_URL}/articles/new/${source_code}`, { headers: headers });
+		const res = await customAxios.get(`${API_URL}/articles/new/${source_code}`);
 
 		return res.data;
 	} catch (e) {
@@ -45,12 +46,27 @@ export async function getArticleFromServer(source_code) {
 	}
 }
 
-export async function getSavedArticleFromServer(source_code) {
+export async function getRandomSavedArticle(source_code) {
 	try {
-		const headers = {
-			Authorization : 'Bearer ' + getAccessToken()
-		};
-		const res = await customAxios.get(`${API_URL}/articles/saved/random/${source_code}`, { headers: headers });
+		// const headers = {
+		// 	Authorization : 'Bearer ' + getAccessToken()
+		// };
+		// const res = await customAxios.get(`${API_URL}/articles/saved/random/${source_code}`, { headers: headers });
+		const res = await customAxios.get(`${API_URL}/articles/saved/random/${source_code}`);
+
+		return res.data;
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+export async function getSavedArticleById(id) {
+	try {
+		// const headers = {
+		// 	Authorization : 'Bearer ' + getAccessToken()
+		// };
+		// const res = await customAxios.get(`${API_URL}/articles/saved/id/${source_code}`, { headers: headers });
+		const res = await customAxios.get(`${API_URL}/articles/saved/id/${id}`);
 
 		return res.data;
 	} catch (e) {

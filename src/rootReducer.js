@@ -10,6 +10,7 @@ import {
 	EDIT_COMPONENT,
 	DELETE_COMPONENT,
 	SET_TEXT_INPUT,
+	SET_CURRENT_ARTICLE,
 	ADD_ALERT,
 	CLEAR_ALERTS,
 	SET_ALERTS,
@@ -21,6 +22,7 @@ import {
 const INITIAL_STATE = {
 	account_override            : null,
 	alerts                      : [],
+	current_article             : null,
 	current_plan                : null,
 	first_login                 : null,
 	is_email_confirmed          : null,
@@ -88,6 +90,7 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 			return {
 				...state,
 				account_override            : action.account_override,
+				current_article             : action.current_article,
 				current_plan                : action.current_plan,
 				first_login                 : action.first_login,
 				is_email_confirmed          : action.is_email_confirmed,
@@ -160,7 +163,8 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 		case SET_USER_LANGUAGE:
 			return {
 				...state,
-				language : action.language
+				current_article : null,
+				language        : action.language
 			};
 
 		case GET_ALL_LANGUAGE_OPTIONS:
@@ -238,6 +242,12 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 			return {
 				...state,
 				text_input : action.textInput
+			};
+
+		case SET_CURRENT_ARTICLE:
+			return {
+				...state,
+				current_article : action.articleId
 			};
 
 		default:

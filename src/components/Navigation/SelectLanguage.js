@@ -2,8 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import { updateUserLastLanguageViaAPI, getUserLanguageWordsViaAPI, setUserLanguage } from '../../actions/vocab';
+import {
+	updateUserLastLanguageViaAPI,
+	getUserLanguageWordsViaAPI,
+	setUserLanguage,
+	setTextInput
+} from '../../actions/vocab';
 import { clearAlerts, addAlert } from '../../actions/auth';
+import { updateSavedRenderedText } from '../../helpers/API';
 
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -29,7 +35,6 @@ export default function SelectLanguage() {
 
 	const { languages, user } = useSelector(store => store);
 	const currentLanguage = useSelector(store => store.language);
-	console.log(currentLanguage);
 	const [ sortedLanguages, setSortedLanguages ] = useState([]);
 	const [ language, setLanguage ] = useState('');
 	const dispatch = useDispatch();
@@ -38,14 +43,15 @@ export default function SelectLanguage() {
 	async function handleChange(event) {
 		const newLanguage = event.target.value;
 		setLanguage(newLanguage);
-		localStorage.removeItem('rss_object');
-		
+
 		if (user) {
-			await dispatch(updateUserLastLanguageViaAPI(newLanguage));
+			dispatch(updateUserLastLanguageViaAPI(newLanguage));
 			dispatch(getUserLanguageWordsViaAPI(newLanguage));
 		}
 		else {
 			dispatch(setUserLanguage(newLanguage));
+			localStorage.removeItem('rss_object');
+			dispatch(setTextInput(''));
 		}
 		dispatch(clearAlerts());
 

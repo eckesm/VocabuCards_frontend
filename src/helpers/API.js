@@ -149,12 +149,13 @@ export async function getDictionaryWordViaAPI(word) {
 	}
 }
 
-export async function updateSavedRenderedText(text) {
+export async function updateSavedRenderedText(text, articleId = null) {
 	const headers = {
 		Authorization : 'Bearer ' + getAccessToken()
 	};
 	const data = {
-		text : text || ''
+		text      : text || '',
+		articleId
 	};
 
 	try {

@@ -5,9 +5,9 @@ import { renderHtml } from '../../helpers/renderingText';
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { setTextInput } from '../../actions/vocab';
+import { setTextInput, setCurrentArticle } from '../../actions/vocab';
 import { updateSavedRenderedText } from '../../helpers/API';
-import { getArticleFromServer, getSavedArticleFromServer } from '../../helpers/newsSources';
+import { getNewArticle, getRandomSavedArticle, getSavedArticleById } from '../../helpers/newsSources';
 import useLocalStorageState from '../../hooks/useLocalStorageState';
 
 import Paragraph from './Paragraph';
@@ -69,7 +69,7 @@ const useStyles = makeStyles(theme => ({
 			marginTop : '-15px'
 		}
 	},
-	RenderTextButtonContainer : {
+	RenderTextButtonContainer  : {
 		// marginTop     : '10px',
 		marginBottom                   : '10px',
 		paddingTop                     : '10px',
@@ -83,7 +83,7 @@ const useStyles = makeStyles(theme => ({
 			// border       : '1px solid rgb(200, 200, 200)',
 			// borderRadius : '3px',
 			// marginLeft   : '25px',
-			width        : '300px'
+			width : '300px'
 		}
 	},
 	getArticlesButtonContainer : {
@@ -176,9 +176,16 @@ const useStyles = makeStyles(theme => ({
 export default function RenderText() {
 	const classes = useStyles();
 	const dispatch = useDispatch();
-	const { text_input, language, language_object, news_sources, variations, words_array, user } = useSelector(
-		store => store
-	);
+	const {
+		text_input,
+		language,
+		language_object,
+		news_sources,
+		variations,
+		words_array,
+		user,
+		current_article
+	} = useSelector(store => store);
 	const translate_code = 'en';
 	const source_code = language;
 
@@ -195,7 +202,7 @@ export default function RenderText() {
 	const [ clickedArray, setClickedArray ] = useLocalStorageState('clicked_words_array', []);
 	const [ rssNewsSource, setRssNewsSource ] = useState(null);
 	const [ enableRssNewsSources, setEnableRssNewsSources ] = useState(false);
-	const [ initialLanguage, setInitialLanguage ] = useState(null);
+	// const [ initialLanguage, setInitialLanguage ] = useState(null);
 
 	// console.log(articleObject);
 
@@ -222,7 +229,7 @@ export default function RenderText() {
 
 	async function handleGetArticle() {
 		setFetchingArticle(true);
-		const res = await getArticleFromServer(language);
+		const res = await getNewArticle(language);
 
 		try {
 			if (res.text) {
@@ -232,7 +239,7 @@ export default function RenderText() {
 					foreignText : res.text
 				});
 
-				renderAndSaveText(res.text);
+				renderAndSaveText(res.text, res.id);
 			}
 		} catch (e) {
 			console.log('Error getting news article!');
@@ -244,7 +251,7 @@ export default function RenderText() {
 
 	async function handleGetSavedArticle() {
 		setFetchingSavedArticle(true);
-		const res = await getSavedArticleFromServer(language);
+		const res = await getRandomSavedArticle(language);
 		try {
 			if (res.text) {
 				setArticleObject(res);
@@ -252,7 +259,7 @@ export default function RenderText() {
 					...formData,
 					foreignText : res.text
 				});
-				renderAndSaveText(res.text);
+				renderAndSaveText(res.text, res.id);
 			}
 		} catch (e) {
 			console.log('Error getting news article!');
@@ -267,11 +274,12 @@ export default function RenderText() {
 		renderAndSaveText(formData.foreignText);
 	}
 
-	function renderAndSaveText(text) {
+	function renderAndSaveText(text, articleId = null) {
 		if (user) {
-			updateSavedRenderedText(text);
+			updateSavedRenderedText(text, articleId);
 		}
 		dispatch(setTextInput(text));
+		dispatch(setCurrentArticle(articleId));
 		setClickedArray([]);
 
 		let prepareRenderedText = renderHtml(text, source_code, translate_code, variations);
@@ -292,20 +300,21 @@ export default function RenderText() {
 	};
 
 	useEffect(
-		() => {
+		async () => {
 			setEnableRssNewsSources(false);
+
 			if (language) {
-				if (initialLanguage !== null) {
-					if (language !== initialLanguage) {
-						setArticleObject('');
-						setFormData({
-							...formData,
-							foreignText : ''
-						});
-						setRenderedText([]);
-						setInitialLanguage(null);
-					}
-				}
+				// if (initialLanguage !== null) {
+				// 	if (language !== initialLanguage) {
+				// 		setArticleObject('');
+				// 		setFormData({
+				// 			...formData,
+				// 			foreignText : ''
+				// 		});
+				// 		setRenderedText([]);
+				// 		setInitialLanguage(null);
+				// 	}
+				// }
 
 				if (news_sources) {
 					if (news_sources.hasOwnProperty(language)) {
@@ -315,21 +324,21 @@ export default function RenderText() {
 				}
 			}
 
-			if (initialLanguage === null) {
-				// if (text_input !== '' && text_input !== null) {
-				// 	setFormData({ ...formData, foreignText: text_input });
-				// 	let prepareRenderedText = renderHtml(text_input, source_code, translate_code, variations);
-				// 	setRenderedText(prepareRenderedText);
-				// }
-				// else if (!user && articleObject) {
-				// if (articleObject) {
-				// 	setFormData({ ...formData, foreignText: articleObject.text });
-				// 	dispatch(setTextInput(articleObject.text));
-				// }
-				setInitialLanguage(language);
-			}
+			// if (initialLanguage === null) {
+			// if (text_input !== '' && text_input !== null) {
+			// 	setFormData({ ...formData, foreignText: text_input });
+			// 	let prepareRenderedText = renderHtml(text_input, source_code, translate_code, variations);
+			// 	setRenderedText(prepareRenderedText);
+			// }
+			// else if (!user && articleObject) {
+			// if (articleObject) {
+			// 	setFormData({ ...formData, foreignText: articleObject.text });
+			// 	dispatch(setTextInput(articleObject.text));
+			// }
+			// setInitialLanguage(language);
+			// }
 
-			if (articleObject) {
+			if (articleObject && articleObject.text) {
 				setFormData({ ...formData, foreignText: articleObject.text });
 				dispatch(setTextInput(articleObject.text));
 				let prepareRenderedText = renderHtml(articleObject.text, source_code, translate_code, variations);
@@ -339,6 +348,19 @@ export default function RenderText() {
 				setFormData({ ...formData, foreignText: text_input });
 				let prepareRenderedText = renderHtml(text_input, source_code, translate_code, variations);
 				setRenderedText(prepareRenderedText);
+			}
+
+			if (current_article) {
+				if (articleObject && articleObject.id) {
+					if (current_article !== articleObject.id) {
+						const article = getSavedArticleById(current_article);
+						setArticleObject(article);
+					}
+				}
+				else {
+					const article = await getSavedArticleById(current_article);
+					setArticleObject(article);
+				}
 			}
 
 			// if (user && words_array !== null && words_array.length > 0 && formData.foreignText !== '') {
@@ -353,7 +375,7 @@ export default function RenderText() {
 			// 	setRenderedText(prepareRenderedText);
 			// }
 		},
-		[ text_input, language, variations, words_array, news_sources, user ]
+		[ text_input, language, variations, words_array, news_sources, user, current_article ]
 	);
 
 	return (
@@ -459,8 +481,8 @@ export default function RenderText() {
 				renderedText.length === 0 && (
 					<h4 className={classes.empty}>
 						<i>
-							...type or paste {language_object[language]} text into the input box then click "Render Entered Text" to
-							process...
+							...type or paste {language_object[language]} text into the input box then click "Render
+							Entered Text" to process...
 						</i>
 					</h4>
 				)}
