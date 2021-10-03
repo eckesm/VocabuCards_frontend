@@ -38,6 +38,8 @@ export default function SelectLanguage() {
 	async function handleChange(event) {
 		const newLanguage = event.target.value;
 		setLanguage(newLanguage);
+		localStorage.removeItem('rss_object');
+		
 		if (user) {
 			await dispatch(updateUserLastLanguageViaAPI(newLanguage));
 			dispatch(getUserLanguageWordsViaAPI(newLanguage));

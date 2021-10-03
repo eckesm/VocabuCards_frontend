@@ -43,6 +43,7 @@ export function loginUserViaAPI(email_address, password) {
 				localStorage.setItem('refresh_token', res.data.refresh_token);
 				// localStorage.setItem('access_token_exp', res.data.access_token_exp);
 				// localStorage.setItem('refresh_token_exp', res.data.refresh_token_exp);
+				localStorage.removeItem('rss_object');
 				dispatch(getUserInfo());
 				return res.data;
 			}

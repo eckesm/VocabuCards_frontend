@@ -69,6 +69,23 @@ const useStyles = makeStyles(theme => ({
 			marginTop : '-15px'
 		}
 	},
+	RenderTextButtonContainer : {
+		// marginTop     : '10px',
+		marginBottom                   : '10px',
+		paddingTop                     : '10px',
+		paddingBottom                  : '10px',
+		[theme.breakpoints.down('sm')]: {
+			marginLeft : '0px',
+			width      : '100%',
+			marginTop  : '20px'
+		},
+		[theme.breakpoints.up('md')]: {
+			// border       : '1px solid rgb(200, 200, 200)',
+			// borderRadius : '3px',
+			// marginLeft   : '25px',
+			width        : '300px'
+		}
+	},
 	getArticlesButtonContainer : {
 		// marginTop     : '10px',
 		marginBottom                   : '10px',
@@ -124,10 +141,16 @@ const useStyles = makeStyles(theme => ({
 		marginTop    : '5px',
 		marginBottom : '5px'
 	},
-	author                     : {
+	publication                : {
 		fontSize     : '1.5rem',
 		marginTop    : '0px',
 		marginBottom : '5px'
+	},
+	author                     : {
+		fontSize     : '1.2rem',
+		marginTop    : '0px',
+		marginBottom : '5px',
+		fontStyle    : 'italic'
 	},
 	pubDate                    : {
 		fontSize     : '1.5rem',
@@ -168,13 +191,13 @@ export default function RenderText() {
 	const [ fetchingArticle, setFetchingArticle ] = useState(false);
 	const [ fetchingSavedArticle, setFetchingSavedArticle ] = useState(false);
 
-	const [ rssObject, setRssObject ] = useLocalStorageState('rss_object', '');
+	const [ articleObject, setArticleObject ] = useLocalStorageState('rss_object', '');
 	const [ clickedArray, setClickedArray ] = useLocalStorageState('clicked_words_array', []);
-	const [ rssSource, setRssSource ] = useState(null);
-	const [ enableRss, setEnableRss ] = useState(false);
+	const [ rssNewsSource, setRssNewsSource ] = useState(null);
+	const [ enableRssNewsSources, setEnableRssNewsSources ] = useState(false);
 	const [ initialLanguage, setInitialLanguage ] = useState(null);
 
-	console.log(rssObject);
+	// console.log(articleObject);
 
 	function handleChange(evt) {
 		const { name, value } = evt.target;
@@ -203,7 +226,7 @@ export default function RenderText() {
 
 		try {
 			if (res.text) {
-				setRssObject(res);
+				setArticleObject(res);
 				setFormData({
 					...formData,
 					foreignText : res.text
@@ -224,25 +247,23 @@ export default function RenderText() {
 		const res = await getSavedArticleFromServer(language);
 		try {
 			if (res.text) {
-				setRssObject(res);
+				setArticleObject(res);
 				setFormData({
 					...formData,
 					foreignText : res.text
 				});
-
 				renderAndSaveText(res.text);
 			}
 		} catch (e) {
 			console.log('Error getting news article!');
 			console.log(e);
 		}
-
 		setFetchingSavedArticle(false);
 	}
 
 	function handleSubmit(evt) {
 		evt.preventDefault();
-		setRssObject('');
+		setArticleObject({ ...text_input, text: formData.foreignText });
 		renderAndSaveText(formData.foreignText);
 	}
 
@@ -272,11 +293,11 @@ export default function RenderText() {
 
 	useEffect(
 		() => {
-			setEnableRss(false);
+			setEnableRssNewsSources(false);
 			if (language) {
 				if (initialLanguage !== null) {
 					if (language !== initialLanguage) {
-						setRssObject('');
+						setArticleObject('');
 						setFormData({
 							...formData,
 							foreignText : ''
@@ -288,28 +309,51 @@ export default function RenderText() {
 
 				if (news_sources) {
 					if (news_sources.hasOwnProperty(language)) {
-						setRssSource(news_sources[language]['source']);
-						// setRssSource(news_sources[language]['publication']);
-						setEnableRss(true);
+						setRssNewsSource(news_sources[language]['source']);
+						setEnableRssNewsSources(true);
 					}
 				}
 			}
 
 			if (initialLanguage === null) {
-				if (text_input !== '' && text_input !== null) {
-					setFormData({ ...formData, foreignText: text_input });
-					let prepareRenderedText = renderHtml(text_input, source_code, translate_code, variations);
-					setRenderedText(prepareRenderedText);
-				}
+				// if (text_input !== '' && text_input !== null) {
+				// 	setFormData({ ...formData, foreignText: text_input });
+				// 	let prepareRenderedText = renderHtml(text_input, source_code, translate_code, variations);
+				// 	setRenderedText(prepareRenderedText);
+				// }
+				// else if (!user && articleObject) {
+				// if (articleObject) {
+				// 	setFormData({ ...formData, foreignText: articleObject.text });
+				// 	dispatch(setTextInput(articleObject.text));
+				// }
 				setInitialLanguage(language);
 			}
 
-			if (words_array !== null && words_array.length > 0 && formData.foreignText !== '') {
+			if (articleObject) {
+				setFormData({ ...formData, foreignText: articleObject.text });
+				dispatch(setTextInput(articleObject.text));
+				let prepareRenderedText = renderHtml(articleObject.text, source_code, translate_code, variations);
+				setRenderedText(prepareRenderedText);
+			}
+			else if (user && text_input !== '' && text_input !== null) {
+				setFormData({ ...formData, foreignText: text_input });
 				let prepareRenderedText = renderHtml(text_input, source_code, translate_code, variations);
 				setRenderedText(prepareRenderedText);
 			}
+
+			// if (user && words_array !== null && words_array.length > 0 && formData.foreignText !== '') {
+			// console.log('RAN user');
+			// let prepareRenderedText = renderHtml(text_input, source_code, translate_code, variations);
+			// setRenderedText(prepareRenderedText);
+			// }
+
+			// if (!user && formData.foreignText !== '') {
+			// console.log(text_input, source_code, translate_code, variations);
+			// 	let prepareRenderedText = renderHtml(text_input, source_code, translate_code, variations);
+			// 	setRenderedText(prepareRenderedText);
+			// }
 		},
-		[ text_input, language, variations, words_array, news_sources ]
+		[ text_input, language, variations, words_array, news_sources, user ]
 	);
 
 	return (
@@ -339,24 +383,25 @@ export default function RenderText() {
 					onChange={handleChange}
 				/>
 				<div className={classes.buttonContainer}>
-					<div>
-						<CustomButton onClick={handleSubmit} customtype="width_resize">
+					<div className={classes.RenderTextButtonContainer}>
+						{/* <CustomButton onClick={handleSubmit} customtype="width_resize"> */}
+						<CustomButton onClick={handleSubmit} customtype="RenderText_RenderEnteredText">
 							Render Entered Text
 						</CustomButton>
 					</div>
-					{enableRss && (
+					{enableRssNewsSources && (
 						<div className={classes.getArticlesButtonContainer}>
-							<p className={classes.buttonHeading}>Get Article from {rssSource}</p>
+							<p className={classes.buttonHeading}>Get Article from {rssNewsSource}</p>
 							<CustomButton
 								// customtype="width_resize"
 								onClick={handleGetArticle}
 								disabled={fetchingArticle ? true : false}
-								customtype="small_text"
+								customtype="RenderText_GetArticles"
 							>
 								{fetchingArticle ? (
 									<i>fetching new article</i>
 								) : (
-									// `Get New Article: ${rssSource}`
+									// `Get New Article: ${rssNewsSource}`
 									'Recent Article (slower)'
 								)}
 							</CustomButton>
@@ -365,12 +410,12 @@ export default function RenderText() {
 								// customtype="width_resize"
 								onClick={handleGetSavedArticle}
 								disabled={fetchingSavedArticle ? true : false}
-								customtype="small_text"
+								customtype="RenderText_GetArticles"
 							>
 								{fetchingSavedArticle ? (
 									<i>fetching saved article</i>
 								) : (
-									// `Get Saved Article: ${rssSource}`
+									// `Get Saved Article: ${rssNewsSource}`
 									`Saved Article (faster)`
 								)}
 							</CustomButton>
@@ -380,22 +425,31 @@ export default function RenderText() {
 			</form>
 
 			<div className={classes.renderTextOutput}>
-				{enableRss &&
-				rssObject !== '' &&
-				rssObject !== undefined && (
+				{enableRssNewsSources &&
+				articleObject !== '' &&
+				articleObject !== undefined &&
+				(articleObject.title ||
+					articleObject.author ||
+					articleObject.publication ||
+					articleObject.publication_date ||
+					articleObject.url) && (
 					<div className={classes.rssTextOutput}>
-						{rssObject.title !== '' && <p className={classes.title}>{rssObject.title}</p>}
-						{rssObject.author !== '' && <p className={classes.author}>{rssObject.author}</p>}
-						{rssObject.url !== '' && (
+						{articleObject.title !== '' && <p className={classes.title}>{articleObject.title}</p>}
+						{articleObject.publication !== '' && (
+							<p className={classes.publication}>{articleObject.publication}</p>
+						)}
+						{articleObject.author !== articleObject.publication &&
+						articleObject.author !== '' && <p className={classes.author}>By {articleObject.author}</p>}
+						{articleObject.url !== '' && (
 							<div className={classes.linkContainer}>
-								{rssObject.full_text === false && (
+								{articleObject.full_text === false && (
 									<p className={classes.linkDescription}>The full article is available at: </p>
 								)}
-								{rssObject.fullText === true && (
+								{articleObject.full_text === true && (
 									<p className={classes.linkDescription}>Link to article: </p>
 								)}
-								<a href={rssObject.url} target="_blank">
-									<p className={classes.link}>{rssObject.url}</p>
+								<a href={articleObject.url} target="_blank">
+									<p className={classes.link}>{articleObject.url}</p>
 								</a>
 							</div>
 						)}
@@ -405,7 +459,7 @@ export default function RenderText() {
 				renderedText.length === 0 && (
 					<h4 className={classes.empty}>
 						<i>
-							...type or paste {language_object[language]} text into the input box then click RENDER to
+							...type or paste {language_object[language]} text into the input box then click "Render Entered Text" to
 							process...
 						</i>
 					</h4>

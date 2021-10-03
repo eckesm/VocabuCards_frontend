@@ -102,26 +102,28 @@ export default function NavDrawer({
 					<ListItemText primary="Home" />
 				</ListItem>
 
+
+
 				{/* {auth && <Divider />} */}
 
 				<ListItem>
 					<SelectLanguage />
 				</ListItem>
 
-				{/* {auth && (
-					<ListItem>
-						<SelectLanguage />
+				{!auth && (
+					<ListItem
+						button
+						onClick={() => {
+							history.push('/');
+						}}
+					>
+						<ListItemText>Study Text</ListItemText>
 					</ListItem>
-				)} */}
+				)}
 
 				<ListItem button onClick={goToGettingStarted}>
 					<ListItemText>Getting Started</ListItemText>
 				</ListItem>
-				{auth && (
-					<ListItem button onClick={goToPlans}>
-						<ListItemText>Subscriptions</ListItemText>
-					</ListItem>
-				)}
 
 				<Divider />
 
@@ -170,6 +172,14 @@ export default function NavDrawer({
 				{auth && (
 					<ListItem button onClick={handleModalOpen}>
 						<ListItemText>Add Word</ListItemText>
+					</ListItem>
+				)}
+
+				{auth && <Divider />}
+
+				{auth && (
+					<ListItem button onClick={goToPlans}>
+						<ListItemText>Subscriptions</ListItemText>
 					</ListItem>
 				)}
 

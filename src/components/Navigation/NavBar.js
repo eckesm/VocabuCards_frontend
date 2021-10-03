@@ -138,19 +138,24 @@ export default function NavBar() {
 					</div>
 					<div className={classes.grow} />
 					<div className={classes.sectionDesktop}>
-						<Button color="inherit" href="/#/getting-started" style={{ textTransform: 'none' }}>
-							Getting Started
-						</Button>
-						{auth &&
-						subscription_status === 'past_due' && (
-							<Button color="inherit" href="/#/plans" style={{ textTransform: 'none' }}>
-								Subscriptions
-							</Button>
-						)}
 						{auth &&
 						subscription_status !== 'past_due' && (
 							<Button color="inherit" href="/#/read" style={{ textTransform: 'none' }}>
 								Study Text
+							</Button>
+						)}
+						{!auth && (
+							<Button color="inherit" href="/#/" style={{ textTransform: 'none' }}>
+								Study Text
+							</Button>
+						)}
+						{/* <Button color="inherit" href="/#/getting-started" style={{ textTransform: 'none' }}>
+							Getting Started
+						</Button> */}
+						{auth &&
+						subscription_status === 'past_due' && (
+							<Button color="inherit" href="/#/plans" style={{ textTransform: 'none' }}>
+								Subscriptions
 							</Button>
 						)}
 						{auth &&
