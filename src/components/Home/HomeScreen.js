@@ -5,9 +5,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import NavBar from '../Navigation/NavBar';
 import AlertsContainer from '../Alerts/AlertsContainer';
-import Home from './Home';
+// import Home from './Home';
 import Welcome from './Welcome';
-import ScreenShots from './ScreenShots';
+// import ScreenShots from './ScreenShots';
 import RenderText from '../RenderedText/RenderText';
 
 import { SCREEN_HOME_MOBILE, SCREEN_HOME_DESKTOP, SCREEN_WELCOME_MOBILE, SCREEN_WELCOME_DESKTOP } from '../../settings';

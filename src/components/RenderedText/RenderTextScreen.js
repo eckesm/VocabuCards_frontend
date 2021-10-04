@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { renderHtml } from '../../helpers/renderingText';
-import { TextField, Button } from '@material-ui/core';
+// import { renderHtml } from '../../helpers/renderingText';
+// import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import NavBar from '../Navigation/NavBar';

@@ -53,7 +53,7 @@ export default function ScreenShotCard({ src, text }) {
 
 	return (
 		<div className={classes.introductionCard}>
-			<img className={classes.introductionImage} src={src} />
+			<img className={classes.introductionImage} src={src} alt={text} />
 			<div className={classes.textContainer}>
 				<h3 className={classes.text}>{text}</h3>
 			</div>

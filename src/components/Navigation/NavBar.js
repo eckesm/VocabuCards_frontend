@@ -44,9 +44,9 @@ const useStyles = makeStyles(theme => ({
 export default function NavBar() {
 	const dispatch = useDispatch();
 	const history = useHistory();
-	
+
 	// const { user, language, language_object, current_plan, subscription_status } = useSelector(store => store);
-	const { user, language, language_object, subscription_status } = useSelector(store => store);
+	const { user, language, language_object } = useSelector(store => store);
 	const languageName = language_object[language];
 	const [ auth, setAuth ] = useState(false);
 
@@ -94,12 +94,12 @@ export default function NavBar() {
 
 	const [ modalOpen, setModalOpen ] = useState(false);
 	const handleModalOpen = () => {
-		if (subscription_status === 'past_due') {
-			history.push('/restricted');
-		}
-		else {
+		// if (subscription_status === 'past_due') {
+		// 	history.push('/restricted');
+		// }
+		// else {
 			setModalOpen(true);
-		}
+		// }
 	};
 	const handleModalClose = () => {
 		setModalOpen(false);
@@ -107,7 +107,7 @@ export default function NavBar() {
 
 	const classes = useStyles();
 
-	const [ mobileMoreAnchorEl, setMobileMoreAnchorEl ] = React.useState(null);
+	// const [ mobileMoreAnchorEl, setMobileMoreAnchorEl ] = React.useState(null);
 
 	return (
 		<div className={classes.grow}>
@@ -139,8 +139,8 @@ export default function NavBar() {
 					</div>
 					<div className={classes.grow} />
 					<div className={classes.sectionDesktop}>
-						{auth &&
-						subscription_status !== 'past_due' && (
+						{auth && (
+							// subscription_status !== 'past_due' && (
 							<Button color="inherit" href="/#/study-text" style={{ textTransform: 'none' }}>
 								Study Text
 							</Button>
@@ -150,20 +150,20 @@ export default function NavBar() {
 								Study Text
 							</Button>
 						)}
-						{auth &&
-						subscription_status === 'past_due' && (
+						{auth && (
+							// subscription_status === 'past_due' && (
 							<Button color="inherit" href="/#/plans" style={{ textTransform: 'none' }}>
 								Subscriptions
 							</Button>
 						)}
-						{auth &&
-						subscription_status !== 'past_due' && (
+						{auth && (
+							// subscription_status !== 'past_due' && (
 							<Button color="inherit" href="/#/words" style={{ textTransform: 'none' }}>
 								My VocabuCards
 							</Button>
 						)}
-						{auth &&
-						subscription_status !== 'past_due' && (
+						{auth && (
+							// subscription_status !== 'past_due' && (
 							<Button color="inherit" onClick={handleModalOpen} style={{ textTransform: 'none' }}>
 								Add Word
 							</Button>

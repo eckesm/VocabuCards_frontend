@@ -39,7 +39,7 @@ export function stripeRenewingSoonAlert(current_plan, stripe_period_end, closeMs
 }
 
 export function stripeExpiredAlert(current_plan, stripe_period_end, closeMs = false) {
-	const dateVal = new Date(stripe_period_end * 1000).toLocaleDateString('en-US');
+	// const dateVal = new Date(stripe_period_end * 1000).toLocaleDateString('en-US');
 	return {
 		type    : 'error',
 		title   : `Plan Expired`,

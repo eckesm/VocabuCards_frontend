@@ -9,7 +9,6 @@ import {
 	setTextInput
 } from '../../actions/vocab';
 import { clearAlerts, addAlert } from '../../actions/auth';
-import { updateSavedRenderedText } from '../../helpers/API';
 
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';

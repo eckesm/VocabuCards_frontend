@@ -19,7 +19,7 @@ const useStyles = makeStyles({
 
 export default function ProductChoice({ planObject, selected = false }) {
 	const classes = useStyles();
-	const bull = <span className={classes.bullet}>•</span>;
+	// const bull = <span className={classes.bullet}>•</span>;
 
 	return (
 		<Card className={selected === false ? classes.selected : classes.root} variant="outlined">

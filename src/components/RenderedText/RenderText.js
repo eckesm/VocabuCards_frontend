@@ -152,8 +152,8 @@ const useStyles = makeStyles(theme => ({
 		marginBottom : '5px',
 		fontStyle    : 'italic'
 	},
-	pubDate                    : {
-		fontSize     : '1.5rem',
+	publicationDate            : {
+		fontSize     : '1.0rem',
 		marginTop    : '0px',
 		marginBottom : '5px'
 	},
@@ -202,6 +202,7 @@ export default function RenderText() {
 	const [ clickedArray, setClickedArray ] = useLocalStorageState('clicked_words_array', []);
 	const [ rssNewsSource, setRssNewsSource ] = useState(null);
 	const [ enableRssNewsSources, setEnableRssNewsSources ] = useState(false);
+	const [ publicationDate, setPublicationDate ] = useState('');
 	// const [ initialLanguage, setInitialLanguage ] = useState(null);
 
 	// console.log(articleObject);
@@ -219,6 +220,7 @@ export default function RenderText() {
 			...formData,
 			foreignText : ''
 		});
+		localStorage.removeItem('rss_object');
 	}
 
 	function addToClickedArray(word) {
@@ -320,6 +322,9 @@ export default function RenderText() {
 					if (news_sources.hasOwnProperty(language)) {
 						setRssNewsSource(news_sources[language]['source']);
 						setEnableRssNewsSources(true);
+						if (!articleObject && formData.foreignText === '') {
+							await handleGetSavedArticle();
+						}
 					}
 				}
 			}
@@ -343,6 +348,16 @@ export default function RenderText() {
 				dispatch(setTextInput(articleObject.text));
 				let prepareRenderedText = renderHtml(articleObject.text, source_code, translate_code, variations);
 				setRenderedText(prepareRenderedText);
+
+				setPublicationDate(articleObject.publication_date.replace(' 00:00:00 GMT', ''));
+
+				// let pubDate = new Date(articleObject.publication_date);
+				// console.log(pubDate.toString());
+				// console.log(pubDate.format('mmm d, yyy'));
+				// console.log(
+				// 	pubDate.toDateString('en-us', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })
+				// );
+				// console.log(pubDate.toGMTString());
 			}
 			else if (user && text_input !== '' && text_input !== null) {
 				setFormData({ ...formData, foreignText: text_input });
@@ -461,14 +476,19 @@ export default function RenderText() {
 							<p className={classes.publication}>{articleObject.publication}</p>
 						)}
 						{articleObject.author !== articleObject.publication &&
-						articleObject.author !== '' && <p className={classes.author}>By {articleObject.author}</p>}
+						articleObject.author !== '' && (
+							<p className={classes.author}>written by {articleObject.author}</p>
+						)}
+						{articleObject.publication_date !== '' && (
+							<p className={classes.publicationDate}>published {publicationDate}</p>
+						)}
 						{articleObject.url !== '' && (
 							<div className={classes.linkContainer}>
 								{articleObject.full_text === false && (
-									<p className={classes.linkDescription}>The full article is available at: </p>
+									<p className={classes.linkDescription}>the full article is available at: </p>
 								)}
 								{articleObject.full_text === true && (
-									<p className={classes.linkDescription}>Link to article: </p>
+									<p className={classes.linkDescription}>link to article: </p>
 								)}
 								<a href={articleObject.url} target="_blank">
 									<p className={classes.link}>{articleObject.url}</p>
