@@ -147,9 +147,8 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-// export default function HomeScreen({ status = null }) {
-export default function HomeScreen() {
-	// export default function HomeScreen() {
+export default function HomeScreen({ status = null }) {
+// export default function HomeScreen() {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const history = useHistory();
@@ -166,8 +165,8 @@ export default function HomeScreen() {
 		history.push('/getting-started');
 	};
 
-	// if (user || status === 'welcome') {
-	if (user) {
+	if (user || status === 'welcome') {
+	// if (user) {
 		return (
 			<div className={classes.welcomeScreen}>
 				<NavBar />
@@ -206,7 +205,7 @@ export default function HomeScreen() {
 						</p>
 						<p className={classes.InstructionText}>
 							<b>
-								<Link onClick={goToGettingStarted}
+								<Link onClick={goToNewUser}
 								//  href="/#/new-user"
 								 >
 									Create an account

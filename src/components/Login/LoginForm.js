@@ -76,7 +76,7 @@ export default function LoginForm({ startEmailAddress = null, forward = false })
 					if (res.status === 'success') {
 						setEmail(formData.emailAddress);
 						if (forward === false) {
-							history.push('/');
+							history.push('/welcome');
 						}
 					}
 				} catch (e) {

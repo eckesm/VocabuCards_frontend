@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 
@@ -25,7 +25,8 @@ const useStyles = makeStyles(theme => ({
 export default function Welcome() {
 	const classes = useStyles();
 	const history = useHistory();
-	const { user, language, language_object, subscription_status } = useSelector(store => store);
+	// const { user, language, language_object, subscription_status } = useSelector(store => store);
+	const { user, language, language_object } = useSelector(store => store);
 	const languageName = language_object[language];
 	const [ checkLogin, setCheckLogin ] = useState(false);
 
@@ -36,6 +37,15 @@ export default function Welcome() {
 	function goToHomeScreen() {
 		history.push('/');
 	}
+
+	useEffect(
+		() => {
+			if (user) {
+				history.push('/');
+			}
+		},
+		[ user ]
+	);
 
 	return (
 		<div className={classes.container}>
@@ -51,8 +61,9 @@ export default function Welcome() {
 			)}
 
 			{user &&
-			subscription_status !== 'canceled' &&
-			subscription_status !== 'past_due' && (
+			// subscription_status !== 'canceled' &&
+			// subscription_status !== 'past_due' && (
+				(
 				<div>
 					<CustomButton
 						style={{ width: '275px' }}
@@ -74,7 +85,7 @@ export default function Welcome() {
 				</div>
 			)}
 
-			{user &&
+			{/* {user &&
 			(subscription_status === 'canceled' || subscription_status === 'past_due') && (
 				<div>
 					<CustomButton
@@ -85,7 +96,7 @@ export default function Welcome() {
 						Update Subscription
 					</CustomButton>
 				</div>
-			)}
+			)} */}
 		</div>
 	);
 }
