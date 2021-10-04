@@ -56,7 +56,6 @@ const useStyles = makeStyles(theme => ({
 	},
 	buttonContainer            : {
 		marginBottom                   : '0px',
-		// justifyContent                 : 'space-around',
 		justifyContent                 : 'center',
 		[theme.breakpoints.down('sm')]: {
 			marginTop : '0px'
@@ -70,7 +69,6 @@ const useStyles = makeStyles(theme => ({
 		}
 	},
 	RenderTextButtonContainer  : {
-		// marginTop     : '10px',
 		marginBottom                   : '10px',
 		paddingTop                     : '10px',
 		paddingBottom                  : '10px',
@@ -80,14 +78,10 @@ const useStyles = makeStyles(theme => ({
 			marginTop  : '20px'
 		},
 		[theme.breakpoints.up('md')]: {
-			// border       : '1px solid rgb(200, 200, 200)',
-			// borderRadius : '3px',
-			// marginLeft   : '25px',
 			width : '300px'
 		}
 	},
 	getArticlesButtonContainer : {
-		// marginTop     : '10px',
 		marginBottom                   : '10px',
 		paddingTop                     : '10px',
 		paddingBottom                  : '10px',
@@ -170,6 +164,17 @@ const useStyles = makeStyles(theme => ({
 		fontSize : '1.0rem',
 		margin   : '0px',
 		wordWrap : 'break-word'
+	},
+	heading                    : {
+		textDecoration                 : 'underline',
+		marginBottom                   : '5px',
+		[theme.breakpoints.down('sm')]: {
+			textAlign : 'center'
+		},
+		[theme.breakpoints.up('md')]: {
+			textAlign  : 'left',
+			marginLeft : '25px'
+		}
 	}
 }));
 
@@ -349,7 +354,9 @@ export default function RenderText() {
 				let prepareRenderedText = renderHtml(articleObject.text, source_code, translate_code, variations);
 				setRenderedText(prepareRenderedText);
 
-				setPublicationDate(articleObject.publication_date.replace(' 00:00:00 GMT', ''));
+				if (articleObject.publication_date && articleObject.publication_date !== '') {
+					setPublicationDate(articleObject.publication_date.replace(' 00:00:00 GMT', ''));
+				}
 
 				// let pubDate = new Date(articleObject.publication_date);
 				// console.log(pubDate.toString());
@@ -428,21 +435,8 @@ export default function RenderText() {
 					</div>
 					{enableRssNewsSources && (
 						<div className={classes.getArticlesButtonContainer}>
-							<p className={classes.buttonHeading}>Get Article from {rssNewsSource}</p>
-							<CustomButton
-								// customtype="width_resize"
-								onClick={handleGetArticle}
-								disabled={fetchingArticle ? true : false}
-								customtype="RenderText_GetArticles"
-							>
-								{fetchingArticle ? (
-									<i>fetching new article</i>
-								) : (
-									// `Get New Article: ${rssNewsSource}`
-									'Recent Article (slower)'
-								)}
-							</CustomButton>
-
+							{/* <p className={classes.buttonHeading}>Get Article from {rssNewsSource}</p> */}
+							<p className={classes.buttonHeading}>Get Random Article</p>
 							<CustomButton
 								// customtype="width_resize"
 								onClick={handleGetSavedArticle}
@@ -453,14 +447,27 @@ export default function RenderText() {
 									<i>fetching saved article</i>
 								) : (
 									// `Get Saved Article: ${rssNewsSource}`
-									`Saved Article (faster)`
+									`Saved in Our Archives (faster)`
+								)}
+							</CustomButton>
+							<CustomButton
+								// customtype="width_resize"
+								onClick={handleGetArticle}
+								disabled={fetchingArticle ? true : false}
+								customtype="RenderText_GetArticles"
+							>
+								{fetchingArticle ? (
+									<i>fetching new article</i>
+								) : (
+									// `Get New Article: ${rssNewsSource}`
+									'New, Recently Published (slower)'
 								)}
 							</CustomButton>
 						</div>
 					)}
 				</div>
 			</form>
-
+			{/* <h2 className={classes.heading}>Rendered Text Output</h2> */}
 			<div className={classes.renderTextOutput}>
 				{enableRssNewsSources &&
 				articleObject !== '' &&

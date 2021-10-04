@@ -228,6 +228,7 @@ export default function VocabComponentForm({
 
 	async function handleSubmit(evt) {
 		evt.preventDefault();
+
 		onClose();
 
 		if (setting === 'edit_variation' || setting === 'edit_saved_variation') {
@@ -542,7 +543,7 @@ export default function VocabComponentForm({
 					</p>
 				))}
 
-			<form onSubmit={handleSubmit} className={classes.root}>
+			<form onSubmit={user ? handleSubmit : handleNoUser} className={classes.root}>
 				<div className={classes.sectionContainer}>
 					<TextField
 						id="variation"
@@ -684,6 +685,7 @@ export default function VocabComponentForm({
 						label="Part of Speech"
 						updatePOS={updatePOS}
 						value={formData.partOfSpeech}
+						isRequired={user ? true : false}
 					/>
 
 					<TextField
@@ -775,7 +777,7 @@ export default function VocabComponentForm({
 					</div>
 				)}
 				<div className={classes.buttonContainer}>
-					<CustomButton type="submit" onClick={user ? handleSubmit : handleNoUser}>
+					<CustomButton type="submit">
 						{user && (setting === 'edit_variation' || setting === 'edit_saved_variation') && 'Save Word'}
 						{user &&
 							(setting === 'add_variation_or_root' || setting === 'add_variation_of_root') &&

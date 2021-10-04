@@ -18,19 +18,9 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function SelectPOS({ id, label, updatePOS, value }) {
+export default function SelectPOS({ id, label, updatePOS, value, isRequired = true }) {
 	const classes = useStyles();
 	const [ data, setData ] = useState(value);
-	// const POSChoices = [
-	// 	[ 'Adjective', 'adjective' ],
-	// 	[ 'Adverb', 'adverb' ],
-	// 	[ 'Article', 'article' ],
-	// 	[ 'Conjunction', 'conjunction' ],
-	// 	[ 'Noun', 'noun' ],
-	// 	[ 'Preposition', 'preposition' ],
-	// 	[ 'Verb', 'verb' ],
-	// 	[ 'Other', 'other' ]
-	// ];
 
 	useEffect(
 		() => {
@@ -46,7 +36,7 @@ export default function SelectPOS({ id, label, updatePOS, value }) {
 
 	return (
 		<div>
-			<FormControl required variant="outlined" className={classes.formControl}>
+			<FormControl required={isRequired} variant="outlined" className={classes.formControl}>
 				<InputLabel id={id}>{label}</InputLabel>
 				<Select labelId={id} id={id} value={data} onChange={handleChange} label={label}>
 					{partsOfSpeechSelectMenuItems.map(choice => {

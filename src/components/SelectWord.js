@@ -21,9 +21,6 @@ const useStyles = makeStyles(theme => ({
 export default function SelectWord({
 	id,
 	label,
-	// updateExistingWord,
-	// wordChoices = [],
-	// setShowNewWord
 	returnSelection,
 	isRequired = false,
 	addNew = false

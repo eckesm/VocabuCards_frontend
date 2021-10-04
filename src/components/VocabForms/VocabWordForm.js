@@ -60,24 +60,10 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 			...data,
 			[name] : value
 		}));
-		// if (name === 'word') {
-		// 	if (value === '') {
-		// 		setTranslateAble(false);
-		// 	}
-		// 	else {
-		// 		setTranslateAble(true);
-		// 	}
-		// }
 	}
 
 	useEffect(() => {
 		if (formData.word) {
-			// if (formData.word === '') {
-			// 	setTranslateAble(false);
-			// }
-			// else {
-			// 	setTranslateAble(true);
-			// }
 			if (formData.translation === '') {
 				try {
 					translateAPI();
@@ -133,8 +119,6 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 		translateAPI();
 	}
 	async function translateAPI() {
-		// const results = await getTranslateWordViaAPI(formData.word, language);
-		// setFormData({ ...formData, translation: results });
 
 		if (formData.word !== '') {
 			const results = await getTranslateWordViaAPI(formData.word, language);
@@ -170,7 +154,6 @@ export default function VocabWordForm({ onClose, word = null, setWord }) {
 					/>
 					<Button
 						className={classes.button}
-						// variant="outlined"
 						variant="contained"
 						color="primary"
 						onClick={handleTranslate}

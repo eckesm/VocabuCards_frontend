@@ -175,13 +175,13 @@ export default function NavDrawer({
 					</ListItem>
 				)}
 
-				{auth && <Divider />}
+				{/* {auth && <Divider />}
 
 				{auth && (
 					<ListItem button onClick={goToPlans}>
 						<ListItemText>Subscriptions</ListItemText>
 					</ListItem>
-				)}
+				)} */}
 
 				{auth && <Divider />}
 

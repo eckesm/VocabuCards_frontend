@@ -10,7 +10,7 @@ import RenderText from './RenderText';
 import { SCREEN_WELCOME_MOBILE, SCREEN_WELCOME_DESKTOP } from '../../settings';
 
 const useStyles = makeStyles(theme => ({
-	screen    : {
+	screen          : {
 		height                         : 'min-content',
 		minHeight                      : '100vh',
 		paddingBottom                  : '25px',
@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 			backgroundImage : `url(${SCREEN_WELCOME_DESKTOP})`
 		}
 	},
-	container : {
+	container       : {
 		margin                         : '0 auto',
 		border                         : '1px solid rgb(200, 200, 200)',
 		borderRadius                   : '3px',

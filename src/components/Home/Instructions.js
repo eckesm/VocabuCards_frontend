@@ -44,7 +44,8 @@ export default function Instructions() {
 	const classes = useStyles();
 	// const history = useHistory();
 	// const { user, language, language_object, subscription_status } = useSelector(store => store);
-	const { user, subscription_status } = useSelector(store => store);
+	// const { user, subscription_status } = useSelector(store => store);
+	const { user } = useSelector(store => store);
 	// const languageName = language_object[language];
 
 	const [ modalOpen, setModalOpen ] = useState(false);
@@ -95,11 +96,8 @@ export default function Instructions() {
 			<p className={classes.textContainer}>
 				You can add a new root word or variation of a root word by clicking the{' '}
 				<b>
-					{user && subscription_status !== 'expired' ? (
-						<Link onClick={handleModalOpen}>Add Word</Link>
-					) : (
-						'Add Word'
-					)}
+					{/* {user && subscription_status !== 'expired' ? ( */}
+					{user ? <Link onClick={handleModalOpen}>Add Word</Link> : 'Add Word'}
 				</b>{' '}
 				button.
 			</p>
@@ -107,7 +105,8 @@ export default function Instructions() {
 			<p className={classes.textContainer}>
 				Click the{' '}
 				<b>
-					{user && subscription_status !== 'expired' ? <Link href="/#/study-text">Study Text</Link> : 'Study Text'}
+					{/* {user && subscription_status !== 'expired' ? <Link href="/#/study-text">Study Text</Link> : 'Study Text'} */}
+					<Link href={user ? '/#/study-text' : '/#/'}>Study Text</Link>
 				</b>{' '}
 				button to render an interactive version of foreign text. Either:
 			</p>
@@ -131,11 +130,8 @@ export default function Instructions() {
 			<p className={classes.textContainer}>
 				Click the{' '}
 				<b>
-					{user && subscription_status !== 'expired' ? (
-						<Link href="/#/words">My VocabuCards</Link>
-					) : (
-						'My VocabuCards'
-					)}
+					{/* {user && subscription_status !== 'expired' ? ( */}
+					{user ? <Link href="/#/words">My VocabuCards</Link> : 'My VocabuCards'}
 				</b>{' '}
 				button to see all of your cards for your current language setting. You can add new roots and variations
 				on this page, make changes to existing roots and variations, and delete roots and variations on this
@@ -145,7 +141,8 @@ export default function Instructions() {
 			<p className={classes.textContainer}>
 				You can study text and store VocabuCards in any available language. Select a language in the "Change
 				Language" select input in the menu and on the{' '}
-				<b>{user && subscription_status !== 'expired' ? <Link href="/#/home">Home</Link> : 'Home'}</b> page.
+				{/* <b>{user && subscription_status !== 'expired' ? <Link href="/#/home">Home</Link> : 'Home'}</b> page. */}
+				<b>{user ? <Link href="/#/home">Home</Link> : 'Home'}</b> page.
 			</p>
 			<p className={classes.textContainer}>
 				When you change languages, you will only see your VocabuCards that are stored in the new language. When

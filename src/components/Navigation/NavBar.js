@@ -150,12 +150,12 @@ export default function NavBar() {
 								Study Text
 							</Button>
 						)}
-						{auth && (
-							// subscription_status === 'past_due' && (
+						{/* {auth && (
+							subscription_status === 'past_due' && (
 							<Button color="inherit" href="/#/plans" style={{ textTransform: 'none' }}>
 								Subscriptions
 							</Button>
-						)}
+						)} */}
 						{auth && (
 							// subscription_status !== 'past_due' && (
 							<Button color="inherit" href="/#/words" style={{ textTransform: 'none' }}>
