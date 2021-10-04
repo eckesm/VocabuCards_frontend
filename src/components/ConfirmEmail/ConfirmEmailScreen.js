@@ -6,7 +6,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import NavBar from '../Navigation/NavBar';
 import ConfirmEmailForm from './ConfirmEmailForm';
 import AlertsContainer from '../Alerts/AlertsContainer';
-import Home from '../Home/Home';
+// import Home from '../Home/Home';
+import LoginForm from '../Login/LoginForm';
 
 import { SCREEN_LOGIN_MOBILE, SCREEN_LOGIN_DESKTOP } from '../../settings';
 
@@ -50,19 +51,33 @@ const useStyles = makeStyles(theme => ({
 
 export default function ConfirmEmailScreen() {
 	const classes = useStyles();
+
 	const { token } = useParams();
 	const [ showForm, setShowForm ] = useState(true);
+	const [ authEmailAddress, setAuthEmailAddress ] = useState(null);
 
 	return (
 		<div className={classes.screen}>
 			<NavBar />
 			<AlertsContainer />
 			<div className={classes.container}>
-				{showForm && <ConfirmEmailForm token={token} setShowForm={setShowForm} />}
+				{showForm && (
+					<ConfirmEmailForm
+						token={token}
+						setShowForm={setShowForm}
+						setAuthEmailAddress={setAuthEmailAddress}
+					/>
+				)}
 				{!showForm && (
 					<div>
-						<h1>Your email address has been confirmed.</h1>
-						<Home />
+						<h3>
+							<i>
+								Your email address has been confirmed. Please log in using your authenticated
+								credentials.
+							</i>
+						</h3>
+						{/* <Home /> */}
+						<LoginForm startEmailAddress={authEmailAddress} />
 					</div>
 				)}
 			</div>

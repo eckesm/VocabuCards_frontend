@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import { TextField, Button } from '@material-ui/core';
@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { confirmEmailViaAPI } from '../../helpers/API';
 import useFields from '../../hooks/useFields';
-import { clearAlerts, addAlert } from '../../actions/auth';
+import { clearAlerts, addAlert, logoutUser, logoutUserViaAPI } from '../../actions/auth';
 
 const useStyles = makeStyles(theme => ({
 	textInput : {
@@ -19,10 +19,12 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function ConfirmEmailForm({ token, setAlerts, setShowForm }) {
+export default function ConfirmEmailForm({ token, setShowForm, setAuthEmailAddress }) {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const history = useHistory();
+
+	const { user } = useSelector(store => store);
 
 	const [ formData, handleChange ] = useFields({
 		password : ''
@@ -38,6 +40,7 @@ export default function ConfirmEmailForm({ token, setAlerts, setShowForm }) {
 
 		try {
 			if (res.status === 'success') {
+				setAuthEmailAddress(res.email_address);
 				setShowForm(false);
 			}
 			dispatch(
@@ -54,6 +57,17 @@ export default function ConfirmEmailForm({ token, setAlerts, setShowForm }) {
 
 		setLoading(false);
 	}
+
+	useEffect(
+		() => {
+			if (user) {
+				dispatch(clearAlerts());
+				dispatch(logoutUser());
+				dispatch(logoutUserViaAPI());
+			}
+		},
+		[ user ]
+	);
 
 	return (
 		<div>

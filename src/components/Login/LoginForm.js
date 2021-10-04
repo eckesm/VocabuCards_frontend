@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
 
@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }));
 
-export default function LoginForm({ forward = false }) {
+export default function LoginForm({ startEmailAddress = null, forward = false }) {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const history = useHistory();
@@ -76,7 +76,7 @@ export default function LoginForm({ forward = false }) {
 					if (res.status === 'success') {
 						setEmail(formData.emailAddress);
 						if (forward === false) {
-							history.push('/welcome');
+							history.push('/');
 						}
 					}
 				} catch (e) {
@@ -95,6 +95,10 @@ export default function LoginForm({ forward = false }) {
 
 		setLoading(false);
 	}
+
+	useEffect(() => {
+		if (startEmailAddress) formData.emailAddress = startEmailAddress;
+	}, []);
 
 	return (
 		<div>
