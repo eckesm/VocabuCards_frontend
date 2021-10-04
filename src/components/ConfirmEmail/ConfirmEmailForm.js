@@ -64,6 +64,14 @@ export default function ConfirmEmailForm({ token, setShowForm, setAuthEmailAddre
 				dispatch(clearAlerts());
 				dispatch(logoutUser());
 				dispatch(logoutUserViaAPI());
+				dispatch(
+					addAlert({
+						type    : 'warning',
+						title   : 'Logged Out!',
+						text    : 'You been logged out in order to confirm your email address.',
+						closeMs : true
+					})
+				);
 			}
 		},
 		[ user ]
