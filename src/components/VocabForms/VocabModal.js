@@ -49,32 +49,12 @@ export default function VocabModal({
 	setWord,
 	setting,
 	rootId = null,
-	rootWord = null
+	rootWord = null,
+	user = true
 }) {
 	const classes = useStyles();
 	// getModalStyle is not a pure function, we roll the style only on the first render
 	const [ modalStyle ] = React.useState(getModalStyle);
-
-	const body = (
-		<div style={modalStyle} className={classes.paper}>
-			{(setting === 'edit_variation' || setting === 'edit_saved_variation') && (
-				<VocabComponentForm
-					onClose={handleClose}
-					wordText={wordText}
-					variation={variation}
-					setVariation={setVariation}
-					setting={setting}
-				/>
-			)}
-			{setting === 'add_variation_or_root' && (
-				<VocabComponentForm onClose={handleClose} wordText={wordText} setting={setting} />
-			)}
-			{setting === 'add_variation_of_root' && (
-				<VocabComponentForm onClose={handleClose} rootId={rootId} rootWord={rootWord} setting={setting} />
-			)}
-			{setting === 'edit_root' && <VocabWordForm onClose={handleClose} word={word} setWord={setWord} />}
-		</div>
-	);
 
 	return (
 		<div>
@@ -84,7 +64,36 @@ export default function VocabModal({
 				aria-labelledby="simple-modal-title"
 				aria-describedby="simple-modal-description"
 			>
-				{body}
+				<div style={modalStyle} className={classes.paper}>
+					{user &&
+					(setting === 'edit_variation' || setting === 'edit_saved_variation') && (
+						<VocabComponentForm
+							onClose={handleClose}
+							wordText={wordText}
+							variation={variation}
+							setVariation={setVariation}
+							setting={setting}
+						/>
+					)}
+					{user &&
+					setting === 'add_variation_or_root' && (
+						<VocabComponentForm onClose={handleClose} wordText={wordText} setting={setting} />
+					)}
+					{user &&
+					setting === 'add_variation_of_root' && (
+						<VocabComponentForm
+							onClose={handleClose}
+							rootId={rootId}
+							rootWord={rootWord}
+							setting={setting}
+						/>
+					)}
+					{user &&
+					setting === 'edit_root' && <VocabWordForm onClose={handleClose} word={word} setWord={setWord} />}
+					{!user && (
+						<VocabComponentForm onClose={handleClose} wordText={wordText} setting="no_user" user={false} />
+					)}
+				</div>
 			</Modal>
 		</div>
 	);

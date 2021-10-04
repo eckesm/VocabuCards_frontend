@@ -16,15 +16,14 @@ import {
 import { addAlert } from './auth';
 import { API_URL } from '../helpers/API';
 import { customAxios } from '../helpers/tokens';
-import {
-	stripeCurrentAlert,
-	stripeExpiringAlert,
-	stripeTrialAlert,
-	// stripeNoPaymentAlert,
-	stripePastDueAlert,
-	stripeExpiredAlert,
-	stripeRenewingSoonAlert
-} from '../helpers/Stripe';
+// import {
+// 	stripeCurrentAlert,
+// 	stripeExpiringAlert,
+// 	stripeTrialAlert,
+// 	stripePastDueAlert,
+// 	stripeExpiredAlert,
+// 	stripeRenewingSoonAlert
+// } from '../helpers/Stripe';
 
 function getAccessToken() {
 	return localStorage.getItem('access_token') || null;
@@ -44,7 +43,7 @@ export function getUserInfo() {
 				let {
 					account_override,
 					current_article,
-					current_plan,
+					// current_plan,
 					current_text,
 					first_login,
 					is_email_confirmed,
@@ -53,15 +52,15 @@ export function getUserInfo() {
 					last_source_code,
 					name,
 					news_sources,
-					stripe_cancel_at_period_end,
-					stripe_canceled_at,
-					stripe_customer_id,
-					stripe_payment_method,
-					stripe_period_end,
-					stripe_period_start,
-					subscription_status,
-					trial_end,
-					trial_start,
+					// stripe_cancel_at_period_end,
+					// stripe_canceled_at,
+					// stripe_customer_id,
+					// stripe_payment_method,
+					// stripe_period_end,
+					// stripe_period_start,
+					// subscription_status,
+					// trial_end,
+					// trial_start,
 					user,
 					words_array
 				} = res.data;
@@ -76,7 +75,7 @@ export function getUserInfo() {
 				dispatch({
 					type                        : GET_USER_INFO,
 					account_override,
-					current_plan,
+					// current_plan,
 					first_login,
 					is_email_confirmed,
 					language                    : last_source_code,
@@ -85,20 +84,22 @@ export function getUserInfo() {
 					last_login,
 					name,
 					news_sources                : news_sources || {},
-					stripe_cancel_at_period_end,
-					stripe_canceled_at,
-					stripe_customer_id,
-					stripe_payment_method,
-					stripe_period_end,
-					stripe_period_start,
-					subscription_status,
+					// stripe_cancel_at_period_end,
+					// stripe_canceled_at,
+					// stripe_customer_id,
+					// stripe_payment_method,
+					// stripe_period_end,
+					// stripe_period_start,
+					// subscription_status,
 					current_article,
 					text_input                  : current_text || null,
-					trial_end,
-					trial_start,
+					// trial_end,
+					// trial_start,
 					user,
 					words_array                 : words_array || []
 				});
+
+				localStorage.setItem('saved_language', res.data.last_source_code);
 
 				let closeMs = true;
 				if (first_login) {
@@ -113,34 +114,34 @@ export function getUserInfo() {
 					closeMs = false;
 				}
 
-				if (account_override !== 'full_access') {
-					if (subscription_status === 'past_due') {
-						dispatch(addAlert(stripePastDueAlert(current_plan, stripe_period_end, false)));
-					}
-					else if (subscription_status === 'canceled') {
-						dispatch(addAlert(stripeExpiredAlert(current_plan, stripe_period_end, false)));
-					}
-					else if (subscription_status === 'trialing' && stripe_cancel_at_period_end === true) {
-						dispatch(addAlert(stripeTrialAlert(current_plan, stripe_period_end, closeMs)));
-					}
-					else if (stripe_cancel_at_period_end === true) {
-						dispatch(addAlert(stripeExpiringAlert(current_plan, stripe_period_end, false)));
-					}
-					else {
-						const stripeEndDate = stripe_period_end * 1000;
-						const nowDate = Date.now();
-						const daysToRenewal = (stripeEndDate - nowDate) / 86400000;
-						if (daysToRenewal < 2 && current_plan === 'weekly') {
-							dispatch(addAlert(stripeRenewingSoonAlert(current_plan, stripe_period_end, false)));
-						}
-						else if (daysToRenewal < 4 && current_plan === 'monthly') {
-							dispatch(addAlert(stripeRenewingSoonAlert(current_plan, stripe_period_end, false)));
-						}
-						else if (daysToRenewal < 10 && current_plan === 'annually') {
-							dispatch(addAlert(stripeRenewingSoonAlert(current_plan, stripe_period_end, false)));
-						}
-					}
-				}
+				// if (account_override !== 'full_access') {
+				// 	if (subscription_status === 'past_due') {
+				// 		dispatch(addAlert(stripePastDueAlert(current_plan, stripe_period_end, false)));
+				// 	}
+				// 	else if (subscription_status === 'canceled') {
+				// 		dispatch(addAlert(stripeExpiredAlert(current_plan, stripe_period_end, false)));
+				// 	}
+				// 	else if (subscription_status === 'trialing' && stripe_cancel_at_period_end === true) {
+				// 		dispatch(addAlert(stripeTrialAlert(current_plan, stripe_period_end, closeMs)));
+				// 	}
+				// 	else if (stripe_cancel_at_period_end === true) {
+				// 		dispatch(addAlert(stripeExpiringAlert(current_plan, stripe_period_end, false)));
+				// 	}
+				// 	else {
+				// 		const stripeEndDate = stripe_period_end * 1000;
+				// 		const nowDate = Date.now();
+				// 		const daysToRenewal = (stripeEndDate - nowDate) / 86400000;
+				// 		if (daysToRenewal < 2 && current_plan === 'weekly') {
+				// 			dispatch(addAlert(stripeRenewingSoonAlert(current_plan, stripe_period_end, false)));
+				// 		}
+				// 		else if (daysToRenewal < 4 && current_plan === 'monthly') {
+				// 			dispatch(addAlert(stripeRenewingSoonAlert(current_plan, stripe_period_end, false)));
+				// 		}
+				// 		else if (daysToRenewal < 10 && current_plan === 'annually') {
+				// 			dispatch(addAlert(stripeRenewingSoonAlert(current_plan, stripe_period_end, false)));
+				// 		}
+				// 	}
+				// }
 
 				if (!is_email_confirmed) {
 					dispatch(
@@ -213,21 +214,12 @@ export function setUserLanguage(source_code) {
 
 // SET_TEXT_INPUT
 export function setTextInput(textInput) {
-	// return function(dispatch) {
-	// dispatch(setTextInputInState(textInput));
 	return {
 		type      : SET_TEXT_INPUT,
 		textInput
 	};
 	// };
 }
-
-// function setTextInputInState(textInput) {
-// 	return {
-// 		type      : SET_TEXT_INPUT,
-// 		textInput
-// 	};
-// }
 
 // SET_CURRENT_ARTICLE
 export function setCurrentArticle(articleId) {

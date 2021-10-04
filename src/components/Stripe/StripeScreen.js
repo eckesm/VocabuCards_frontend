@@ -115,6 +115,7 @@ export default function StripeScreen({ status = null, message = null }) {
 					// else if (!stripe_payment_method) {
 					// 	dispatch(addAlert(stripeNoPaymentAlert(current_plan, stripe_period_end, false)));
 					// }
+					// console.log(current_plan,stripe_period_end)
 					dispatch(addAlert(stripeCurrentAlert(current_plan, stripe_period_end, false)));
 				}
 			}

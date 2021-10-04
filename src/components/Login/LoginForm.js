@@ -130,7 +130,7 @@ export default function LoginForm({ forward = false }) {
 			</form>
 			<div className={classes.linkContainer}>
 				<div className={classes.link}>
-					<Link href="/#/signup" onClick={() => dispatch(clearAlerts())}>
+					<Link href="/#/new-user" onClick={() => dispatch(clearAlerts())}>
 						<i>Create an account.</i>
 					</Link>
 				</div>

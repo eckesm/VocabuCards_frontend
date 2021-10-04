@@ -508,6 +508,7 @@ export default function RenderText() {
 				handleClose={handleClose}
 				wordText={modalText}
 				setting="add_variation_or_root"
+				user={user ? true : false}
 			/>
 		</div>
 	);

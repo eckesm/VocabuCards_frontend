@@ -107,7 +107,7 @@ export default function Instructions() {
 			<p className={classes.textContainer}>
 				Click the{' '}
 				<b>
-					{user && subscription_status !== 'expired' ? <Link href="/#/read">Study Text</Link> : 'Study Text'}
+					{user && subscription_status !== 'expired' ? <Link href="/#/study-text">Study Text</Link> : 'Study Text'}
 				</b>{' '}
 				button to render an interactive version of foreign text. Either:
 			</p>

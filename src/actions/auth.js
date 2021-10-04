@@ -41,9 +41,8 @@ export function loginUserViaAPI(email_address, password) {
 			if (res.data.status === 'success') {
 				localStorage.setItem('access_token', res.data.access_token);
 				localStorage.setItem('refresh_token', res.data.refresh_token);
-				// localStorage.setItem('access_token_exp', res.data.access_token_exp);
-				// localStorage.setItem('refresh_token_exp', res.data.refresh_token_exp);
 				localStorage.removeItem('rss_object');
+				localStorage.removeItem('clicked_words_array');
 				dispatch(getUserInfo());
 				return res.data;
 			}
@@ -132,8 +131,6 @@ export function logoutUserViaAPI() {
 export function logoutUser() {
 	localStorage.removeItem('access_token');
 	localStorage.removeItem('refresh_token');
-	// localStorage.removeItem('access_token_exp');
-	// localStorage.removeItem('refresh_token_exp');
 	localStorage.removeItem('rss_object');
 	localStorage.removeItem('clicked_words_array');
 	return async function(dispatch) {

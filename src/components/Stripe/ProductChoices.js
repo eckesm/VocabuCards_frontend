@@ -5,11 +5,10 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import ProductChoice from './ProductChoice';
 
 export default function ProductChoices({ selectPlan = null, current_plan = null }) {
-
 	const plansArray = [
-		{ title: 'Weekly Plan', code: 'weekly', price: 1.99, message: '$1.99 charged weekly.' },
-		{ title: 'Monthly Plan', code: 'monthly', price: 4.99, message: '$4.99 charged monthly.' },
-		{ title: 'Annual Plan', code: 'annually', price: 49.99, message: '$49.99 charged annually.' }
+		// { title: 'Weekly Plan', code: 'weekly', price: 0.99, message: '$0.99 charged weekly.' },
+		{ title: 'Monthly Plan', code: 'monthly', price: 2.99, message: '$2.99 charged monthly.' },
+		// { title: 'Annual Plan', code: 'annually', price: 29.99, message: '$29.99 charged annually.' }
 	];
 
 	return (

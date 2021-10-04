@@ -56,7 +56,7 @@ export default function Welcome() {
 				<div>
 					<CustomButton
 						style={{ width: '275px' }}
-						href="/#/read"
+						href="/#/study-text"
 						endIcon={<i className="fas fa-arrow-circle-right" />}
 					>
 						Study {languageName} Text

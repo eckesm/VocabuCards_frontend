@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router';
 
 import { TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -43,16 +44,8 @@ const useStyles = makeStyles(theme => ({
 	buttonContainer     : {
 		textAlign : 'center'
 	},
-	// editSavedbutton     : {
-	// 	width        : '125px',
-	// 	marginTop    : '3px',
-	// 	marginBottom : '3px'
-	// },
 	savedButtonGroup    : {
 		width     : '100%',
-		// marginTop    : 'auto',
-		// marginBottom : 'auto',
-		// marginRight  : '0px',
 		textAlign : 'center'
 	},
 	submitButton        : {
@@ -100,9 +93,12 @@ export default function VocabComponentForm({
 	setVariation = null,
 	rootId = null,
 	rootWord = null,
-	setting = null
+	setting = null,
+	user = true
 }) {
 	const dispatch = useDispatch();
+	const history = useHistory();
+
 	const { language, words_array } = useSelector(store => store);
 	const [ dictionaryChoices, setDictionaryChoices ] = useState([]);
 	const wordChoices = [];
@@ -339,6 +335,12 @@ export default function VocabComponentForm({
 		}
 	}
 
+	function handleNoUser(evt) {
+		evt.preventDefault();
+		onClose();
+		history.push('/new-user');
+	}
+
 	async function translateAPI() {
 		if (formData.variation !== '') {
 			const results = await getTranslateWordViaAPI(formData.variation.toLowerCase(), language);
@@ -528,16 +530,17 @@ export default function VocabComponentForm({
 				)}
 			</div>
 
-			{setting === 'add_variation_or_root' ? (
-				<p className={classes.instructions}>
-					You must complete <b>Variation</b>, <b>Part of Speech</b>, and the <b>Add to Existing Word</b>{' '}
-					section.
-				</p>
-			) : (
-				<p className={classes.instructions}>
-					You must complete <b>Variation</b> and <b>Part of Speech</b>.
-				</p>
-			)}
+			{user &&
+				(setting === 'add_variation_or_root' ? (
+					<p className={classes.instructions}>
+						You must complete <b>Variation</b>, <b>Part of Speech</b>, and the <b>Add to Existing Word</b>{' '}
+						section.
+					</p>
+				) : (
+					<p className={classes.instructions}>
+						You must complete <b>Variation</b> and <b>Part of Speech</b>.
+					</p>
+				))}
 
 			<form onSubmit={handleSubmit} className={classes.root}>
 				<div className={classes.sectionContainer}>
@@ -693,20 +696,22 @@ export default function VocabComponentForm({
 						autoCapitalize="false"
 					/>
 				</div>
-				<div className={classes.sectionContainer}>
-					<TextField
-						id="description"
-						name="description"
-						label="Description"
-						onChange={handleChange}
-						value={formData.description}
-						variant="outlined"
-						autoCapitalize="false"
-					/>
-					<p className={classes.sectionInstructions}>
-						<b>Suggestions:</b> singular, definite, past tense, etc.
-					</p>
-				</div>
+				{user && (
+					<div className={classes.sectionContainer}>
+						<TextField
+							id="description"
+							name="description"
+							label="Description"
+							onChange={handleChange}
+							value={formData.description}
+							variant="outlined"
+							autoCapitalize="false"
+						/>
+						<p className={classes.sectionInstructions}>
+							<b>Suggestions:</b> singular, definite, past tense, etc.
+						</p>
+					</div>
+				)}
 
 				{/* <TextField
 					id="variationNotes"
@@ -717,7 +722,8 @@ export default function VocabComponentForm({
 					variant="outlined"
 					autoCapitalize="false"
 				/> */}
-				{setting === 'add_variation_or_root' && (
+				{user &&
+				setting === 'add_variation_or_root' && (
 					<div className={classes.sectionContainer}>
 						<div className={classes.wordAndButton}>
 							<SelectWord
@@ -769,9 +775,15 @@ export default function VocabComponentForm({
 					</div>
 				)}
 				<div className={classes.buttonContainer}>
-					<CustomButton type="submit">
-						{setting === 'edit_variation' || setting === 'edit_saved_variation' ? 'Save Word' : 'Add Word'}
+					<CustomButton type="submit" onClick={user ? handleSubmit : handleNoUser}>
+						{user && (setting === 'edit_variation' || setting === 'edit_saved_variation') && 'Save Word'}
+						{user &&
+							(setting === 'add_variation_or_root' || setting === 'add_variation_of_root') &&
+							'Add Word'}
+
+						{!user && 'Create an Account to Save Words'}
 					</CustomButton>
+
 					<CustomButton customtype="default" onClick={onClose}>
 						Close
 					</CustomButton>

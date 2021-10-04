@@ -42,11 +42,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function NavBar() {
-	const { user, language, language_object, current_plan, subscription_status } = useSelector(store => store);
 	const dispatch = useDispatch();
 	const history = useHistory();
+	
+	// const { user, language, language_object, current_plan, subscription_status } = useSelector(store => store);
+	const { user, language, language_object, subscription_status } = useSelector(store => store);
 	const languageName = language_object[language];
-
 	const [ auth, setAuth ] = useState(false);
 
 	useEffect(
@@ -68,7 +69,7 @@ export default function NavBar() {
 
 	const goToNewUser = () => {
 		dispatch(clearAlerts());
-		history.push('/signup');
+		history.push('/new-user');
 	};
 
 	const goToLogin = () => {
@@ -140,7 +141,7 @@ export default function NavBar() {
 					<div className={classes.sectionDesktop}>
 						{auth &&
 						subscription_status !== 'past_due' && (
-							<Button color="inherit" href="/#/read" style={{ textTransform: 'none' }}>
+							<Button color="inherit" href="/#/study-text" style={{ textTransform: 'none' }}>
 								Study Text
 							</Button>
 						)}
@@ -149,9 +150,6 @@ export default function NavBar() {
 								Study Text
 							</Button>
 						)}
-						{/* <Button color="inherit" href="/#/getting-started" style={{ textTransform: 'none' }}>
-							Getting Started
-						</Button> */}
 						{auth &&
 						subscription_status === 'past_due' && (
 							<Button color="inherit" href="/#/plans" style={{ textTransform: 'none' }}>
@@ -172,7 +170,7 @@ export default function NavBar() {
 						)}
 						{!auth && (
 							<Button color="inherit" onClick={goToNewUser} style={{ textTransform: 'none' }}>
-								New User
+								Create an Account
 							</Button>
 						)}
 						{!auth && (

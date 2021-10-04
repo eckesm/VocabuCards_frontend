@@ -16,7 +16,7 @@ import {
 	SET_ALERTS,
 	REMOVE_ALERT,
 	GET_USER_INFO,
-	GET_STRIPE_CUSTOMER_ID
+	// GET_STRIPE_CUSTOMER_ID
 } from './actions/types';
 
 const INITIAL_STATE = {
@@ -32,19 +32,20 @@ const INITIAL_STATE = {
 	last_login                  : null,
 	name                        : '',
 	news_sources                : {},
-	stripe_cancel_at_period_end : null,
-	stripe_canceled_at          : null,
-	stripe_customer_id          : null,
-	stripe_payment_method       : null,
-	stripe_period_end           : null,
-	stripe_period_start         : null,
-	subscription_status         : null,
+	// stripe_cancel_at_period_end : null,
+	// stripe_canceled_at          : null,
+	// stripe_customer_id          : null,
+	// stripe_payment_method       : null,
+	// stripe_period_end           : null,
+	// stripe_period_start         : null,
+	// subscription_status         : null,
 	text_input                  : null,
 	trial_end                   : null,
 	trial_start                 : null,
 	user                        : null,
 	variations                  : {},
-	words_array                 : null
+	// words_array                 : null
+	words_array                 : []
 };
 
 function sortByRoot(words_array) {
@@ -100,13 +101,13 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 				last_login                  : action.last_login,
 				name                        : action.name,
 				news_sources                : action.news_sources,
-				stripe_cancel_at_period_end : action.stripe_cancel_at_period_end,
-				stripe_canceled_at          : action.stripe_canceled_at,
-				stripe_customer_id          : action.stripe_customer_id,
-				stripe_payment_method       : action.stripe_payment_method,
-				stripe_period_end           : action.stripe_period_end,
-				stripe_period_start         : action.stripe_period_start,
-				subscription_status         : action.subscription_status,
+				// stripe_cancel_at_period_end : action.stripe_cancel_at_period_end,
+				// stripe_canceled_at          : action.stripe_canceled_at,
+				// stripe_customer_id          : action.stripe_customer_id,
+				// stripe_payment_method       : action.stripe_payment_method,
+				// stripe_period_end           : action.stripe_period_end,
+				// stripe_period_start         : action.stripe_period_start,
+				// subscription_status         : action.subscription_status,
 				text_input                  : action.text_input,
 				trial_end                   : action.trial_end,
 				trial_start                 : action.trial_start,
@@ -154,11 +155,11 @@ export default function rootReducer(state = INITIAL_STATE, action) {
 				words_array : action.words_array,
 				variations  : createVariationsObject(action.words_array)
 			};
-		case GET_STRIPE_CUSTOMER_ID:
-			return {
-				...state,
-				stripe_customer_id : action.stripe_customer_id
-			};
+		// case GET_STRIPE_CUSTOMER_ID:
+		// 	return {
+		// 		...state,
+		// 		stripe_customer_id : action.stripe_customer_id
+		// 	};
 
 		case SET_USER_LANGUAGE:
 			return {

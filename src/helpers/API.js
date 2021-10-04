@@ -70,12 +70,13 @@ export async function getTranslateWordViaAPI(text, source_code, translate_code =
 		};
 	}
 	try {
-		const headers = {
-			Authorization : 'Bearer ' + getAccessToken()
-		};
-		const res = await customAxios.get(`${API_URL}/translate/${text}/${source_code}/${translate_code}`, {
-			headers : headers
-		});
+		// const headers = {
+		// 	Authorization : 'Bearer ' + getAccessToken()
+		// };
+		// const res = await customAxios.get(`${API_URL}/translate/${text}/${source_code}/${translate_code}`, {
+		// 	headers : headers
+		// });
+		const res = await customAxios.get(`${API_URL}/translate/${text}/${source_code}/${translate_code}`);
 		return {
 			status : 'success',
 			data   : res.data
@@ -139,10 +140,11 @@ export async function getDictionaryWordViaAPI(word) {
 	}
 
 	try {
-		const headers = {
-			Authorization : 'Bearer ' + getAccessToken()
-		};
-		const res = await customAxios.get(`${API_URL}/dictionary/${adjustedWord}`, { headers: headers });
+		// const headers = {
+		// 	Authorization : 'Bearer ' + getAccessToken()
+		// };
+		// const res = await customAxios.get(`${API_URL}/dictionary/${adjustedWord}`, { headers: headers });
+		const res = await customAxios.get(`${API_URL}/dictionary/${adjustedWord}`);
 		return res.data;
 	} catch (e) {
 		console.log(e);

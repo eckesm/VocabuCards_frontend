@@ -46,9 +46,10 @@ export default function NavDrawer({
 }) {
 	const classes = useStyles();
 	const history = useHistory();
-	const { user, language, language_object, current_plan } = useSelector(store => store);
-	const [ loading, setLoading ] = useState(true);
-	const languageName = language_object[language];
+	// const { user, language, language_object, current_plan } = useSelector(store => store);
+	const { user } = useSelector(store => store);
+	// const [ loading, setLoading ] = useState(true);
+	// const languageName = language_object[language];
 	const [ state, setState ] = React.useState({
 		top    : false,
 		left   : false,
@@ -92,9 +93,23 @@ export default function NavDrawer({
 			onKeyDown={toggleDrawer(anchor, false)}
 		>
 			<List>
-				<ListItem>
-					<ListItemText primary={user} style={{ fontStyle: 'italic' }} />
-				</ListItem>
+				{auth && (
+					<ListItem>
+						<ListItemText primary={user} style={{ fontStyle: 'italic' }} />
+					</ListItem>
+				)}
+				{auth && <Divider />}
+				{!auth && (
+					<ListItem button onClick={goToLogin}>
+						<ListItemText>Login</ListItemText>
+					</ListItem>
+				)}
+				{!auth && (
+					<ListItem button onClick={goToNewUser}>
+						<ListItemText>Create an Account</ListItemText>
+					</ListItem>
+				)}
+				{!auth && <Divider />}
 				<ListItem button onClick={goToHome}>
 					<ListItemIcon>
 						<i className="fas fa-home" />
@@ -102,12 +117,8 @@ export default function NavDrawer({
 					<ListItemText primary="Home" />
 				</ListItem>
 
-
-
-				{/* {auth && <Divider />} */}
-
-				<ListItem>
-					<SelectLanguage />
+				<ListItem button onClick={goToGettingStarted}>
+					<ListItemText>Getting Started</ListItemText>
 				</ListItem>
 
 				{!auth && (
@@ -121,28 +132,17 @@ export default function NavDrawer({
 					</ListItem>
 				)}
 
-				<ListItem button onClick={goToGettingStarted}>
-					<ListItemText>Getting Started</ListItemText>
+				<ListItem>
+					<SelectLanguage />
 				</ListItem>
 
 				<Divider />
-
-				{!auth && (
-					<ListItem button onClick={goToLogin}>
-						<ListItemText>Login</ListItemText>
-					</ListItem>
-				)}
-				{!auth && (
-					<ListItem button onClick={goToNewUser}>
-						<ListItemText>New User</ListItemText>
-					</ListItem>
-				)}
 
 				{auth && (
 					<ListItem
 						button
 						onClick={() => {
-							history.push('/read');
+							history.push('/study-text');
 						}}
 					>
 						<ListItemText>Study Text</ListItemText>
@@ -159,6 +159,11 @@ export default function NavDrawer({
 					</ListItem>
 				)}
 				{auth && (
+					<ListItem button onClick={handleModalOpen}>
+						<ListItemText>Add Word</ListItemText>
+					</ListItem>
+				)}
+				{auth && (
 					<ListItem>
 						<SelectWord
 							id="word"
@@ -167,11 +172,6 @@ export default function NavDrawer({
 							returnSelection={returnSelection}
 							isRequired={false}
 						/>
-					</ListItem>
-				)}
-				{auth && (
-					<ListItem button onClick={handleModalOpen}>
-						<ListItemText>Add Word</ListItemText>
 					</ListItem>
 				)}
 
@@ -190,6 +190,7 @@ export default function NavDrawer({
 						<ListItemText>Logout</ListItemText>
 					</ListItem>
 				)}
+				{auth && <Divider />}
 			</List>
 		</div>
 	);

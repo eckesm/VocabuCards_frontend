@@ -40,7 +40,7 @@ export default function Home() {
 		<div className={classes.container}>
 			<div>
 				<CustomButton href="/#/login">Login</CustomButton>
-				<CustomButton href="/#/signup" customtype="default">
+				<CustomButton href="/#/new-user" customtype="default">
 					New User
 				</CustomButton>
 			</div>
